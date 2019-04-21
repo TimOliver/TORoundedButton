@@ -11,7 +11,7 @@
 
 @interface ViewController ()
 
-@property (weak, nonatomic) IBOutlet UIButton *button;
+@property (weak, nonatomic) IBOutlet TORoundedButton *button;
 
 @end
 
@@ -22,6 +22,5 @@
 
 
 }
-
 
 @end
