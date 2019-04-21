@@ -83,26 +83,33 @@
 
 - (void)didTouchDownInside
 {
-    [self animateLabelAlpha:0.5f];
+    [self setLabelAlpha:0.5f animated:NO];
 }
 
 - (void)didTouchUpInside
 {
-    [self animateLabelAlpha:1.0f];
+    [self setLabelAlpha:1.0f animated:YES];
+
+    if (self.tappedHandler) { self.tappedHandler(); }
 }
 
 - (void)didDragOutside
 {
-    [self animateLabelAlpha:1.0f];
+    [self setLabelAlpha:1.0f animated:YES];
 }
 
 - (void)didDragInside
 {
-    [self animateLabelAlpha:0.5f];
+    [self setLabelAlpha:0.5f animated:YES];
 }
 
-- (void)animateLabelAlpha:(CGFloat)labelAlpha
+- (void)setLabelAlpha:(CGFloat)labelAlpha animated:(BOOL)animated
 {
+    if (!animated) {
+        self.titleLabel.alpha = labelAlpha;
+        return;
+    }
+
     id animationBlock = ^{
         self.titleLabel.alpha = labelAlpha;
     };
