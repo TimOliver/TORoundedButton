@@ -15,9 +15,7 @@ IB_DESIGNABLE
 
 @property (nonatomic, assign) IBInspectable CGFloat cornerRadius;
 
-@property (nonatomic, strong) IBInspectable UIColor *buttonBackgroundColor;
-
-@property (nonatomic, strong) IBInspectable UIColor *buttonBackgroundColorHighlighted;
+@property (nonatomic, copy) void (^tappedHandler)(void);
 
 @end
 
