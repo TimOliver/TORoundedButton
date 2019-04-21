@@ -11,9 +11,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 IB_DESIGNABLE
-@interface TORoundedButton : UIButton
+@interface TORoundedButton : UIControl
 
+@property (nonatomic, assign) IBInspectable CGFloat cornerRadius;
 
+@property (nonatomic, strong) IBInspectable UIColor *buttonBackgroundColor;
+
+@property (nonatomic, strong) IBInspectable UIColor *buttonBackgroundColorHighlighted;
 
 @end
 
