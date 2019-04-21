@@ -20,7 +20,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-
+    self.button.tappedHandler = ^{
+        NSLog(@"HI TWITCH");
+    };
 }
 
 @end
