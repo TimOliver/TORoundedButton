@@ -14,6 +14,7 @@
 		22700649226CA24E003492CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22700647226CA24E003492CB /* LaunchScreen.storyboard */; };
 		2270064C226CA24E003492CB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2270064B226CA24E003492CB /* main.m */; };
 		22700656226CA24E003492CB /* TORoundedButtonExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700655226CA24E003492CB /* TORoundedButtonExampleTests.m */; };
+		22700663226CA35D003492CB /* TORoundedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700662226CA35D003492CB /* TORoundedButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,8 @@
 		22700651226CA24E003492CB /* TORoundedButtonExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TORoundedButtonExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22700655226CA24E003492CB /* TORoundedButtonExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TORoundedButtonExampleTests.m; sourceTree = "<group>"; };
 		22700657226CA24E003492CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		22700661226CA35D003492CB /* TORoundedButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TORoundedButton.h; sourceTree = "<group>"; };
+		22700662226CA35D003492CB /* TORoundedButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TORoundedButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +66,7 @@
 		22700630226CA24D003492CB = {
 			isa = PBXGroup;
 			children = (
+				22700660226CA322003492CB /* TORoundedButton */,
 				2270063B226CA24D003492CB /* TORoundedButtonExample */,
 				22700654226CA24E003492CB /* TORoundedButtonExampleTests */,
 				2270063A226CA24D003492CB /* Products */,
@@ -101,6 +105,15 @@
 				22700657226CA24E003492CB /* Info.plist */,
 			);
 			path = TORoundedButtonExampleTests;
+			sourceTree = "<group>";
+		};
+		22700660226CA322003492CB /* TORoundedButton */ = {
+			isa = PBXGroup;
+			children = (
+				22700661226CA35D003492CB /* TORoundedButton.h */,
+				22700662226CA35D003492CB /* TORoundedButton.m */,
+			);
+			path = TORoundedButton;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,6 +216,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22700663226CA35D003492CB /* TORoundedButton.m in Sources */,
 				22700641226CA24D003492CB /* ViewController.m in Sources */,
 				2270064C226CA24E003492CB /* main.m in Sources */,
 				2270063E226CA24D003492CB /* AppDelegate.m in Sources */,

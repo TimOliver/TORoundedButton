@@ -7,8 +7,11 @@
 //
 
 #import "ViewController.h"
+#import "TORoundedButton.h"
 
 @interface ViewController ()
+
+@property (weak, nonatomic) IBOutlet TORoundedButton *button;
 
 @end
 
@@ -16,8 +19,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-}
 
+
+}
 
 @end
