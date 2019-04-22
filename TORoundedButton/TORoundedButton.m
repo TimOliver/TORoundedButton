@@ -46,7 +46,7 @@
     // Create sub views
     self.backgroundImageView = [[UIImageView alloc] initWithFrame:self.bounds];
     self.backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.backgroundImageView.opaque = YES;
+    self.backgroundImageView.opaque = self.opaque; // Match self
     self.backgroundImageView.clipsToBounds = YES;
     [self addSubview:self.backgroundImageView];
 
@@ -128,9 +128,13 @@
 
     CGFloat dimensionSize = (cornerRadius * 2.0f) + 2.0f;
     CGSize size = (CGSize){dimensionSize, dimensionSize};
-
+    CGFloat r = 0, g = 0, b = 0, a = 0;
     UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
-    format.opaque = !([backgroundColor isEqual:[UIColor clearColor]]);
+
+    // If the background color's _alpha_ is anything other than 1.0, it's not opaque ;)
+    [backgroundColor getRed: &r green: &g blue: &b alpha: &a];
+
+    format.opaque = a == 1.0;
 
     UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:size format:format];
     UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext *rendererContext) {
