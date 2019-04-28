@@ -93,7 +93,7 @@
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.titleLabel.textColor = [UIColor whiteColor];
-    self.titleLabel.font = [UIFont systemFontOfSize:21.0f weight:UIFontWeightBold];
+    self.titleLabel.font = [UIFont systemFontOfSize:20.0f weight:UIFontWeightBold];
     self.titleLabel.backgroundColor = self.tintColor;
     self.titleLabel.text = @"Button";
     [self.containerView addSubview:self.titleLabel];
