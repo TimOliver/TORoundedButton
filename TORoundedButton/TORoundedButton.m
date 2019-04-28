@@ -13,6 +13,9 @@
 /** Marked whenever the graphical components of the button need to be recalculated */
 @property (nonatomic, assign) BOOL isDirty;
 
+/** A container view that holds all of the content view and performs the clipping */
+@property (nonatomic, strong) UIView *containerView;
+
 /** The title label displaying the text in the center of the button */
 @property (nonatomic, strong) UILabel *titleLabel;
 
@@ -65,9 +68,9 @@
 - (void)roundedButtonCommonInit
 {
     // Default properties (Make sure they're not overriding IB)
-    _cornerRadius = 10.0f;
-    _tappedTextAlpha = 0.5f;
-    _tapAnimationDuration = 0.4f;
+    _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 10.0f;
+    _tappedTextAlpha = (_tappedTextAlpha > FLT_EPSILON) ?: 0.5f;
+    _tapAnimationDuration = (_tapAnimationDuration > FLT_EPSILON) ?: 0.4f;
     _isDirty = YES;
     self.opaque = YES;
 
@@ -75,20 +78,25 @@
     super.backgroundColor = [UIColor clearColor];
 
     // Create sub views
+    self.containerView = [[UIView alloc] initWithFrame:self.bounds];
+    self.containerView.backgroundColor = [UIColor clearColor];
+    self.containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.containerView.userInteractionEnabled = NO;
+    self.containerView.clipsToBounds = YES;
+    [self addSubview:self.containerView];
+
     self.backgroundImageView = [[UIImageView alloc] initWithFrame:self.bounds];
     self.backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.backgroundImageView.opaque = self.opaque;
     self.backgroundImageView.clipsToBounds = YES;
-    [self addSubview:self.backgroundImageView];
+    [self.containerView addSubview:self.backgroundImageView];
 
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.font = [UIFont systemFontOfSize:21.0f weight:UIFontWeightBold];
     self.titleLabel.backgroundColor = self.tintColor;
-    [self addSubview:self.titleLabel];
-
     self.titleLabel.text = @"Button";
+    [self.containerView addSubview:self.titleLabel];
 
     [self addTarget:self action:@selector(didTouchDownInside) forControlEvents:UIControlEventTouchDown];
     [self addTarget:self action:@selector(didTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
@@ -108,7 +116,7 @@
     }
 
     [self.titleLabel sizeToFit];
-    self.titleLabel.center = self.backgroundImageView.center;
+    self.titleLabel.center = self.containerView.center;
     self.titleLabel.frame = CGRectIntegral(self.titleLabel.frame);
 }
 
@@ -129,13 +137,19 @@
                                                         foregroundColor:self.tintColor
                                                            cornerRadius:self.cornerRadius];
 
+    if (self.tappedTintColor) {
+        self.tappedBackgroundImage = [[self class] buttonImageWithBackgroundColor:self.buttonBackgroundColor
+                                                                  foregroundColor:self.tappedTintColor
+                                                                     cornerRadius:self.cornerRadius];
+    }
+
     // Configure the background image view for opaque drawing
     self.backgroundImageView.image = self.backgroundImage;
     self.backgroundImageView.backgroundColor = nil;
 
     // Reset ourselves from potential clipping
-    self.layer.masksToBounds = NO;
-    self.layer.cornerRadius = 0.0f;
+    self.containerView.layer.masksToBounds = NO;
+    self.containerView.layer.cornerRadius = 0.0f;
 }
 
 - (void)prepareForTransparentDisplay
@@ -148,49 +162,166 @@
     self.backgroundImageView.backgroundColor = self.tintColor;
 
     // Configure ourselves for clipping the views
-    self.layer.masksToBounds = YES;
-    self.layer.cornerRadius = self.cornerRadius;
+    self.containerView.layer.masksToBounds = YES;
+    self.containerView.layer.cornerRadius = self.cornerRadius;
+}
+
+- (void)tintColorDidChange
+{
+    [super tintColorDidChange];
+    self.isDirty = YES;
+    [self setNeedsLayout];
 }
 
 #pragma mark - Interaction -
 
 - (void)didTouchDownInside
 {
-    [self setLabelAlpha:self.tappedTextAlpha animated:NO];
+    [self setLabelAlphaTapped:YES animated:NO];
+    [self setBackgroundColorTapped:YES animated:NO];
+    [self setButtonScaledTapped:YES animated:NO];
 }
 
 - (void)didTouchUpInside
 {
-    [self setLabelAlpha:1.0f animated:YES];
+    [self setLabelAlphaTapped:NO animated:YES];
+    [self setBackgroundColorTapped:NO animated:YES];
+    [self setButtonScaledTapped:NO animated:YES];
 
     if (self.tappedHandler) { self.tappedHandler(); }
 }
 
 - (void)didDragOutside
 {
-    [self setLabelAlpha:1.0f animated:YES];
+    [self setLabelAlphaTapped:NO animated:YES];
+    [self setBackgroundColorTapped:NO animated:YES];
+    [self setButtonScaledTapped:NO animated:YES];
 }
 
 - (void)didDragInside
 {
-    [self setLabelAlpha:self.tappedTextAlpha animated:YES];
+    [self setLabelAlphaTapped:YES animated:YES];
+    [self setBackgroundColorTapped:YES animated:YES];
+    [self setButtonScaledTapped:YES animated:YES];
 }
 
-- (void)setLabelAlpha:(CGFloat)labelAlpha animated:(BOOL)animated
+#pragma mark - Animation -
+
+- (void)setBackgroundColorTapped:(BOOL)tapped animated:(BOOL)animated
 {
-    if (!animated) {
-        self.titleLabel.alpha = labelAlpha;
+    if (!self.tappedTintColor) { return; }
+
+    // For transparent buttons, just animate the tint color
+    if (!self.opaque) {
+        void (^animationBlock)(void) = ^{
+            self.backgroundImageView.backgroundColor = tapped ? self.tappedTintColor : self.tintColor;
+        };
+
+        if (!animated) {
+            animationBlock();
+        }
+        else {
+            [UIView animateWithDuration:self.tapAnimationDuration
+                                  delay:0.0f
+                                options:UIViewAnimationOptionBeginFromCurrentState
+                             animations:animationBlock
+                             completion:nil];
+        }
+
         return;
     }
 
-    id animationBlock = ^{
-        self.titleLabel.alpha = labelAlpha;
+    if (!animated) {
+        self.backgroundImageView.image = tapped ? self.tappedBackgroundImage : self.backgroundImage;
+        return;
+    }
+
+    // For opaque buttons, perform a Core Animation cross fade animation
+    UIImage *fromImage = tapped ? self.backgroundImage : self.tappedBackgroundImage;
+    UIImage *toImage = tapped ? self.tappedBackgroundImage : self.backgroundImage;
+
+    // If we quickly move between states before the animation completes, capture the progress
+    // we were at, so we can apply it as the new starting point
+    id presentationContents = nil;
+    CABasicAnimation *previousAnimation = [self.backgroundImageView.layer animationForKey:@"animateContents"];
+    if (previousAnimation) {
+        presentationContents = self.backgroundImageView.layer.presentationLayer.contents;
+        [self.backgroundImageView.layer removeAnimationForKey:@"animateContents"];
+    }
+
+    // Perform the crossfade animation
+    CABasicAnimation *crossFade = [CABasicAnimation animationWithKeyPath:@"contents"];
+    crossFade.duration = self.tapAnimationDuration;
+    crossFade.fromValue = presentationContents ?: (id)fromImage.CGImage;
+    crossFade.toValue = (id)toImage.CGImage;
+    [self.backgroundImageView.layer addAnimation:crossFade forKey:@"animateContents"];
+    self.backgroundImageView.image = toImage;
+}
+
+- (void)setLabelAlphaTapped:(BOOL)tapped animated:(BOOL)animated
+{
+    if (self.tappedTextAlpha > 1.0f - FLT_EPSILON) { return; }
+
+    CGFloat alpha = tapped ? self.tappedTextAlpha : 1.0f;
+
+    // Animate the alpha value of the label
+    void (^animationBlock)(void) = ^{
+        self.titleLabel.alpha = alpha;
     };
 
+    // Whenever the button is tapped, make the background color of the
+    // label clear so we can potentially animate the background color
+    void (^completionBlock)(BOOL) = ^(BOOL completed) {
+        if (completed == NO) { return; }
+        UIColor *backgroundColor = tapped ? [UIColor clearColor] : self.tintColor;
+        self.titleLabel.backgroundColor = backgroundColor;
+    };
+
+    // If we're not animating, just call the blocks manually
+    if (!animated) {
+        animationBlock();
+        completionBlock(YES);
+        return;
+    }
+
+    // Set the title label to clear beforehand
+    self.titleLabel.backgroundColor = [UIColor clearColor];
+
+    // Animate the button alpha
     [UIView animateWithDuration:self.tapAnimationDuration
                           delay:0.0f
                         options:UIViewAnimationOptionBeginFromCurrentState
-                     animations:animationBlock completion:nil];
+                     animations:animationBlock
+                     completion:completionBlock];
+}
+
+- (void)setButtonScaledTapped:(BOOL)tapped animated:(BOOL)animated
+{
+    if (self.tappedButtonScale < FLT_EPSILON) { return; }
+
+    CGFloat scale = tapped ? self.tappedButtonScale : 1.0f;
+
+    // Animate the alpha value of the label
+    void (^animationBlock)(void) = ^{
+        self.containerView.transform = CGAffineTransformScale(CGAffineTransformIdentity,
+                                                scale,
+                                                scale);
+    };
+
+    // If we're not animating, just call the blocks manually
+    if (!animated) {
+        animationBlock();
+        return;
+    }
+
+    // Animate the button alpha
+    [UIView animateWithDuration:self.tapAnimationDuration
+                          delay:0.0f
+         usingSpringWithDamping:1.0f
+          initialSpringVelocity:0.5f
+                        options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:animationBlock
+                     completion:nil];
 }
 
 #pragma mark - Public Accessors -
@@ -212,6 +343,7 @@
     if (_textPointSize == textPointSize) { return; }
     _textPointSize = textPointSize;
     self.titleLabel.font = [UIFont boldSystemFontOfSize:textPointSize];
+    [self setNeedsLayout];
 }
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor
@@ -219,6 +351,13 @@
     if (backgroundColor == _buttonBackgroundColor) { return; }
     _buttonBackgroundColor = backgroundColor;
     _isDirty = YES;
+    [self setNeedsLayout];
+}
+
+- (void)setTintColor:(UIColor *)tintColor
+{
+    [super setTintColor:tintColor];
+    self.isDirty = YES;
     [self setNeedsLayout];
 }
 

@@ -32,7 +32,10 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 @property (nonatomic, assign) IBInspectable CGFloat textPointSize;
 
 /** If desired, set the background color of the button when tapped (Default is nil). */
-@property (nonatomic, strong, nullable) UIColor *tappedTintColor;
+@property (nonatomic, strong, nullable) IBInspectable UIColor *tappedTintColor;
+
+/** When tapped, the scale by which the button shrinks during the animation (Default is off with 0.0) */
+@property (nonatomic, assign) IBInspectable CGFloat tappedButtonScale;
 
 /** The duration of the tapping cross-fade animation (Default is 0.4f) */
 @property (nonatomic, assign) CGFloat tapAnimationDuration;
