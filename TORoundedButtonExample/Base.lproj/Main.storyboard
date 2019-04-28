@@ -18,24 +18,86 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FSg-5z-vxE" customClass="TORoundedButton">
-                                <rect key="frame" x="24" y="253" width="272" height="62"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PmS-wi-IuL" userLabel="Container">
+                                <rect key="frame" x="16" y="58" width="288" height="472"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FSg-5z-vxE" userLabel="OpaqueButton" customClass="TORoundedButton">
+                                        <rect key="frame" x="0.0" y="48" width="288" height="62"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="62" id="pL0-ED-U2o"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Opaque" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="69U-3U-We8">
+                                        <rect key="frame" x="96" y="0.0" width="96.5" height="33"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="33" id="4ux-nF-VJc"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transparent" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ndM-nK-Lty">
+                                        <rect key="frame" x="70.5" y="172" width="147" height="33"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="33" id="R4m-D1-86G"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UMi-OW-Zp0">
+                                        <rect key="frame" x="124" y="209" width="178" height="103"/>
+                                        <color key="backgroundColor" red="0.9405696981929127" green="0.9405696981929127" blue="0.9405696981929127" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="103" id="JNY-ep-EwL"/>
+                                            <constraint firstAttribute="width" constant="178" id="igc-wR-4O0"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jmh-aa-z96" userLabel="TransparentButton" customClass="TORoundedButton">
+                                        <rect key="frame" x="0.0" y="220" width="288" height="62"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="62" id="Agf-Ga-mv1"/>
+                                        </constraints>
+                                        <viewLayoutGuide key="safeArea" id="x2Q-6O-lp4"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="272" id="ooZ-We-Pzw"/>
-                                    <constraint firstAttribute="height" constant="62" id="pL0-ED-U2o"/>
+                                    <constraint firstItem="ndM-nK-Lty" firstAttribute="top" secondItem="FSg-5z-vxE" secondAttribute="bottom" constant="62" id="2Dp-Sd-A8b"/>
+                                    <constraint firstItem="jmh-aa-z96" firstAttribute="width" secondItem="PmS-wi-IuL" secondAttribute="width" id="APK-Xi-HVZ"/>
+                                    <constraint firstAttribute="width" constant="288" id="ATk-4G-prW"/>
+                                    <constraint firstItem="UMi-OW-Zp0" firstAttribute="leading" secondItem="PmS-wi-IuL" secondAttribute="leading" constant="124" id="Fkh-HO-WeY"/>
+                                    <constraint firstItem="69U-3U-We8" firstAttribute="top" secondItem="PmS-wi-IuL" secondAttribute="top" id="H2N-fy-GBD"/>
+                                    <constraint firstItem="FSg-5z-vxE" firstAttribute="width" secondItem="PmS-wi-IuL" secondAttribute="width" id="MOK-rk-o5t"/>
+                                    <constraint firstItem="jmh-aa-z96" firstAttribute="top" secondItem="ndM-nK-Lty" secondAttribute="bottom" constant="15" id="Nwp-rO-GUt"/>
+                                    <constraint firstItem="ndM-nK-Lty" firstAttribute="centerX" secondItem="PmS-wi-IuL" secondAttribute="centerX" id="QRw-db-KgX"/>
+                                    <constraint firstItem="FSg-5z-vxE" firstAttribute="top" secondItem="69U-3U-We8" secondAttribute="bottom" constant="15" id="e0G-5b-J8y"/>
+                                    <constraint firstAttribute="height" constant="472" id="fS6-EZ-aCg"/>
+                                    <constraint firstItem="UMi-OW-Zp0" firstAttribute="top" secondItem="PmS-wi-IuL" secondAttribute="top" constant="209" id="gDu-ba-Wrr"/>
+                                    <constraint firstItem="jmh-aa-z96" firstAttribute="centerX" secondItem="PmS-wi-IuL" secondAttribute="centerX" id="rkf-OS-oKP"/>
+                                    <constraint firstItem="FSg-5z-vxE" firstAttribute="centerX" secondItem="PmS-wi-IuL" secondAttribute="centerX" id="svF-5f-S1V"/>
+                                    <constraint firstItem="69U-3U-We8" firstAttribute="centerX" secondItem="PmS-wi-IuL" secondAttribute="centerX" id="wNd-ZV-cuQ"/>
                                 </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="FSg-5z-vxE" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="aLv-jM-Nbr"/>
-                            <constraint firstItem="FSg-5z-vxE" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" constant="-10" id="vm4-b9-h9F"/>
+                            <constraint firstItem="PmS-wi-IuL" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="1Vk-Ub-mZM"/>
+                            <constraint firstItem="PmS-wi-IuL" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="RO9-H5-kdv"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

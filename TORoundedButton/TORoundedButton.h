@@ -23,7 +23,7 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 @property (nonatomic, strong) IBInspectable UIColor *textColor;
 
 /** When tapped, the level of transparency that the text label animates to. (Defaults to 0.5f) */
-@property (nonatomic, assign) IBInspectable CGFloat textTappedAlpha;
+@property (nonatomic, assign) IBInspectable CGFloat tappedTextAlpha;
 
 /** The font of the text in the button (Default is size 21 Bold) */
 @property (nonatomic, strong) UIFont *textFont;
@@ -32,7 +32,7 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 @property (nonatomic, assign) IBInspectable CGFloat textPointSize;
 
 /** If desired, set the background color of the button when tapped (Default is nil). */
-@property (nonatomic, strong, nullable) UIColor *tintTappedColor;
+@property (nonatomic, strong, nullable) UIColor *tappedTintColor;
 
 /** The duration of the tapping cross-fade animation (Default is 0.4f) */
 @property (nonatomic, assign) CGFloat tapAnimationDuration;
