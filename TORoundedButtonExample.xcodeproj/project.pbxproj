@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		220E1D342275FA220064DDA4 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 220E1D332275FA220064DDA4 /* TableViewCell.m */; };
 		2270063E226CA24D003492CB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2270063D226CA24D003492CB /* AppDelegate.m */; };
-		22700641226CA24D003492CB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700640226CA24D003492CB /* ViewController.m */; };
 		22700644226CA24D003492CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22700642226CA24D003492CB /* Main.storyboard */; };
 		22700646226CA24E003492CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22700645226CA24E003492CB /* Assets.xcassets */; };
 		22700649226CA24E003492CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22700647226CA24E003492CB /* LaunchScreen.storyboard */; };
 		2270064C226CA24E003492CB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2270064B226CA24E003492CB /* main.m */; };
 		22700656226CA24E003492CB /* TORoundedButtonExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700655226CA24E003492CB /* TORoundedButtonExampleTests.m */; };
 		22700663226CA35D003492CB /* TORoundedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700662226CA35D003492CB /* TORoundedButton.m */; };
+		22D23CC82276E73200EE65DD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22D23CC72276E73200EE65DD /* ViewController.m */; };
+		22D23CCA2276E76A00EE65DD /* wallpaper.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 22D23CC92276E76900EE65DD /* wallpaper.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,13 +29,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		220E1D322275FA220064DDA4 /* TableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
-		220E1D332275FA220064DDA4 /* TableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TableViewCell.m; sourceTree = "<group>"; };
 		22700639226CA24D003492CB /* TORoundedButtonExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TORoundedButtonExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2270063C226CA24D003492CB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2270063D226CA24D003492CB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		2270063F226CA24D003492CB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		22700640226CA24D003492CB /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		22700643226CA24D003492CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		22700645226CA24E003492CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		22700648226CA24E003492CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -46,6 +42,9 @@
 		22700657226CA24E003492CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		22700661226CA35D003492CB /* TORoundedButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TORoundedButton.h; sourceTree = "<group>"; };
 		22700662226CA35D003492CB /* TORoundedButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TORoundedButton.m; sourceTree = "<group>"; };
+		22D23CC62276E73200EE65DD /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		22D23CC72276E73200EE65DD /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		22D23CC92276E76900EE65DD /* wallpaper.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallpaper.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,15 +89,14 @@
 			children = (
 				2270063C226CA24D003492CB /* AppDelegate.h */,
 				2270063D226CA24D003492CB /* AppDelegate.m */,
-				2270063F226CA24D003492CB /* ViewController.h */,
-				22700640226CA24D003492CB /* ViewController.m */,
-				220E1D322275FA220064DDA4 /* TableViewCell.h */,
-				220E1D332275FA220064DDA4 /* TableViewCell.m */,
+				22D23CC62276E73200EE65DD /* ViewController.h */,
+				22D23CC72276E73200EE65DD /* ViewController.m */,
 				22700642226CA24D003492CB /* Main.storyboard */,
 				22700645226CA24E003492CB /* Assets.xcassets */,
 				22700647226CA24E003492CB /* LaunchScreen.storyboard */,
 				2270064A226CA24E003492CB /* Info.plist */,
 				2270064B226CA24E003492CB /* main.m */,
+				22D23CC92276E76900EE65DD /* wallpaper.jpg */,
 			);
 			path = TORoundedButtonExample;
 			sourceTree = "<group>";
@@ -201,6 +199,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22D23CCA2276E76A00EE65DD /* wallpaper.jpg in Resources */,
 				22700649226CA24E003492CB /* LaunchScreen.storyboard in Resources */,
 				22700646226CA24E003492CB /* Assets.xcassets in Resources */,
 				22700644226CA24D003492CB /* Main.storyboard in Resources */,
@@ -222,9 +221,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				22700663226CA35D003492CB /* TORoundedButton.m in Sources */,
-				22700641226CA24D003492CB /* ViewController.m in Sources */,
 				2270064C226CA24E003492CB /* main.m in Sources */,
-				220E1D342275FA220064DDA4 /* TableViewCell.m in Sources */,
+				22D23CC82276E73200EE65DD /* ViewController.m in Sources */,
 				2270063E226CA24D003492CB /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -392,7 +390,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dev.tim.TORoundedButtonExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -409,7 +407,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dev.tim.TORoundedButtonExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
