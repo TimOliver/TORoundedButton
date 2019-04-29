@@ -30,7 +30,7 @@
 /** When clear, Core Animation clipping is used instead of a bitmap to produce transparency */
 @property (nonatomic, assign) BOOL isClear;
 
-/** Hold on to a global state for whether we are tapped or not because the state can change before a block completes */
+/** Hold on to a global state for whether we are tapped or not because the state can change before blocks complete */
 @property (nonatomic, assign) BOOL isTapped;
 
 /** A container view that holds all of the content view and performs the clipping */
@@ -52,6 +52,18 @@
 @property (nonatomic, strong, nullable) UIColor *buttonBackgroundColor;
 
 @end
+
+// --------------------------------------------------------------------
+
+static inline BOOL TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(CGFloat value) {
+    return (value > -FLT_EPSILON) && (value < FLT_EPSILON);
+}
+
+static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat secondValue) {
+    return fabs(firstValue - secondValue) > FLT_EPSILON;
+}
+
+// --------------------------------------------------------------------
 
 @implementation TORoundedButton
 
@@ -91,6 +103,7 @@
     _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 10.0f;
     _tappedTextAlpha = (_tappedTextAlpha > FLT_EPSILON) ?: 0.5f;
     _tapAnimationDuration = (_tapAnimationDuration > FLT_EPSILON) ?: 0.4f;
+    _tappedTintColorBrightnessOffset = !TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(_tappedTintColorBrightnessOffset) ?: -0.1f;
     _isDirty = YES;
 
     if (!_buttonBackgroundColor) { _buttonBackgroundColor = [UIColor whiteColor]; }
@@ -155,6 +168,9 @@
                                                         foregroundColor:self.tintColor
                                                            cornerRadius:self.cornerRadius];
     
+    // Double check we have the correct tint color set
+    [self updateTappedTintColorForTintColor];
+    
     // If we've set a tapped color, generate an image for that one too
     if (self.tappedTintColor) {
         self.tappedBackgroundImage = [[self class] buttonImageWithBackgroundColor:self.buttonBackgroundColor
@@ -195,6 +211,16 @@
     [super tintColorDidChange];
     self.isDirty = YES;
     [self setNeedsLayout];
+}
+
+- (void)updateTappedTintColorForTintColor
+{
+    if (TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(_tappedTintColorBrightnessOffset)) {
+        return;
+    }
+    
+    _tappedTintColor = [[self class] brightnessAdjustedColorWithColor:self.tintColor
+                                                               amount:_tappedTintColorBrightnessOffset];
 }
 
 #pragma mark - Interaction -
@@ -404,6 +430,7 @@
 {
     [super setTintColor:tintColor];
     _isDirty = YES;
+    [self updateTappedTintColorForTintColor];
     [self setNeedsLayout];
 }
 
@@ -412,6 +439,21 @@
     if (_tappedTintColor == tappedTintColor) { return; }
     _tappedTintColor = tappedTintColor;
     _isDirty = YES;
+    _tappedTintColorBrightnessOffset = 0.0f;
+    [self setNeedsLayout];
+}
+
+- (void)setTappedTintColorBrightnessOffset:(CGFloat)tappedTintColorBrightnessOffset
+{
+    if (TO_ROUNDED_BUTTON_FLOATS_MATCH(_tappedTintColorBrightnessOffset,
+                                       tappedTintColorBrightnessOffset))
+    {
+        return;
+    }
+    
+    _tappedTintColorBrightnessOffset = tappedTintColorBrightnessOffset;
+    _isDirty = YES;
+    [self updateTappedTintColorForTintColor];
     [self setNeedsLayout];
 }
 
@@ -463,6 +505,17 @@
 
     UIEdgeInsets insets = UIEdgeInsetsMake(cornerRadius, cornerRadius, cornerRadius, cornerRadius);
     return [image resizableImageWithCapInsets:insets resizingMode:UIImageResizingModeStretch];
+}
+
++ (UIColor *)brightnessAdjustedColorWithColor:(UIColor *)color amount:(CGFloat)amount
+{
+    if (!color) { return nil; }
+    
+    CGFloat h, s, b, a;
+    if (![color getHue:&h saturation:&s brightness:&b alpha:&a]) { return nil; }
+    b += amount; // Add the adjust amount
+    b = MAX(b, 0.0f); b = MIN(b, 1.0f);
+    return [UIColor colorWithHue:h saturation:s brightness:b alpha:a];
 }
 
 @end
