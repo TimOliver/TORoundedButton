@@ -33,7 +33,6 @@
     TORoundedButton *button = cell.button;
 
     button.tappedTintColor = nil;
-    button.tappedButtonScale = 0.0f;
 
     switch (indexPath.row) {
         case 0:
