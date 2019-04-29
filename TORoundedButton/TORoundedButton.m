@@ -103,6 +103,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 10.0f;
     _tappedTextAlpha = (_tappedTextAlpha > FLT_EPSILON) ?: 1.0f;
     _tapAnimationDuration = (_tapAnimationDuration > FLT_EPSILON) ?: 0.4f;
+    _tappedButtonScale = (_tappedButtonScale > FLT_EPSILON) ?: 0.97f;
     _tappedTintColorBrightnessOffset = !TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(_tappedTintColorBrightnessOffset) ?: -0.1f;
     _isDirty = YES;
 
@@ -127,7 +128,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.titleLabel.textColor = [UIColor whiteColor];
-    self.titleLabel.font = [UIFont systemFontOfSize:20.0f weight:UIFontWeightBold];
+    self.titleLabel.font = [UIFont systemFontOfSize:19.0f weight:UIFontWeightBold];
     self.titleLabel.backgroundColor = self.tintColor;
     self.titleLabel.text = @"Button";
     [self.containerView addSubview:self.titleLabel];
@@ -295,7 +296,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
             completionBlock(YES);
         }
         else {
-            updateTitleOpacity();
+            self.titleLabel.backgroundColor = [UIColor clearColor];
             [UIView animateWithDuration:self.tapAnimationDuration
                                   delay:0.0f
                                 options:UIViewAnimationOptionBeginFromCurrentState
@@ -331,10 +332,17 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
         [self.backgroundImageView.layer removeAnimationForKey:animateContentsKey];
     }
 
+    // Force the label to be clear before any animations start
+    self.titleLabel.backgroundColor = [UIColor clearColor];
+    
     [CATransaction begin];
     
     // When the animation is complete, set the label back to opaque
-    [CATransaction setCompletionBlock:updateTitleOpacity];
+    [CATransaction setCompletionBlock:^{
+        // If another animation was queued after this one, don't update the opacity in this block
+        if ([self.backgroundImageView.layer animationForKey:animateContentsKey]) { return; }
+        updateTitleOpacity();
+    }];
     
     // Perform the crossfade animation
     CABasicAnimation *crossFade = [CABasicAnimation animationWithKeyPath:@"contents"];
