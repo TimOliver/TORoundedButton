@@ -29,10 +29,19 @@
                                             <constraint firstAttribute="width" constant="288" id="hN0-R5-rZn"/>
                                         </constraints>
                                     </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Opaque" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l8T-Yp-FD5">
+                                        <rect key="frame" x="16" y="163" width="75" height="24"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="PkL-y1-8vn" firstAttribute="centerX" secondItem="rb5-SM-ioZ" secondAttribute="centerX" id="FAc-PW-CLQ"/>
+                                    <constraint firstItem="PkL-y1-8vn" firstAttribute="top" secondItem="l8T-Yp-FD5" secondAttribute="bottom" constant="12" id="NQK-Sv-19K"/>
+                                    <constraint firstItem="PkL-y1-8vn" firstAttribute="leading" secondItem="l8T-Yp-FD5" secondAttribute="leading" id="bQt-Hb-Ph4"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="l8T-Yp-FD5" secondAttribute="trailing" constant="20" symbolic="YES" id="dQx-zi-c5a"/>
                                     <constraint firstAttribute="bottom" secondItem="PkL-y1-8vn" secondAttribute="bottom" constant="35" id="gHg-pe-DS1"/>
                                 </constraints>
                             </view>
@@ -50,7 +59,7 @@
                                         </view>
                                         <blurEffect style="extraLight"/>
                                     </visualEffectView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VRv-TI-ypX" userLabel="OpaqueButton" customClass="TORoundedButton">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VRv-TI-ypX" userLabel="TransparentButton" customClass="TORoundedButton">
                                         <rect key="frame" x="16" y="35" width="288" height="50"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -58,12 +67,20 @@
                                             <constraint firstAttribute="width" constant="288" id="fCp-Ph-uL3"/>
                                         </constraints>
                                     </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transparent" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rwH-qS-2lF">
+                                        <rect key="frame" x="16" y="95" width="114" height="24"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="VRv-TI-ypX" firstAttribute="top" secondItem="nKk-1v-dly" secondAttribute="top" constant="35" id="4di-Gs-20w"/>
+                                    <constraint firstItem="rwH-qS-2lF" firstAttribute="top" secondItem="VRv-TI-ypX" secondAttribute="bottom" constant="10" id="6Vy-P3-MjA"/>
                                     <constraint firstItem="5d0-kg-xh0" firstAttribute="height" secondItem="nKk-1v-dly" secondAttribute="height" id="CKj-EZ-OWC"/>
                                     <constraint firstItem="HkY-uJ-fvb" firstAttribute="width" secondItem="nKk-1v-dly" secondAttribute="width" id="LEN-FS-D0I"/>
+                                    <constraint firstItem="rwH-qS-2lF" firstAttribute="leading" secondItem="VRv-TI-ypX" secondAttribute="leading" id="PUC-m5-pWQ"/>
                                     <constraint firstItem="HkY-uJ-fvb" firstAttribute="leading" secondItem="nKk-1v-dly" secondAttribute="leading" id="RCc-7q-rLj"/>
                                     <constraint firstItem="5d0-kg-xh0" firstAttribute="width" secondItem="nKk-1v-dly" secondAttribute="width" id="V09-Re-C5u"/>
                                     <constraint firstItem="5d0-kg-xh0" firstAttribute="top" secondItem="nKk-1v-dly" secondAttribute="top" id="afY-Bg-1Xp"/>
@@ -71,6 +88,7 @@
                                     <constraint firstItem="HkY-uJ-fvb" firstAttribute="height" secondItem="nKk-1v-dly" secondAttribute="height" id="cKU-Gw-HVC"/>
                                     <constraint firstItem="VRv-TI-ypX" firstAttribute="centerX" secondItem="nKk-1v-dly" secondAttribute="centerX" id="dHm-cS-MG8"/>
                                     <constraint firstItem="5d0-kg-xh0" firstAttribute="leading" secondItem="nKk-1v-dly" secondAttribute="leading" id="izs-0X-VI9"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="rwH-qS-2lF" secondAttribute="trailing" constant="20" symbolic="YES" id="oVQ-68-IyA"/>
                                 </constraints>
                             </view>
                         </subviews>
