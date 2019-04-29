@@ -101,7 +101,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 {
     // Default properties (Make sure they're not overriding IB)
     _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 10.0f;
-    _tappedTextAlpha = (_tappedTextAlpha > FLT_EPSILON) ?: 0.5f;
+    _tappedTextAlpha = (_tappedTextAlpha > FLT_EPSILON) ?: 1.0f;
     _tapAnimationDuration = (_tapAnimationDuration > FLT_EPSILON) ?: 0.4f;
     _tappedTintColorBrightnessOffset = !TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(_tappedTintColorBrightnessOffset) ?: -0.1f;
     _isDirty = YES;
@@ -185,7 +185,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)configureImageViewForOpaqueDisplay
 {
     // Configure the background image view for opaque drawing
-    self.backgroundImageView.image = self.backgroundImage;
+    self.backgroundImageView.image = self.isTapped ? self.tappedBackgroundImage : self.backgroundImage;
     self.backgroundImageView.backgroundColor = nil;
 
     // Reset ourselves from potential clipping
@@ -273,25 +273,40 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 {
     if (!self.tappedTintColor) { return; }
 
+    // Toggle the background color of the title label
+    void (^updateTitleOpacity)(void) = ^{
+        self.titleLabel.backgroundColor = self.isTapped ? [UIColor clearColor] : self.tintColor;
+    };
+    
+    // -----------------------------------------------------
+    
     // For transparent buttons, just animate the tint color
     if (!self.opaque) {
         void (^animationBlock)(void) = ^{
             self.backgroundImageView.backgroundColor = self.isTapped ? self.tappedTintColor : self.tintColor;
         };
+        
+        void (^completionBlock)(BOOL) = ^(BOOL completed){
+            updateTitleOpacity();
+        };
 
         if (!animated) {
             animationBlock();
+            completionBlock(YES);
         }
         else {
+            updateTitleOpacity();
             [UIView animateWithDuration:self.tapAnimationDuration
                                   delay:0.0f
                                 options:UIViewAnimationOptionBeginFromCurrentState
                              animations:animationBlock
-                             completion:nil];
+                             completion:completionBlock];
         }
 
         return;
     }
+    
+    // -----------------------------------------------------
 
     // Define a single key for reffering to cross fade the image contents
     NSString *animateContentsKey = @"animateContents";
@@ -299,6 +314,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     if (!animated) {
         [self.backgroundImageView.layer removeAnimationForKey:animateContentsKey];
         self.backgroundImageView.image = self.isTapped ? self.tappedBackgroundImage : self.backgroundImage;
+        updateTitleOpacity();
         return;
     }
 
@@ -315,6 +331,11 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
         [self.backgroundImageView.layer removeAnimationForKey:animateContentsKey];
     }
 
+    [CATransaction begin];
+    
+    // When the animation is complete, set the label back to opaque
+    [CATransaction setCompletionBlock:updateTitleOpacity];
+    
     // Perform the crossfade animation
     CABasicAnimation *crossFade = [CABasicAnimation animationWithKeyPath:@"contents"];
     crossFade.duration = self.tapAnimationDuration;
@@ -322,6 +343,8 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     crossFade.toValue = (id)toImage.CGImage;
     [self.backgroundImageView.layer addAnimation:crossFade forKey:animateContentsKey];
     self.backgroundImageView.image = toImage;
+    
+    [CATransaction commit];
 }
 
 - (void)setLabelAlphaTappedAnimated:(BOOL)animated
@@ -335,20 +358,11 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
         self.titleLabel.alpha = alpha;
     };
 
-    // Whenever the button is tapped, make the background color of the
-    // label clear so we can potentially animate the background color
-    void (^completionBlock)(BOOL) = ^(BOOL completed) {
-        if (completed == NO) { return; }
-        UIColor *backgroundColor = self.isTapped ? [UIColor clearColor] : self.tintColor;
-        self.titleLabel.backgroundColor = backgroundColor;
-    };
-
     // If we're not animating, just call the blocks manually
     if (!animated) {
         // Remove any animations in progress
         [self.titleLabel.layer removeAnimationForKey:@"opacity"];
         animationBlock();
-        completionBlock(YES);
         return;
     }
 
@@ -360,7 +374,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
                           delay:0.0f
                         options:UIViewAnimationOptionBeginFromCurrentState
                      animations:animationBlock
-                     completion:completionBlock];
+                     completion:nil];
 }
 
 - (void)setButtonScaledTappedAnimated:(BOOL)animated
