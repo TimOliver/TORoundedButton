@@ -63,7 +63,7 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /** A callback handler triggered each time the button is tapped. */
 @property (nonatomic, copy) void (^tappedHandler)(void);
 
-/** Create a new instance with the supplied button text. */
+/** Create a new instance with the supplied button text. The size will be 288 points wide, and 50 tall. */
 - (instancetype)initWithText:(NSString *)text;
 
 @end
