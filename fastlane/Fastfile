@@ -97,6 +97,8 @@ lane :commit_file do |options|
   file_path = options[:file_path]
   message = options[:commit_message]
 
+  UI.message "/repos/#{repo_name}/contents/#{file_path}"
+
   # Fetch the file so we can extract the sha
   result = Fastlane::Actions::GithubApiAction.run(
     server_url: "https://api.github.com",
