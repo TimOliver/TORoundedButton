@@ -11,6 +11,7 @@
 		220F9AB522784FD4001862A7 /* TORoundedButton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220F9AAE22784FD4001862A7 /* TORoundedButton.framework */; };
 		220F9AB622784FD4001862A7 /* TORoundedButton.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 220F9AAE22784FD4001862A7 /* TORoundedButton.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		220F9ABC22784FF5001862A7 /* TORoundedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700662226CA35D003492CB /* TORoundedButton.m */; };
+		220F9ABF2278AA0B001862A7 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 220F9ABE2278AA0B001862A7 /* Info.plist */; };
 		2270063E226CA24D003492CB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2270063D226CA24D003492CB /* AppDelegate.m */; };
 		22700644226CA24D003492CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22700642226CA24D003492CB /* Main.storyboard */; };
 		22700646226CA24E003492CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22700645226CA24E003492CB /* Assets.xcassets */; };
@@ -57,6 +58,7 @@
 		220F9AAE22784FD4001862A7 /* TORoundedButton.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TORoundedButton.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		220F9AB022784FD4001862A7 /* TORoundedButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TORoundedButton.h; sourceTree = "<group>"; };
 		220F9AB122784FD4001862A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		220F9ABE2278AA0B001862A7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		22700639226CA24D003492CB /* TORoundedButtonExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TORoundedButtonExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2270063C226CA24D003492CB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2270063D226CA24D003492CB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -110,11 +112,20 @@
 			path = TORoundedButton;
 			sourceTree = "<group>";
 		};
+		220F9ABD2278AA0B001862A7 /* TORoundedButtonFramework */ = {
+			isa = PBXGroup;
+			children = (
+				220F9ABE2278AA0B001862A7 /* Info.plist */,
+			);
+			path = TORoundedButtonFramework;
+			sourceTree = "<group>";
+		};
 		22700630226CA24D003492CB = {
 			isa = PBXGroup;
 			children = (
 				22700660226CA322003492CB /* TORoundedButton */,
 				2270063B226CA24D003492CB /* TORoundedButtonExample */,
+				220F9ABD2278AA0B001862A7 /* TORoundedButtonFramework */,
 				22700654226CA24E003492CB /* TORoundedButtonExampleTests */,
 				220F9AAF22784FD4001862A7 /* TORoundedButton */,
 				2270063A226CA24D003492CB /* Products */,
@@ -281,6 +292,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				220F9ABF2278AA0B001862A7 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,7 +390,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = TORoundedButton/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/TORoundedButtonFramework/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -406,7 +418,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = TORoundedButton/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/TORoundedButtonFramework/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
