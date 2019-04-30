@@ -110,6 +110,9 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     if (!_buttonBackgroundColor) { _buttonBackgroundColor = [UIColor whiteColor]; }
     super.backgroundColor = [UIColor clearColor];
 
+    // Set the tapped tint color if we've set to dynamically calculate it
+    [self updateTappedTintColorForTintColor];
+
     // Create the container view that manages the image view and text
     self.containerView = [[UIView alloc] initWithFrame:self.bounds];
     self.containerView.backgroundColor = [UIColor clearColor];
@@ -138,6 +141,9 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self addTarget:self action:@selector(didTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [self addTarget:self action:@selector(didDragOutside) forControlEvents:UIControlEventTouchDragExit|UIControlEventTouchCancel];
     [self addTarget:self action:@selector(didDragInside) forControlEvents:UIControlEventTouchDragEnter];
+
+    // Configure views for the current state
+    [self configureBackgroundView];
 }
 
 #pragma mark - View Displaying -
@@ -146,7 +152,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 {
     [super layoutSubviews];
 
-    // 
+    // Regenerate the images if they are dirty and we need them
     if (!self.isClear && self.isDirty) {
         [self generateOpaqueImages];
         self.isDirty = NO;
@@ -156,22 +162,21 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self.titleLabel sizeToFit];
     self.titleLabel.center = self.containerView.center;
     self.titleLabel.frame = CGRectIntegral(self.titleLabel.frame);
-    
-    // Configure the image view depending on the state
-    if (self.isClear) { [self configureImageViewForClearDisplay]; }
-    else { [self configureImageViewForOpaqueDisplay]; }
 }
 
 - (void)generateOpaqueImages
 {
+    // Double check we have the correct tint color set
+    [self updateTappedTintColorForTintColor];
+
     // Generate any images we need
     self.backgroundImage = [[self class] buttonImageWithBackgroundColor:self.buttonBackgroundColor
                                                         foregroundColor:self.tintColor
                                                            cornerRadius:self.cornerRadius];
-    
-    // Double check we have the correct tint color set
-    [self updateTappedTintColorForTintColor];
-    
+
+    // Attach this new image to the background view
+    self.backgroundImageView.image = self.backgroundImage;
+
     // If we've set a tapped color, generate an image for that one too
     if (self.tappedTintColor) {
         self.tappedBackgroundImage = [[self class] buttonImageWithBackgroundColor:self.buttonBackgroundColor
@@ -183,10 +188,17 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     }
 }
 
+- (void)configureBackgroundView
+{
+    // Configure the image view depending on the state
+    if (self.isClear) { [self configureImageViewForClearDisplay]; }
+    else { [self configureImageViewForOpaqueDisplay]; }
+}
+
 - (void)configureImageViewForOpaqueDisplay
 {
     // Configure the background image view for opaque drawing
-    self.backgroundImageView.image = self.isTapped ? self.tappedBackgroundImage : self.backgroundImage;
+    self.backgroundImageView.image = self.backgroundImage;
     self.backgroundImageView.backgroundColor = nil;
 
     // Reset ourselves from potential clipping
@@ -282,12 +294,13 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     // -----------------------------------------------------
     
     // For transparent buttons, just animate the tint color
-    if (!self.opaque) {
+    if (self.isClear) {
         void (^animationBlock)(void) = ^{
             self.backgroundImageView.backgroundColor = self.isTapped ? self.tappedTintColor : self.tintColor;
         };
         
         void (^completionBlock)(BOOL) = ^(BOOL completed){
+            if (completed == NO) { return; }
             updateTitleOpacity();
         };
 
@@ -445,6 +458,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _buttonBackgroundColor = backgroundColor;
     _isDirty = YES;
     _isClear = ![[self class] isOpaqueColor:backgroundColor];
+    [self configureBackgroundView];
     [self setNeedsLayout];
 }
 
