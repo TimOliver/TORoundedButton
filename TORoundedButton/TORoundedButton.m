@@ -429,20 +429,24 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 #pragma mark - Public Accessors -
 
-/** Map the text property directly to the label */
 - (void)setText:(NSString *)text
 {
     self.titleLabel.text = text;
 }
 - (NSString *)text { return self.titleLabel.text; }
 
-/** Map the font property directly to the label */
 - (void)setTextFont:(UIFont *)textFont
 {
     self.titleLabel.font = textFont;
     self.textPointSize = 0.0f; // Reset the IB text point size back to disabled
 }
 - (UIFont *)textFont { return self.titleLabel.font; }
+
+- (void)setTextColor:(UIColor *)textColor
+{
+    self.titleLabel.textColor = textColor;
+}
+- (UIColor *)textColor { return self.titleLabel.textColor; }
 
 - (void)setTextPointSize:(CGFloat)textPointSize
 {
