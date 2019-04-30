@@ -47,7 +47,7 @@ lane :release do
   if podspec_version != latest_version
     UI.message "Updating Podspec version"
     version_bump_podspec(path: ENV["PODSPEC_PATH"], version_number: latest_version)
-    commit_file(file_path: ENV["PODSPEC_PATH"], commit_message: "Bumped Podspec Version to v#{latest_version}")
+    commit = commit_file(file_path: ENV["PODSPEC_PATH"], commit_message: "Bumped Podspec Version to v#{latest_version}")
     commit_sha = commit[:json]["commit"]["sha"]
   end
 
