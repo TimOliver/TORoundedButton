@@ -1,0 +1,6 @@
+env:
+  TEST_SCHEME: "TORoundedButtonTests"
+
+steps:  
+  - label: ':fastlane: Run Tests'
+    command: 'bundle install && bundle exec fastlane test'

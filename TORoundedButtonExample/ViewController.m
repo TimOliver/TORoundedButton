@@ -2,13 +2,11 @@
 //  ViewController.m
 //  TORoundedButtonExample
 //
-//  Created by Tim Oliver on 21/4/19.
+//  Created by Tim Oliver on 29/4/19.
 //  Copyright © 2019 Tim Oliver. All rights reserved.
 //
 
 #import "ViewController.h"
-#import "TORoundedButton.h"
-#import "TableViewCell.h"
 
 @interface ViewController ()
 
@@ -18,44 +16,33 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    self.opaqueTappedLabel.alpha = 0.0f;
+    self.transparentTappedLabel.alpha = 0.0f;
+
+    __weak typeof(self) weakSelf = self;
+    self.opaqueButton.tappedHandler = ^{
+        [weakSelf playFadeAnimationOnView:weakSelf.opaqueTappedLabel];
+    };
+
+    self.clearButton.tappedHandler = ^{
+        [weakSelf playFadeAnimationOnView:weakSelf.transparentTappedLabel];
+    };
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (void)playFadeAnimationOnView:(UIView *)view
 {
-    return 4;
-}
+    [view.layer removeAllAnimations];
+    view.alpha = 1.0f;
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    TableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.95f, 0.95f);
+    [UIView animateWithDuration:0.3f delay:0.0f usingSpringWithDamping:0.1f initialSpringVelocity:0.5f options:0 animations:^{
+        view.transform = CGAffineTransformIdentity;
+    } completion:nil];
 
-    NSString *title = nil;
-    TORoundedButton *button = cell.button;
-
-    button.tappedTintColor = nil;
-
-    switch (indexPath.row) {
-        case 0:
-            title = @"Default";
-            break;
-        case 1:
-            title = @"Background Fade";
-            button.tappedTintColor = [UIColor colorWithRed:0.0f green:0.41f blue:0.85f alpha:1.0f];
-            break;
-        case 2:
-            title = @"Scale Inset";
-            button.tappedButtonScale = 0.95f;
-            break;
-        case 3:
-            title = @"All Effects";
-            button.tappedButtonScale = 0.95f;
-            button.tappedTintColor = [UIColor colorWithRed:0.0f green:0.41f blue:0.85f alpha:1.0f];
-            break;
-    }
-    cell.titleLabel.text = title;
-
-
-    return cell;
+    [UIView animateWithDuration:1.0f delay:0.3f options:0 animations:^{
+        view.alpha = 0.0f;
+    } completion:nil];
 }
 
 @end
