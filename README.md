@@ -1,7 +1,7 @@
 # TORoundedButton
 
 <p align="center">
-	<img src="https://github.com/TimOliver/TORoundedButton/blob/ship-it/screenshot.jpg" alt="TORoundedButton" />
+	<img src="https://raw.githubusercontent.com/TimOliver/TORoundedButton/master/screenshot.jpg" alt="TORoundedButton" />
 </p>
 
 [![Build Status](https://badge.buildkite.com/5a6554b48a4200ec601178fb1a6d9927a5eec3b94c49fd73fb.svg)](https://buildkite.com/xd-ci/toroundedbutton-run-ci)
