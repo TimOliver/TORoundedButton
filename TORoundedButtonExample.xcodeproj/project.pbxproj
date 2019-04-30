@@ -11,7 +11,6 @@
 		220F9AB522784FD4001862A7 /* TORoundedButton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220F9AAE22784FD4001862A7 /* TORoundedButton.framework */; };
 		220F9AB622784FD4001862A7 /* TORoundedButton.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 220F9AAE22784FD4001862A7 /* TORoundedButton.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		220F9ABC22784FF5001862A7 /* TORoundedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700662226CA35D003492CB /* TORoundedButton.m */; };
-		220F9ABF2278AA0B001862A7 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 220F9ABE2278AA0B001862A7 /* Info.plist */; };
 		2270063E226CA24D003492CB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2270063D226CA24D003492CB /* AppDelegate.m */; };
 		22700644226CA24D003492CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22700642226CA24D003492CB /* Main.storyboard */; };
 		22700646226CA24E003492CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22700645226CA24E003492CB /* Assets.xcassets */; };
@@ -292,7 +291,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				220F9ABF2278AA0B001862A7 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
