@@ -16,17 +16,33 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    self.opaqueTappedLabel.alpha = 0.0f;
+    self.transparentTappedLabel.alpha = 0.0f;
+
+    __weak typeof(self) weakSelf = self;
+    self.opaqueButton.tappedHandler = ^{
+        [weakSelf playFadeAnimationOnView:weakSelf.opaqueTappedLabel];
+    };
+
+    self.clearButton.tappedHandler = ^{
+        [weakSelf playFadeAnimationOnView:weakSelf.transparentTappedLabel];
+    };
 }
 
-/*
-#pragma mark - Navigation
+- (void)playFadeAnimationOnView:(UIView *)view
+{
+    [view.layer removeAllAnimations];
+    view.alpha = 1.0f;
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.95f, 0.95f);
+    [UIView animateWithDuration:0.3f delay:0.0f usingSpringWithDamping:0.1f initialSpringVelocity:0.5f options:0 animations:^{
+        view.transform = CGAffineTransformIdentity;
+    } completion:nil];
+
+    [UIView animateWithDuration:1.0f delay:0.3f options:0 animations:^{
+        view.alpha = 0.0f;
+    } completion:nil];
 }
-*/
 
 @end
