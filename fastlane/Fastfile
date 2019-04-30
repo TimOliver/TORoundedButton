@@ -47,7 +47,7 @@ lane :release do
   if podspec_version != latest_version
     UI.message "Updating Podspec version"
     version_bump_podspec(path: ENV["PODSPEC_PATH"], version_number: latest_version)
-    commit = commit_file(file_path: ENV["PODSPEC_PATH"], commit_message: "Bumped Podspec Version to v#{latest_version}")
+    commit = commit_file(repo_name: ENV["REPO_PATH"], file_path: ENV["PODSPEC_PATH"], commit_message: "Bumped Podspec Version to v#{latest_version}")
     commit_sha = commit[:json]["commit"]["sha"]
   end
 
@@ -60,7 +60,7 @@ lane :release do
   if framework_version != latest_version
     UI.message "Updating framework version"
     set_info_plist_value(path: ENV["FRAMEWORK_PLIST_PATH"], key: "CFBundleShortVersionString", value: latest_version)
-    commit = commit_file(file_path: ENV["FRAMEWORK_PLIST_PATH"], commit_message: "Bumped Framework Version to v#{latest_version}")
+    commit = commit_file(repo_name: ENV["REPO_PATH"], file_path: ENV["FRAMEWORK_PLIST_PATH"], commit_message: "Bumped Framework Version to v#{latest_version}")
     commit_sha = commit[:json]["commit"]["sha"]
   end
 
@@ -96,8 +96,6 @@ lane :commit_file do |options|
   repo_name = options[:repo_name]
   file_path = options[:file_path]
   message = options[:commit_message]
-
-  UI.message "/repos/#{repo_name}/contents/#{file_path}"
 
   # Fetch the file so we can extract the sha
   result = Fastlane::Actions::GithubApiAction.run(
