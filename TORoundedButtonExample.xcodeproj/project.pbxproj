@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		220F9AB222784FD4001862A7 /* TORoundedButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 220F9AB022784FD4001862A7 /* TORoundedButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		220F9AB522784FD4001862A7 /* TORoundedButton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220F9AAE22784FD4001862A7 /* TORoundedButton.framework */; };
+		220F9AB622784FD4001862A7 /* TORoundedButton.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 220F9AAE22784FD4001862A7 /* TORoundedButton.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		220F9ABC22784FF5001862A7 /* TORoundedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700662226CA35D003492CB /* TORoundedButton.m */; };
 		2270063E226CA24D003492CB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2270063D226CA24D003492CB /* AppDelegate.m */; };
 		22700644226CA24D003492CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22700642226CA24D003492CB /* Main.storyboard */; };
 		22700646226CA24E003492CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22700645226CA24E003492CB /* Assets.xcassets */; };
@@ -19,6 +23,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		220F9AB322784FD4001862A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 22700631226CA24D003492CB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 220F9AAD22784FD4001862A7;
+			remoteInfo = TORoundedButton;
+		};
 		22700652226CA24E003492CB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 22700631226CA24D003492CB /* Project object */;
@@ -28,7 +39,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		220F9ABA22784FD4001862A7 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				220F9AB622784FD4001862A7 /* TORoundedButton.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		220F9AAE22784FD4001862A7 /* TORoundedButton.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TORoundedButton.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		220F9AB022784FD4001862A7 /* TORoundedButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TORoundedButton.h; sourceTree = "<group>"; };
+		220F9AB122784FD4001862A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		22700639226CA24D003492CB /* TORoundedButtonExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TORoundedButtonExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2270063C226CA24D003492CB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2270063D226CA24D003492CB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -48,10 +76,18 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		220F9AAB22784FD4001862A7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22700636226CA24D003492CB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				220F9AB522784FD4001862A7 /* TORoundedButton.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,12 +101,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		220F9AAF22784FD4001862A7 /* TORoundedButton */ = {
+			isa = PBXGroup;
+			children = (
+				220F9AB022784FD4001862A7 /* TORoundedButton.h */,
+				220F9AB122784FD4001862A7 /* Info.plist */,
+			);
+			path = TORoundedButton;
+			sourceTree = "<group>";
+		};
 		22700630226CA24D003492CB = {
 			isa = PBXGroup;
 			children = (
 				22700660226CA322003492CB /* TORoundedButton */,
 				2270063B226CA24D003492CB /* TORoundedButtonExample */,
 				22700654226CA24E003492CB /* TORoundedButtonExampleTests */,
+				220F9AAF22784FD4001862A7 /* TORoundedButton */,
 				2270063A226CA24D003492CB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -80,6 +126,7 @@
 			children = (
 				22700639226CA24D003492CB /* TORoundedButtonExample.app */,
 				22700651226CA24E003492CB /* TORoundedButtonExampleTests.xctest */,
+				220F9AAE22784FD4001862A7 /* TORoundedButton.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -121,7 +168,36 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		220F9AA922784FD4001862A7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				220F9AB222784FD4001862A7 /* TORoundedButton.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		220F9AAD22784FD4001862A7 /* TORoundedButton */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 220F9AB922784FD4001862A7 /* Build configuration list for PBXNativeTarget "TORoundedButton" */;
+			buildPhases = (
+				220F9AA922784FD4001862A7 /* Headers */,
+				220F9AAA22784FD4001862A7 /* Sources */,
+				220F9AAB22784FD4001862A7 /* Frameworks */,
+				220F9AAC22784FD4001862A7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TORoundedButton;
+			productName = TORoundedButton;
+			productReference = 220F9AAE22784FD4001862A7 /* TORoundedButton.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		22700638226CA24D003492CB /* TORoundedButtonExample */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2270065A226CA24E003492CB /* Build configuration list for PBXNativeTarget "TORoundedButtonExample" */;
@@ -129,10 +205,12 @@
 				22700635226CA24D003492CB /* Sources */,
 				22700636226CA24D003492CB /* Frameworks */,
 				22700637226CA24D003492CB /* Resources */,
+				220F9ABA22784FD4001862A7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				220F9AB422784FD4001862A7 /* PBXTargetDependency */,
 			);
 			name = TORoundedButtonExample;
 			productName = TORoundedButtonExample;
@@ -166,6 +244,9 @@
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Tim Oliver";
 				TargetAttributes = {
+					220F9AAD22784FD4001862A7 = {
+						CreatedOnToolsVersion = 10.1;
+					};
 					22700638226CA24D003492CB = {
 						CreatedOnToolsVersion = 10.1;
 					};
@@ -190,11 +271,19 @@
 			targets = (
 				22700638226CA24D003492CB /* TORoundedButtonExample */,
 				22700650226CA24E003492CB /* TORoundedButtonExampleTests */,
+				220F9AAD22784FD4001862A7 /* TORoundedButton */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		220F9AAC22784FD4001862A7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22700637226CA24D003492CB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -216,6 +305,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		220F9AAA22784FD4001862A7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				220F9ABC22784FF5001862A7 /* TORoundedButton.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22700635226CA24D003492CB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -238,6 +335,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		220F9AB422784FD4001862A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 220F9AAD22784FD4001862A7 /* TORoundedButton */;
+			targetProxy = 220F9AB322784FD4001862A7 /* PBXContainerItemProxy */;
+		};
 		22700653226CA24E003492CB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 22700638226CA24D003492CB /* TORoundedButtonExample */;
@@ -265,6 +367,62 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		220F9AB722784FD4001862A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 6LF3GMKZAB;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = TORoundedButton/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.tim.TORoundedButton;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		220F9AB822784FD4001862A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 6LF3GMKZAB;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = TORoundedButton/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.tim.TORoundedButton;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		22700658226CA24E003492CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -452,6 +610,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		220F9AB922784FD4001862A7 /* Build configuration list for PBXNativeTarget "TORoundedButton" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				220F9AB722784FD4001862A7 /* Debug */,
+				220F9AB822784FD4001862A7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		22700634226CA24D003492CB /* Build configuration list for PBXProject "TORoundedButtonExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
