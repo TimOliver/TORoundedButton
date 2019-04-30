@@ -1,0 +1,6 @@
+env:
+  TEST_SCHEME: "TORoundedTableViewTests"
+
+steps:  
+  - label: ':fastlane: Run Tests'
+    command: 'bundle install && bundle exec fastlane test'

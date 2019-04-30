@@ -1,0 +1,10 @@
+env:
+  LC_ALL: "en_US.UTF-8"
+  REPO_PATH: "TimOliver/TORoundedButton"
+  PODSPEC_PATH: "TORoundedButton.podspec"
+  FRAMEWORK_PLIST_PATH: "TORoundedButtonFramework/Info.plist"
+  BUILDKITE_CLEAN_CHECKOUT: true
+
+steps:  
+  - label: ':fastlane: Cut New Release'
+    command: 'bundle install && bundle exec fastlane release'
