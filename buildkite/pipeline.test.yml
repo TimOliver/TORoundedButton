@@ -1,5 +1,5 @@
 env:
-  TEST_SCHEME: "TORoundedTableViewTests"
+  TEST_SCHEME: "TORoundedButtonTests"
 
 steps:  
   - label: ':fastlane: Run Tests'
