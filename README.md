@@ -11,7 +11,7 @@
 [![PayPal](https://img.shields.io/badge/paypal-donate-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=M4RKULAVKV7K8)
 [![Twitch](https://img.shields.io/badge/twitch-timXD-6441a5.svg)](http://twitch.tv/timXD)
 
-`TORoundedButton` is an open source UI control of a button made up of text on a solid rectangle with rounded corners. This UI style has started becoming more and more common in iOS 11 and above, but while Apple has an official one they use internally, it is not possible to achieve this effect without heavily modifying `UIButton`.
+`TORoundedButton` is an open source UI control of a standard user button. Its design consists of displaying text on top of a solid rectangle with rounded corners. This UI style has started becoming more and more common in iOS 11 and above, but while Apple has an official one they use internally, it is not possible to achieve this effect without heavily modifying `UIButton`.
 
 `TORoundedButton` has been crafted to be as graphically performant as possible, with specific codepaths created for whether the button is opaque (eg, it is displayed over a solid color that never changes), or if it is transparent (Displayed over dynamic content that changes)
 
