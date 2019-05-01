@@ -41,13 +41,15 @@ let button = RoundedButton(text: "Continue")
 // Set the background color to match the super view for best performance
 button.backgroundColor = .white
 
-// Set the background color to clear only when it the background content behind the button dynamically changes
+// Set the background color to clear only when it the 
+// background content behind the button dynamically changes
 button.backgroundColor = .clear
 
 // The button color itself is controlled via tintColor
 button.tintColor = .red
 
-// If desired a brightness offset that will be used to dynamically calculate the 'tapped' color from the default one.
+// If desired a brightness offset that will be used to 
+// dynamically calculate the 'tapped' color from the default one.
 button.tappedTintColorBrightnessOffset = -0.15
 
 // A closure is used to detect when tapped
