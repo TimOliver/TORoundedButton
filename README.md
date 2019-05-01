@@ -27,7 +27,7 @@
 * Elegantly cancels and resumes animations when the user slides their finger on and off the button.
 * Piggy-backs off most standard `UIView` properties in order to minimize the learning curve.
 * Includes dynamic color code to generate a 'tapped' shade of the normal color, saving you extra effort.
-* Fully compatible with Swift, with the class name `RoundedButton.
+* Fully compatible with Swift, with the class name `RoundedButton`.
 
 # Examples
 
