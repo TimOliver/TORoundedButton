@@ -98,6 +98,8 @@ That being said, for instances where actual dynamic clipping is needed, this lib
 
 `TORoundedButton` was created by [Tim Oliver](http://twitter.com/TimOliverAU) as a component of [iComics](http://icomics.co).
 
+iOS device mockup art by [Pixeden](http://pixeden.com).
+
 # License
 
 `TORoundedButton` is available under the MIT license. Please see the [LICENSE](LICENSE) file for more information. ![analytics](https://ga-beacon.appspot.com/UA-5643664-16/TORoundedButton/README.md?pixel)
