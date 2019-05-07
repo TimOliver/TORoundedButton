@@ -33,6 +33,10 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /** The text that is displayed in center of the button (Default is "Button") */
 @property (nonatomic, copy) IBInspectable NSString *text;
 
+/** The Attributed string used in the label of this button (Default is nil) */
+/** See UILabel `attributedText` property  documentation for full details. */
+@property (nonatomic, copy, nullable) NSAttributedString  *attributedText;
+
 /** The radius of the corners of this button (Default is 10.0f) */
 @property (nonatomic, assign) IBInspectable CGFloat cornerRadius;
 

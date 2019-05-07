@@ -22,4 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface NSAttributedString (TORoundedButton)
++ (NSAttributedString *)exampleString;
+@end
+
 NS_ASSUME_NONNULL_END

@@ -429,6 +429,16 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 #pragma mark - Public Accessors -
 
+- (void)setAttributedText:(NSAttributedString *)attributedText
+{
+    self.titleLabel.attributedText = attributedText;
+}
+
+- (NSAttributedString *)attributedText
+{
+    return self.titleLabel.attributedText;
+}
+
 - (void)setText:(NSString *)text
 {
     self.titleLabel.text = text;

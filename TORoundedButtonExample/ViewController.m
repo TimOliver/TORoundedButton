@@ -20,6 +20,8 @@
     self.opaqueTappedLabel.alpha = 0.0f;
     self.transparentTappedLabel.alpha = 0.0f;
 
+    self.clearButton.attributedText = [NSAttributedString exampleString];
+
     __weak typeof(self) weakSelf = self;
     self.opaqueButton.tappedHandler = ^{
         [weakSelf playFadeAnimationOnView:weakSelf.opaqueTappedLabel];
@@ -43,6 +45,41 @@
     [UIView animateWithDuration:1.0f delay:0.3f options:0 animations:^{
         view.alpha = 0.0f;
     } completion:nil];
+}
+
+@end
+
+@implementation NSAttributedString (TORoundedButton)
+
++ (NSAttributedString*)exampleString
+{
+    NSMutableAttributedString *mutString = [NSMutableAttributedString new];
+    NSAttributedString *string1 = [[NSAttributedString alloc] initWithString:@"A" attributes:
+                                   @{
+                                     NSFontAttributeName : [UIFont fontWithName:@"Zapfino" size:22],
+                                     NSForegroundColorAttributeName : [UIColor whiteColor]
+                                     }];
+    [mutString appendAttributedString:string1];
+    NSAttributedString *string2 = [[NSAttributedString alloc] initWithString:@"tt" attributes:
+                                   @{
+                                     NSFontAttributeName : [UIFont fontWithName:@"Zapfino" size:17],
+                                     NSForegroundColorAttributeName : [UIColor orangeColor]
+                                     }];
+    [mutString appendAttributedString:string2];
+    NSAttributedString *string3 = [[NSAttributedString alloc] initWithString:@"ribu" attributes:
+                                   @{
+                                     NSFontAttributeName : [UIFont fontWithName:@"ChalkboardSE-Regular" size:16],
+                                     NSForegroundColorAttributeName : [UIColor yellowColor]
+                                     }];
+    [mutString appendAttributedString:string3];
+    NSAttributedString *string4 = [[NSAttributedString alloc] initWithString:@"ted" attributes:
+                                   @{
+                                     NSFontAttributeName : [UIFont fontWithName:@"Courier" size:22],
+                                     NSForegroundColorAttributeName : [UIColor greenColor]
+                                     }];
+    [mutString appendAttributedString:string4];
+
+    return [mutString copy];
 }
 
 @end
