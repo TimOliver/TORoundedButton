@@ -16,14 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet TORoundedButton *opaqueButton;
 @property (weak, nonatomic) IBOutlet TORoundedButton *clearButton;
 
-
 @property (weak, nonatomic) IBOutlet UILabel *opaqueTappedLabel;
 @property (weak, nonatomic) IBOutlet UILabel *transparentTappedLabel;
 
-@end
-
-@interface NSAttributedString (TORoundedButton)
-+ (NSAttributedString *)exampleString;
 @end
 
 NS_ASSUME_NONNULL_END

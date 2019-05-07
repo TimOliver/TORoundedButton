@@ -20,7 +20,8 @@
     self.opaqueTappedLabel.alpha = 0.0f;
     self.transparentTappedLabel.alpha = 0.0f;
 
-    self.clearButton.attributedText = [NSAttributedString exampleString];
+    // Uncomment this line for an attributed string example
+    // self.clearButton.attributedText = [[self class] makeExampleAttributedString];
 
     __weak typeof(self) weakSelf = self;
     self.opaqueButton.tappedHandler = ^{
@@ -47,11 +48,7 @@
     } completion:nil];
 }
 
-@end
-
-@implementation NSAttributedString (TORoundedButton)
-
-+ (NSAttributedString*)exampleString
++ (NSAttributedString*)makeExampleAttributedString
 {
     NSMutableAttributedString *mutString = [NSMutableAttributedString new];
     NSAttributedString *string1 = [[NSAttributedString alloc] initWithString:@"A" attributes:
