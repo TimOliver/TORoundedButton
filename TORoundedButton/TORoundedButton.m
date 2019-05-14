@@ -257,6 +257,8 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self setBackgroundColorTappedAnimated:YES];
     [self setButtonScaledTappedAnimated:YES];
 
+    [self sendActionsForControlEvents:UIControlEventPrimaryActionTriggered];
+
     if (self.tappedHandler) { self.tappedHandler(); }
 }
 
