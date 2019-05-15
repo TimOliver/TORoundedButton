@@ -522,6 +522,13 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self setNeedsLayout];
 }
 
+- (void)setEnabled:(BOOL)enabled
+{
+    [super setEnabled:enabled];
+
+    self.alpha = enabled ? 1 : 0.4;
+}
+
 #pragma mark - Graphics Handling -
 + (BOOL)isOpaqueColor:(UIColor *)color
 {
