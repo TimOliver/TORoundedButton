@@ -222,6 +222,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)tintColorDidChange
 {
     [super tintColorDidChange];
+    self.titleLabel.backgroundColor = self.isTapped ? [UIColor clearColor] : self.tintColor;
     self.isDirty = YES;
     [self setNeedsLayout];
 }
@@ -409,8 +410,8 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
         self.containerView.transform = CGAffineTransformScale(CGAffineTransformIdentity,
-                                                scale,
-                                                scale);
+                                                              scale,
+                                                              scale);
     };
 
     // If we're not animating, just call the blocks manually
