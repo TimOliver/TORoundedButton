@@ -526,7 +526,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 {
     [super setEnabled:enabled];
 
-    self.alpha = enabled ? 1 : 0.4;
+    self.containerView.alpha = enabled ? 1 : 0.4;
 }
 
 #pragma mark - Graphics Handling -
