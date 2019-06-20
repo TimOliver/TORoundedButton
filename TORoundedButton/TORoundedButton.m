@@ -85,7 +85,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)roundedButtonCommonInit
 {
     // Default properties (Make sure they're not overriding IB)
-    _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 15.0f;
+    _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
     _tappedTextAlpha = (_tappedTextAlpha > FLT_EPSILON) ?: 1.0f;
     _tapAnimationDuration = (_tapAnimationDuration > FLT_EPSILON) ?: 0.4f;
     _tappedButtonScale = (_tappedButtonScale > FLT_EPSILON) ?: 0.97f;
@@ -107,7 +107,9 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.backgroundView.backgroundColor = self.tintColor;
     self.backgroundView.layer.cornerRadius = _cornerRadius;
+#ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) { self.backgroundView.layer.cornerCurve = kCACornerCurveContinuous; }
+#endif
     [self.containerView addSubview:self.backgroundView];
 
     // Create the title label that will display the button text

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14810.11" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GV4-PL-MlK">
-    <device id="retina5_5" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GV4-PL-MlK">
+    <device id="retina5_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14766.13"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,8 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Rx-9D-Udo" userLabel="RoundedButton" customClass="TORoundedButton">
-                                <rect key="frame" x="40" y="259" width="300" height="50"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Rx-9D-Udo" userLabel="RoundedButton" customClass="TORoundedButton">
+                                <rect key="frame" x="67" y="353" width="280" height="50"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="OXU-dJ-PiL"/>
@@ -27,9 +29,11 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="text" value="Continue"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tapped!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YuK-c8-gCA">
-                                <rect key="frame" x="76" y="20" width="228" height="36"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tapped!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YuK-c8-gCA">
+                                <rect key="frame" x="93" y="171.66666666666666" width="228" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="A2b-ZQ-Mpt"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -37,11 +41,17 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="YuK-c8-gCA" firstAttribute="centerY" secondItem="yn0-Wx-glq" secondAttribute="centerY" multiplier="0.5" id="1aK-Gn-u8l"/>
                             <constraint firstItem="3Rx-9D-Udo" firstAttribute="centerX" secondItem="yn0-Wx-glq" secondAttribute="centerX" id="4Pd-sN-oZH"/>
+                            <constraint firstItem="YuK-c8-gCA" firstAttribute="centerX" secondItem="yn0-Wx-glq" secondAttribute="centerX" id="KUL-o1-7MR"/>
                             <constraint firstItem="3Rx-9D-Udo" firstAttribute="centerY" secondItem="yn0-Wx-glq" secondAttribute="centerY" id="rFU-Gn-CY5"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="yn0-Wx-glq"/>
                     </view>
+                    <connections>
+                        <outlet property="button" destination="3Rx-9D-Udo" id="vBt-gD-VP7"/>
+                        <outlet property="tappedLabel" destination="YuK-c8-gCA" id="4Pk-Fd-JQ4"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gnq-hq-tqL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

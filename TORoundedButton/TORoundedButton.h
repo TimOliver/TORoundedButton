@@ -36,7 +36,7 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /** The attributed string used in the label of this button. See `UILabel.attributedText` documentation for full details (Default is nil) */
 @property (nonatomic, copy, nullable) NSAttributedString  *attributedText;
 
-/** The radius of the corners of this button (Default is 15.0f) */
+/** The radius of the corners of this button (Default is 12.0f) */
 @property (nonatomic, assign) IBInspectable CGFloat cornerRadius;
 
 /** The color of the text in this button (Default is white) */
