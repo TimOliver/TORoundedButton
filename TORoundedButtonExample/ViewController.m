@@ -17,19 +17,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.opaqueTappedLabel.alpha = 0.0f;
-    self.transparentTappedLabel.alpha = 0.0f;
+    // Hide the tapped label
+    self.tappedLabel.alpha = 0.0f;
 
     // Uncomment this line for an attributed string example
-    // self.clearButton.attributedText = [[self class] makeExampleAttributedString];
+    // self.button.attributedText = [[self class] makeExampleAttributedString];
 
     __weak typeof(self) weakSelf = self;
-    self.opaqueButton.tappedHandler = ^{
-        [weakSelf playFadeAnimationOnView:weakSelf.opaqueTappedLabel];
-    };
-
-    self.clearButton.tappedHandler = ^{
-        [weakSelf playFadeAnimationOnView:weakSelf.transparentTappedLabel];
+    self.button.tappedHandler = ^{
+        [weakSelf playFadeAnimationOnView:weakSelf.tappedLabel];
     };
 }
 
