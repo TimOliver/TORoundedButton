@@ -30,7 +30,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tapped!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YuK-c8-gCA">
-                                <rect key="frame" x="93" y="171.66666666666666" width="228" height="35"/>
+                                <rect key="frame" x="159.66666666666666" y="171.66666666666666" width="94.666666666666657" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="A2b-ZQ-Mpt"/>
                                 </constraints>
