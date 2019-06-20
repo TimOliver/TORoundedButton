@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "220F9AAD22784FD4001862A7"
                BuildableName = "TORoundedButton.framework"
-               BlueprintName = "TORoundedButton"
+               BlueprintName = "TORoundedButtonFramework"
                ReferencedContainer = "container:TORoundedButtonExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,7 +47,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "220F9AAD22784FD4001862A7"
             BuildableName = "TORoundedButton.framework"
-            BlueprintName = "TORoundedButton"
+            BlueprintName = "TORoundedButtonFramework"
             ReferencedContainer = "container:TORoundedButtonExample.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -65,7 +65,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "220F9AAD22784FD4001862A7"
             BuildableName = "TORoundedButton.framework"
-            BlueprintName = "TORoundedButton"
+            BlueprintName = "TORoundedButtonFramework"
             ReferencedContainer = "container:TORoundedButtonExample.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
