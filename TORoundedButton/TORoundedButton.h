@@ -36,7 +36,7 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /** The attributed string used in the label of this button. See `UILabel.attributedText` documentation for full details (Default is nil) */
 @property (nonatomic, copy, nullable) NSAttributedString  *attributedText;
 
-/** The radius of the corners of this button (Default is 10.0f) */
+/** The radius of the corners of this button (Default is 15.0f) */
 @property (nonatomic, assign) IBInspectable CGFloat cornerRadius;
 
 /** The color of the text in this button (Default is white) */
@@ -45,7 +45,7 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /** When tapped, the level of transparency that the text label animates to. (Defaults to 0.5f) */
 @property (nonatomic, assign) IBInspectable CGFloat tappedTextAlpha;
 
-/** The font of the text in the button (Default is size 19 Bold) */
+/** The font of the text in the button (Default is size UIFontTextStyleBody with bold) */
 @property (nonatomic, strong) UIFont *textFont;
 
 /** Because IB cannot handle fonts, this can alternatively be used to set the font size. (Default is off with 0.0) */
