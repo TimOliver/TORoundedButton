@@ -18,7 +18,12 @@
 - (void)testDefaultValues
 {
     TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
-
+    XCTAssertEqual(button.text, @"Test");
+    XCTAssertEqual(button.cornerRadius, 12.0f);
+    XCTAssertEqual(button.textColor, [UIColor whiteColor]);
+    XCTAssertEqual(button.tappedTextAlpha, 1.0f);
+    XCTAssertEqual(button.tappedTintColorBrightnessOffset, -0.1f);
+    XCTAssertEqual(button.tappedButtonScale, 0.97f);
     XCTAssertNotNil(button);
 }
 
