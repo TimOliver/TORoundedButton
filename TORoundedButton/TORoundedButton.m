@@ -59,6 +59,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     if (self = [super initWithFrame:(CGRect){0,0, 288.0f, 50.0f}]) {
         [self roundedButtonCommonInit];
         _titleLabel.text = text;
+        [_titleLabel sizeToFit];
     }
 
     return self;
@@ -113,8 +114,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self.containerView addSubview:self.backgroundView];
 
     // Create the title label that will display the button text
-    UIFont *buttonFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    buttonFont = [UIFont systemFontOfSize:buttonFont.pointSize weight:UIFontWeightBold];
+    UIFont *buttonFont = [UIFont systemFontOfSize:17.0f weight:UIFontWeightBold];
     if (@available(iOS 11.0, *)) {
         // Apply resizable button metrics to font
         UIFontMetrics *metrics = [[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleBody];
@@ -128,7 +128,6 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     self.titleLabel.adjustsFontForContentSizeCategory = YES;
     self.titleLabel.backgroundColor = self.tintColor;
     self.titleLabel.text = @"Button";
-    [self.titleLabel sizeToFit];
     [self.containerView addSubview:self.titleLabel];
 
     // Create action events for all possible interactions with this control
@@ -145,6 +144,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [super layoutSubviews];
 
     // Configure the button text
+    [self.titleLabel sizeToFit];
     self.titleLabel.center = self.containerView.center;
     self.titleLabel.frame = CGRectIntegral(self.titleLabel.frame);
 }
