@@ -1,8 +1,7 @@
 # TORoundedButton
 
-<p align="center">
-	<img src="https://raw.githubusercontent.com/TimOliver/TORoundedButton/master/screenshot.jpg" alt="TORoundedButton" />
-</p>
+<img src="https://raw.githubusercontent.com/TimOliver/TORoundedButton/master/screenshot.jpg" width="500" align="right" alt="TORoundedButton" />
+
 
 [![Build Status](https://badge.buildkite.com/5a6554b48a4200ec601178fb1a6d9927a5eec3b94c49fd73fb.svg)](https://buildkite.com/xd-ci/toroundedbutton-run-ci)
 [![Version](https://img.shields.io/cocoapods/v/TORoundedButton.svg?style=flat)](http://cocoadocs.org/docsets/TORoundedButton)
@@ -20,9 +19,9 @@
 # Features
 
 * A completely custom implementation; no `UIButton` hacking.
+* Implemented with guidance from Core Animation engineers at WWDC 2019.
 * Extremely flexible with many options for configuring the look and feel of the button.
 * Integrates with Interface Builder for visual configuration.
-* Wherever possible, the rounded rectangle effect is created dynamically in Core Graphics to produce a flat bitmap for ultimate efficiency.
 * When necessary for dynamic background content, it uses Core Animation's `cornerRadius` feature to still allow a performant, dynamically clipped button.
 * Elegantly cancels and resumes animations when the user slides their finger on and off the button.
 * Piggy-backs off most standard `UIView` properties in order to minimize the learning curve.
@@ -37,13 +36,6 @@
 
 // Create a new instance of `RoundedButton`
 let button = RoundedButton(text: "Continue")
-
-// Set the background color to match the super view for best performance
-button.backgroundColor = .white
-
-// Set the background color to clear only when it the 
-// background content behind the button dynamically changes
-button.backgroundColor = .clear
 
 // The button color itself is controlled via tintColor
 button.tintColor = .red
