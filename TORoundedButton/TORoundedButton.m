@@ -128,6 +128,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     self.titleLabel.adjustsFontForContentSizeCategory = YES;
     self.titleLabel.backgroundColor = self.tintColor;
     self.titleLabel.text = @"Button";
+    [self.titleLabel sizeToFit];
     [self.containerView addSubview:self.titleLabel];
 
     // Create action events for all possible interactions with this control
@@ -144,7 +145,6 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [super layoutSubviews];
 
     // Configure the button text
-    [self.titleLabel sizeToFit];
     self.titleLabel.center = self.containerView.center;
     self.titleLabel.frame = CGRectIntegral(self.titleLabel.frame);
 }
@@ -322,6 +322,8 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)setAttributedText:(NSAttributedString *)attributedText
 {
     self.titleLabel.attributedText = attributedText;
+    [self.titleLabel sizeToFit];
+    [self setNeedsLayout];
 }
 
 - (NSAttributedString *)attributedText
@@ -332,6 +334,8 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)setText:(NSString *)text
 {
     self.titleLabel.text = text;
+    [self.titleLabel sizeToFit];
+    [self setNeedsLayout];
 }
 - (NSString *)text { return self.titleLabel.text; }
 
@@ -402,6 +406,11 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 {
     [super setEnabled:enabled];
     self.containerView.alpha = enabled ? 1 : 0.4;
+}
+
+- (CGFloat)minimumWidth
+{
+    return self.titleLabel.frame.size.width;
 }
 
 #pragma mark - Graphics Handling -
