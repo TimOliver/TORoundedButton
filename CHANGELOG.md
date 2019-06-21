@@ -1,7 +1,20 @@
 x.y.z Release Notes (yyyy-MM-dd)
 =============================================================
 
-1.1.0 Release Notes (yyyy-MM-dd)
+1.1.1 Release Notes (2019-06-21)
+=============================================================
+
+### Enhancements
+
+* Added unit tests to check consistent initial behaviour.
+* Updated the documentation in the header to match expected default values.
+
+### Fixed
+
+* A bug where the dynamic text size would not properly restore.
+
+
+1.1.0 Release Notes (2019-06-21)
 =============================================================
 
 ### Enchancements
