@@ -55,6 +55,8 @@
 /* Begin PBXFileReference section */
 		220F9AAE22784FD4001862A7 /* TORoundedButton.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TORoundedButton.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		220F9ABE2278AA0B001862A7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		220FC30822BC67E700B5C284 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		220FC30922BC67FE00B5C284 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		22700639226CA24D003492CB /* TORoundedButtonExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TORoundedButtonExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2270063C226CA24D003492CB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2270063D226CA24D003492CB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -110,11 +112,13 @@
 		22700630226CA24D003492CB = {
 			isa = PBXGroup;
 			children = (
+				220FC30822BC67E700B5C284 /* README.md */,
 				22700660226CA322003492CB /* TORoundedButton */,
 				2270063B226CA24D003492CB /* TORoundedButtonExample */,
 				220F9ABD2278AA0B001862A7 /* TORoundedButtonFramework */,
 				22700654226CA24E003492CB /* TORoundedButtonExampleTests */,
 				2270063A226CA24D003492CB /* Products */,
+				220FC30922BC67FE00B5C284 /* CHANGELOG.md */,
 			);
 			sourceTree = "<group>";
 		};
