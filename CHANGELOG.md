@@ -6,7 +6,7 @@ x.y.z Release Notes (yyyy-MM-dd)
 
 ### Enchancements
 
-* Added `minimumWidth` property to help with guiding external layout.
+* Added `minimumWidth` property to help with guiding external layout. ([#21](https://github.com/TimOliver/TORoundedButton/pull/21))
 * Refactored button from Core Animation labs chat at WWDC 2019. ([#20](https://github.com/TimOliver/TORoundedButton/pull/20))
 * Increased corner radius default value to 12.0. ([#20](https://github.com/TimOliver/TORoundedButton/pull/20))
 * Added lower alpha value when button is set to disabled. ([#15](https://github.com/TimOliver/TORoundedButton/pull/15))
