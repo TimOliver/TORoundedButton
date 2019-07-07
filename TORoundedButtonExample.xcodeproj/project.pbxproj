@@ -19,6 +19,7 @@
 		22700663226CA35D003492CB /* TORoundedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700662226CA35D003492CB /* TORoundedButton.m */; };
 		22D23CC82276E73200EE65DD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22D23CC72276E73200EE65DD /* ViewController.m */; };
 		22D23CCA2276E76A00EE65DD /* wallpaper.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 22D23CC92276E76900EE65DD /* wallpaper.jpg */; };
+		22D935D122D237D800C26F18 /* TORoundedButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 22700661226CA35D003492CB /* TORoundedButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,13 +113,13 @@
 		22700630226CA24D003492CB = {
 			isa = PBXGroup;
 			children = (
-				220FC30822BC67E700B5C284 /* README.md */,
 				22700660226CA322003492CB /* TORoundedButton */,
 				2270063B226CA24D003492CB /* TORoundedButtonExample */,
 				220F9ABD2278AA0B001862A7 /* TORoundedButtonFramework */,
 				22700654226CA24E003492CB /* TORoundedButtonExampleTests */,
 				2270063A226CA24D003492CB /* Products */,
 				220FC30922BC67FE00B5C284 /* CHANGELOG.md */,
+				220FC30822BC67E700B5C284 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -174,6 +175,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22D935D122D237D800C26F18 /* TORoundedButton.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,7 +476,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -528,7 +530,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -544,6 +546,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6LF3GMKZAB;
 				INFOPLIST_FILE = TORoundedButtonExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -562,6 +565,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6LF3GMKZAB;
 				INFOPLIST_FILE = TORoundedButtonExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
