@@ -22,9 +22,6 @@
 
 #import <UIKit/UIKit.h>
 
-FOUNDATION_EXPORT double TORoundedButtonVersionNumber;
-FOUNDATION_EXPORT const unsigned char TORoundedButtonVersionString[];
-
 NS_ASSUME_NONNULL_BEGIN
 
 NS_SWIFT_NAME(RoundedButton)
@@ -75,3 +72,6 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 @end
 
 NS_ASSUME_NONNULL_END
+
+FOUNDATION_EXPORT double TORoundedButtonVersionNumber;
+FOUNDATION_EXPORT const unsigned char TORoundedButtonVersionString[];
