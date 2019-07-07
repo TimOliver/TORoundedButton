@@ -1,6 +1,13 @@
 x.y.z Release Notes (yyyy-MM-dd)
 =============================================================
 
+1.1.2 Release Notes (2019-07-07)
+=============================================================
+
+### Fixed
+
+* An issue where the header wasn't being added to the framework. ([#23](https://github.com/TimOliver/TORoundedButton/pull/23))
+
 1.1.1 Release Notes (2019-06-21)
 =============================================================
 
