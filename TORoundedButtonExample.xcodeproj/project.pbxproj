@@ -113,7 +113,7 @@
 		22700630226CA24D003492CB = {
 			isa = PBXGroup;
 			children = (
-				22700660226CA322003492CB /* TORoundedButton */,
+				FC0F46C523675B7B00E64949 /* Sources */,
 				2270063B226CA24D003492CB /* TORoundedButtonExample */,
 				220F9ABD2278AA0B001862A7 /* TORoundedButtonFramework */,
 				22700654226CA24E003492CB /* TORoundedButtonExampleTests */,
@@ -162,10 +162,26 @@
 		22700660226CA322003492CB /* TORoundedButton */ = {
 			isa = PBXGroup;
 			children = (
-				22700661226CA35D003492CB /* TORoundedButton.h */,
+				FC0F46C623675B8800E64949 /* Include */,
 				22700662226CA35D003492CB /* TORoundedButton.m */,
 			);
 			path = TORoundedButton;
+			sourceTree = "<group>";
+		};
+		FC0F46C523675B7B00E64949 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				22700660226CA322003492CB /* TORoundedButton */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		FC0F46C623675B8800E64949 /* Include */ = {
+			isa = PBXGroup;
+			children = (
+				22700661226CA35D003492CB /* TORoundedButton.h */,
+			);
+			path = Include;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
