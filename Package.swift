@@ -22,7 +22,8 @@ let package = Package(
                 "TORoundedButtonExample",
                 "TORoundedButtonExampleTest",
                 "TORoundedButtonExampleFramework"
-            ]
+            ],
+            publicHeadersPath: "TORoundedButton"
         )
     ]
 )
