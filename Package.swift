@@ -21,7 +21,7 @@ let package = Package(
             exclude: [
                 "TORoundedButtonExample",
                 "TORoundedButtonExampleTest",
-                "TORoundedButtonExampleFramework"
+                "TORoundedButtonFramework"
             ]
         )
     ]
