@@ -23,7 +23,12 @@ let package = Package(
                 "TORoundedButtonExampleTest",
                 "TORoundedButtonExampleFramework"
             ],
-            publicHeadersPath: "TORoundedButton"
+            cSettings: [
+                .headerSearchPath("TORoundedButton"),
+            ],
+            cxxSettings: [
+                .headerSearchPath("TORoundedButton"),
+            ]
         )
     ]
 )
