@@ -1,0 +1,13 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: '(curl -s -L http://tim.dev/install_lib | bash -s arg1 arg2) && bundle exec fastlane test'
