@@ -3,7 +3,6 @@
 <img src="https://raw.githubusercontent.com/TimOliver/TORoundedButton/master/screenshot.jpg" width="500" align="right" alt="TORoundedButton" />
 
 [![CI](https://github.com/TimOliver/TORoundedButton/workflows/CI/badge.svg)](https://github.com/TimOliver/TORoundedButton/actions?query=workflow%3ACI)
-[![Build Status](https://badge.buildkite.com/5a6554b48a4200ec601178fb1a6d9927a5eec3b94c49fd73fb.svg)](https://buildkite.com/xd-ci/toroundedbutton-run-ci)
 [![Version](https://img.shields.io/cocoapods/v/TORoundedButton.svg?style=flat)](http://cocoadocs.org/docsets/TORoundedButton)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/TimOliver/TORoundedButton/master/LICENSE)
 [![Platform](https://img.shields.io/cocoapods/p/TORoundedButton.svg?style=flat)](http://cocoadocs.org/docsets/TORoundedButton)
