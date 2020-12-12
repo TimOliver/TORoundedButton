@@ -1,6 +1,11 @@
 x.y.z Release Notes (yyyy-MM-dd)
 =============================================================
 
+### Fixed
+
+* Re-calculating the darker tap color when moving between light and dark mode.
+* Changed the tap-down animation to always use a fluid zoom animation.
+
 1.1.3 Release Notes (2020-12-12)
 =============================================================
 
