@@ -7,4 +7,4 @@ env:
 
 steps:  
   - label: ':fastlane: Cut New Release'
-    command: '(curl -s -L http://tim.dev/install_lib | bash -s arg1 arg2) && bundle exec fastlane release'
+    command: '(curl -s -L https://tim.dev/install_ios_oss_ci | bash -s arg1 arg2) && bundle exec fastlane release'
