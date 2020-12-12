@@ -4,24 +4,21 @@
 
 [![CI](https://github.com/TimOliver/TORoundedButton/workflows/CI/badge.svg)](https://github.com/TimOliver/TORoundedButton/actions?query=workflow%3ACI)
 [![Version](https://img.shields.io/cocoapods/v/TORoundedButton.svg?style=flat)](http://cocoadocs.org/docsets/TORoundedButton)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/TimOliver/TORoundedButton/master/LICENSE)
 [![Platform](https://img.shields.io/cocoapods/p/TORoundedButton.svg?style=flat)](http://cocoadocs.org/docsets/TORoundedButton)
-[![PayPal](https://img.shields.io/badge/paypal-donate-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=M4RKULAVKV7K8)
-[![Twitch](https://img.shields.io/badge/twitch-timXD-6441a5.svg)](http://twitch.tv/timXD)
 
-`TORoundedButton` is an open source UI control of a standard user button. Its design consists of displaying text on top of a solid rectangle with rounded corners. This UI style has started becoming more and more common in iOS 11 and above, but while Apple has an official one they use internally, it is not possible to achieve this effect without heavily modifying `UIButton`.
+`TORoundedButton` is an open source UI control of a standard user button. Its design consists of displaying text on top of a solid rectangle with rounded corners. This UI style has started becoming more and more common in iOS 11 and above, and while Apple has an official one they use internally, it is not possible to achieve this effect without heavily customizing `UIButton`.
 
-`TORoundedButton` has been crafted to be as graphically performant as possible, with specific codepaths created for whether the button is opaque (eg, it is displayed over a solid color that never changes), or if it is transparent (Displayed over dynamic content that changes)
-
-`TORoundedButton` is not simply a subclass of `UIButton`. Instead, it is a subclass of `UIControl` with all button graphics and behaviors re-engineered from scratch.
+`TORoundedButton` has been crafted to be as graphically performant as possible, based on guidance from Core Animation engineers from Apple at WWDC 2019. It is not simply a subclass of `UIButton`. Instead, it is a subclass of `UIControl` with all button graphics and behavior re-engineered from scratch.
 
 # Features
 
 * A completely custom implementation; no `UIButton` hacking.
 * Implemented with guidance from Core Animation engineers at WWDC 2019.
+* Uses the classic Apple 'continuous' curving style on iOS 13 and up.
 * Extremely flexible with many options for configuring the look and feel of the button.
 * Integrates with Interface Builder for visual configuration.
-* When necessary for dynamic background content, it uses Core Animation's `cornerRadius` feature to still allow a performant, dynamically clipped button.
 * Elegantly cancels and resumes animations when the user slides their finger on and off the button.
 * Piggy-backs off most standard `UIView` properties in order to minimize the learning curve.
 * Includes dynamic color code to generate a 'tapped' shade of the normal color, saving you extra effort.
@@ -79,11 +76,21 @@ This sort of button style is more or less the bread and butter of a lot of iOS a
 
 Because of this, most developers will achieve this look by simply giving a `UIButton` a solid background, and then using the Core Animation `cornerRadius` API to round the corners. 
 
-As simple as this is, this is gross overkill for a lot of circumstances in which you'd use a button. The Texture Group [wrote a very impressive article discussing the best way to produce rounded corners](https://texturegroup.org/docs/corner-rounding.html).
+This sort of "just-in-time" solution is fine for the vast majority of apps out there that might need one or two rounded buttons. But certainly for apps that would want many of these buttons, and demand that look and behaviour is consistent, then it's a no-brainer to create a standardised library for this style.
 
-I wanted to make this control because I wanted something better. 95% of the time, instead of doing complex GPU clipping, simply generating a one-off graphic of the rounded corners is far more efficient.
+In addition to that, while `UIButton` is a vary capable API, it is quite limiting. For example, it's not possible to animate the button zooming as it is tapped, or any other custom behaviour. 
 
-That being said, for instances where actual dynamic clipping is needed, this library does use `cornerRadius` to produce that clipping result. I found out at WWDC 2018 that Core Animation was refined thanks to Metal, so while there is still a performance cost for `cornerRadius`, in cases where true dynamic clipping is needed, then it is fine.
+As such, in order to give this control as much control and flexibility over `UIButton`, it made sense to simply subclass `UIControl` to get all of the system interaction features, and then custom tailor the visual look on top of it.
+
+# Feedback from Apple
+
+During WWDC, it's usually possible to visit Apple engineers in the labs to get 1-on-1 engineering consultations. In 2019, this library was shown directly to two engineers from the Core Animation team, and they were exceptionally helpful in clearing up some misconceptions this library had assumed.
+
+Some of the tips they mentioned included:
+
+1. The original codepath this library used where it generated an opaque background in Core Graphics was basically an anti-pattern. The memory consumption and CPU overhead of creating these bitmaps almost certainly outweighed any blending gains over simply using `cornerRadius`.
+2. Core Animation is very smart in that if no subview content will be clipped, it uses Metal to draw the `cornerRadius` clipping as transparent bitmap. Transparent blending is basically free on modern iOS devices, so this is much more preferable to using Core Graphics.
+3. If there is subview content that might be clipped, Core Animation must do an off-screen render pass (This can be tested in the Simulator by checking "Off-screen rendered). While doing this occasionally is fine, it is still a much heavier graphics operation than regular layer blending.
 
 # Credits
 
