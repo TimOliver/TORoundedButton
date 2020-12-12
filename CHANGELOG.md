@@ -1,6 +1,17 @@
 x.y.z Release Notes (yyyy-MM-dd)
 =============================================================
 
+1.1.3 Release Notes (2020-12-12)
+=============================================================
+
+### Added
+
+* Dark Mode support for iOS 13 and up. ([#34](https://github.com/TimOliver/TORoundedButton/pull/34))
+
+### Fixed
+
+* Refined SwiftPM support to not need to touch the main sources directory.
+
 1.1.2 Release Notes (2019-07-07)
 =============================================================
 
