@@ -162,18 +162,10 @@
 		22700660226CA322003492CB /* TORoundedButton */ = {
 			isa = PBXGroup;
 			children = (
-				FC2924342368A43A00B92058 /* Include */,
+				22700661226CA35D003492CB /* TORoundedButton.h */,
 				22700662226CA35D003492CB /* TORoundedButton.m */,
 			);
 			path = TORoundedButton;
-			sourceTree = "<group>";
-		};
-		FC2924342368A43A00B92058 /* Include */ = {
-			isa = PBXGroup;
-			children = (
-				22700661226CA35D003492CB /* TORoundedButton.h */,
-			);
-			path = Include;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
