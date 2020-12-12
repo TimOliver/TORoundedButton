@@ -17,11 +17,9 @@ let package = Package(
     targets: [
         .target(
             name: "TORoundedButton",
-            path: "TORoundedButton",
-            exclude: [
-                "TORoundedButtonExample",
-                "TORoundedButtonExampleTest",
-                "TORoundedButtonFramework"
+            path: ".",
+            sources: [
+                "TORoundedButton/TORoundedButton.m"
             ],
             publicHeadersPath: "include"
         )
