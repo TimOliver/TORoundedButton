@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GV4-PL-MlK">
-    <device id="retina5_5" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GV4-PL-MlK">
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Rx-9D-Udo" userLabel="RoundedButton" customClass="TORoundedButton">
-                                <rect key="frame" x="67" y="353" width="280" height="50"/>
+                                <rect key="frame" x="67" y="343" width="280" height="50"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="OXU-dJ-PiL"/>
@@ -30,23 +29,22 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tapped!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YuK-c8-gCA">
-                                <rect key="frame" x="159.66666666666666" y="171.66666666666666" width="94.666666666666657" height="35"/>
+                                <rect key="frame" x="159.66666666666666" y="166.66666666666666" width="94.666666666666657" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="A2b-ZQ-Mpt"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
-                                <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="yn0-Wx-glq"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="YuK-c8-gCA" firstAttribute="centerY" secondItem="yn0-Wx-glq" secondAttribute="centerY" multiplier="0.5" id="1aK-Gn-u8l"/>
                             <constraint firstItem="3Rx-9D-Udo" firstAttribute="centerX" secondItem="yn0-Wx-glq" secondAttribute="centerX" id="4Pd-sN-oZH"/>
                             <constraint firstItem="YuK-c8-gCA" firstAttribute="centerX" secondItem="yn0-Wx-glq" secondAttribute="centerX" id="KUL-o1-7MR"/>
                             <constraint firstItem="3Rx-9D-Udo" firstAttribute="centerY" secondItem="yn0-Wx-glq" secondAttribute="centerY" id="rFU-Gn-CY5"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="yn0-Wx-glq"/>
                     </view>
                     <connections>
                         <outlet property="button" destination="3Rx-9D-Udo" id="vBt-gD-VP7"/>
@@ -58,4 +56,9 @@
             <point key="canvasLocation" x="-473.91304347826093" y="-123.91304347826087"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
