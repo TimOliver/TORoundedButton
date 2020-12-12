@@ -90,7 +90,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _tappedTextAlpha = (_tappedTextAlpha > FLT_EPSILON) ?: 1.0f;
     _tapAnimationDuration = (_tapAnimationDuration > FLT_EPSILON) ?: 0.4f;
     _tappedButtonScale = (_tappedButtonScale > FLT_EPSILON) ?: 0.97f;
-    _tappedTintColorBrightnessOffset = !TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(_tappedTintColorBrightnessOffset) ?: -0.1f;
+    _tappedTintColorBrightnessOffset = !TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(_tappedTintColorBrightnessOffset) ?: -0.15f;
 
     // Set the tapped tint color if we've set to dynamically calculate it
     [self updateTappedTintColorForTintColor];
@@ -169,8 +169,13 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     if (TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(_tappedTintColorBrightnessOffset)) {
         return;
     }
-    
-    _tappedTintColor = [[self class] brightnessAdjustedColorWithColor:self.tintColor
+
+    UIColor *tintColor = self.tintColor;
+    if (@available(iOS 13.0, *)) {
+        tintColor = [tintColor resolvedColorWithTraitCollection:self.traitCollection];
+    }
+
+    _tappedTintColor = [[self class] brightnessAdjustedColorWithColor:tintColor
                                                                amount:_tappedTintColorBrightnessOffset];
 }
 
@@ -182,7 +187,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     
     // The user touched their finger down into the button bounds
     [self setLabelAlphaTappedAnimated:NO];
-    [self setBackgroundColorTappedAnimated:NO];
+    [self setBackgroundColorTappedAnimated:YES];
     [self setButtonScaledTappedAnimated:YES];
 }
 
@@ -252,6 +257,8 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
         self.titleLabel.backgroundColor = [UIColor clearColor];
         [UIView animateWithDuration:self.tapAnimationDuration
                               delay:0.0f
+             usingSpringWithDamping:1.0f
+              initialSpringVelocity:0.5f
                             options:UIViewAnimationOptionBeginFromCurrentState
                          animations:animationBlock
                          completion:completionBlock];
@@ -284,6 +291,8 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     // Animate the button alpha
     [UIView animateWithDuration:self.tapAnimationDuration
                           delay:0.0f
+         usingSpringWithDamping:1.0f
+          initialSpringVelocity:0.5f
                         options:UIViewAnimationOptionBeginFromCurrentState
                      animations:animationBlock
                      completion:nil];
