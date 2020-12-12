@@ -3,33 +3,25 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		220F9AB522784FD4001862A7 /* TORoundedButton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220F9AAE22784FD4001862A7 /* TORoundedButton.framework */; };
 		220F9AB622784FD4001862A7 /* TORoundedButton.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 220F9AAE22784FD4001862A7 /* TORoundedButton.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		220F9ABC22784FF5001862A7 /* TORoundedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700662226CA35D003492CB /* TORoundedButton.m */; };
+		220F9ABC22784FF5001862A7 /* TORoundedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700662226CA35D003492CB /* TORoundedButton.m */; platformFilter = ios; };
 		2270063E226CA24D003492CB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2270063D226CA24D003492CB /* AppDelegate.m */; };
 		22700644226CA24D003492CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22700642226CA24D003492CB /* Main.storyboard */; };
 		22700646226CA24E003492CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22700645226CA24E003492CB /* Assets.xcassets */; };
 		22700649226CA24E003492CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22700647226CA24E003492CB /* LaunchScreen.storyboard */; };
 		2270064C226CA24E003492CB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2270064B226CA24E003492CB /* main.m */; };
 		22700656226CA24E003492CB /* TORoundedButtonExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700655226CA24E003492CB /* TORoundedButtonExampleTests.m */; };
-		22700663226CA35D003492CB /* TORoundedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700662226CA35D003492CB /* TORoundedButton.m */; };
+		2274936425849FA300FE4C74 /* TORoundedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700662226CA35D003492CB /* TORoundedButton.m */; };
 		22D23CC82276E73200EE65DD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22D23CC72276E73200EE65DD /* ViewController.m */; };
 		22D23CCA2276E76A00EE65DD /* wallpaper.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 22D23CC92276E76900EE65DD /* wallpaper.jpg */; };
 		22D935D122D237D800C26F18 /* TORoundedButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 22700661226CA35D003492CB /* TORoundedButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		220F9AB322784FD4001862A7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 22700631226CA24D003492CB /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 220F9AAD22784FD4001862A7;
-			remoteInfo = TORoundedButton;
-		};
 		22700652226CA24E003492CB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 22700631226CA24D003492CB /* Project object */;
@@ -88,7 +80,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				220F9AB522784FD4001862A7 /* TORoundedButton.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +111,7 @@
 				2270063A226CA24D003492CB /* Products */,
 				220FC30922BC67FE00B5C284 /* CHANGELOG.md */,
 				220FC30822BC67E700B5C284 /* README.md */,
+				2274935225849DE500FE4C74 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -162,18 +154,17 @@
 		22700660226CA322003492CB /* TORoundedButton */ = {
 			isa = PBXGroup;
 			children = (
-				FC2924342368A43A00B92058 /* Include */,
+				22700661226CA35D003492CB /* TORoundedButton.h */,
 				22700662226CA35D003492CB /* TORoundedButton.m */,
 			);
 			path = TORoundedButton;
 			sourceTree = "<group>";
 		};
-		FC2924342368A43A00B92058 /* Include */ = {
+		2274935225849DE500FE4C74 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				22700661226CA35D003492CB /* TORoundedButton.h */,
 			);
-			path = Include;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,7 +211,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				220F9AB422784FD4001862A7 /* PBXTargetDependency */,
 			);
 			name = TORoundedButtonExample;
 			productName = TORoundedButtonExample;
@@ -251,7 +241,7 @@
 		22700631226CA24D003492CB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = "Tim Oliver";
 				TargetAttributes = {
 					220F9AAD22784FD4001862A7 = {
@@ -327,7 +317,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22700663226CA35D003492CB /* TORoundedButton.m in Sources */,
+				2274936425849FA300FE4C74 /* TORoundedButton.m in Sources */,
 				2270064C226CA24E003492CB /* main.m in Sources */,
 				22D23CC82276E73200EE65DD /* ViewController.m in Sources */,
 				2270063E226CA24D003492CB /* AppDelegate.m in Sources */,
@@ -345,11 +335,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		220F9AB422784FD4001862A7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 220F9AAD22784FD4001862A7 /* TORoundedButtonFramework */;
-			targetProxy = 220F9AB322784FD4001862A7 /* PBXContainerItemProxy */;
-		};
 		22700653226CA24E003492CB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 22700638226CA24D003492CB /* TORoundedButtonExample */;
@@ -389,18 +374,15 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/TORoundedButtonFramework/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACH_O_TYPE = staticlib;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.tim.TORoundedButton;
 				PRODUCT_NAME = TORoundedButton;
-				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
@@ -417,18 +399,15 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/TORoundedButtonFramework/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACH_O_TYPE = staticlib;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.tim.TORoundedButton;
 				PRODUCT_NAME = TORoundedButton;
-				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
@@ -459,6 +438,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -519,6 +499,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;

@@ -161,6 +161,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 {
     [super traitCollectionDidChange:previousTraitCollection];
     [self setNeedsLayout];
+    [self updateTappedTintColorForTintColor];
 }
 
 - (void)updateTappedTintColorForTintColor
