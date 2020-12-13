@@ -23,7 +23,7 @@
     XCTAssertEqual(button.cornerRadius, 12.0f);
     XCTAssertEqual(button.textColor, [UIColor whiteColor]);
     XCTAssertEqual(button.tappedTextAlpha, 1.0f);
-    XCTAssertEqual(button.tappedTintColorBrightnessOffset, -0.1f);
+    XCTAssertEqual(button.tappedTintColorBrightnessOffset, -0.15f);
     XCTAssertEqual(button.tappedButtonScale, 0.97f);
 }
 
