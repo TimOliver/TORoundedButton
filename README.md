@@ -89,9 +89,9 @@ During WWDC, it's usually possible to visit Apple engineers in the labs to get 1
 
 Some of the tips they mentioned included:
 
-1. The original codepath this library used where it generated an opaque background in Core Graphics was basically an anti-pattern. The memory consumption and CPU overhead of creating these bitmaps almost certainly outweighed any blending gains over simply using `cornerRadius`.
-2. Core Animation is very smart in that if no subview content will be clipped, it uses Metal to draw the `cornerRadius` clipping as transparent bitmap. Transparent blending is basically free on modern iOS devices, so this is much more preferable to using Core Graphics.
-3. If there is subview content that might be clipped, Core Animation must do an off-screen render pass (This can be tested in the Simulator by checking "Off-screen rendered). While doing this occasionally is fine, it is still a much heavier graphics operation than regular layer blending.
+1. The original codepath this library used where it generated an opaque background in Core Graphics was basically an anti-pattern. The memory consumption and CPU overhead of creating these bitmaps almost certainly outweighed the performance gains over simply using the `cornerRadius` API.
+2. Core Animation is very smart in that if no subview content will be clipped, it uses Metal to draw the `cornerRadius` clipping as a transparent bitmap. Transparent blending is basically free on modern iOS devices, so this is much more preferable to using an opaque bitmap from Core Graphics.
+3. If there is subview content that might be clipped, Core Animation must do an off-screen render pass (This can be tested in the Simulator by checking "Off-screen rendered"). While doing this occasionally is fine, it is still a much heavier graphics operation than regular transparency blending and should always be avoided if it can be helped.
 
 # Credits
 
