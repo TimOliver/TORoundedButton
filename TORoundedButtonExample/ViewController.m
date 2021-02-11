@@ -24,6 +24,7 @@
     // self.button.attributedText = [[self class] makeExampleAttributedString];
 
     __weak typeof(self) weakSelf = self;
+    self.view.tintColor = [self.view.tintColor colorWithAlphaComponent:0.4];
     self.button.tappedHandler = ^{
         [weakSelf playFadeAnimationOnView:weakSelf.tappedLabel];
     };
