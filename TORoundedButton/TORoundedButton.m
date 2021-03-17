@@ -128,6 +128,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     self.titleLabel.adjustsFontForContentSizeCategory = YES;
     self.titleLabel.backgroundColor = self.tintColor;
     self.titleLabel.text = @"Button";
+    self.titleLabel.numberOfLines = 0;
     [self.containerView addSubview:self.titleLabel];
 
     // Create action events for all possible interactions with this control
