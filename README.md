@@ -48,7 +48,7 @@ button.tappedHandler = {
 
 ```
 
-The important thing to remember when using this library is to correctly set `backgroundColor`. 
+One important thing to remember is that the button color is controlled via `tintColor` and not `backgroundColor`.
 
 
 # Requirements
