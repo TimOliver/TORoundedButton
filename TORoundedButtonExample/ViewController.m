@@ -23,8 +23,10 @@
     // Uncomment this line for an attributed string example
     // self.button.attributedText = [[self class] makeExampleAttributedString];
 
+    // Uncomment to apply an alpha value to the button
+    // self.button.tintColor = [self.view.tintColor colorWithAlphaComponent:0.4];
+
     __weak typeof(self) weakSelf = self;
-    self.view.tintColor = [self.view.tintColor colorWithAlphaComponent:0.4];
     self.button.tappedHandler = ^{
         [weakSelf playFadeAnimationOnView:weakSelf.tappedLabel];
     };

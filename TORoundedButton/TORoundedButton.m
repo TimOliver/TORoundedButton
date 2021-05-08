@@ -36,6 +36,9 @@
 /** An image view that displays the rounded box behind the button text */
 @property (nonatomic, strong) UIView *backgroundView;
 
+/** Checks whether the button is tapped, or the BG is transparent to return the correct label background*/
+@property (nonatomic, readonly) UIColor *labelBackgroundColor;
+
 @end
 
 // --------------------------------------------------------------------
@@ -126,7 +129,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.font = buttonFont;
     self.titleLabel.adjustsFontForContentSizeCategory = YES;
-    self.titleLabel.backgroundColor = CGColorGetAlpha(self.tintColor.CGColor) == 1 ? self.tintColor : [UIColor clearColor];
+    self.titleLabel.backgroundColor = self.labelBackgroundColor;
     self.titleLabel.text = @"Button";
     self.titleLabel.numberOfLines = 0;
     [self.containerView addSubview:self.titleLabel];
@@ -153,7 +156,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)tintColorDidChange
 {
     [super tintColorDidChange];
-    self.titleLabel.backgroundColor = self.isTapped ? [UIColor clearColor] : CGColorGetAlpha(self.tintColor.CGColor) == 1 ? self.tintColor : [UIColor clearColor];
+    self.titleLabel.backgroundColor = self.labelBackgroundColor;
     self.backgroundView.backgroundColor = self.tintColor;
     [self setNeedsLayout];
 }
@@ -178,6 +181,16 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
     _tappedTintColor = [[self class] brightnessAdjustedColorWithColor:tintColor
                                                                amount:_tappedTintColorBrightnessOffset];
+}
+
+- (UIColor *)labelBackgroundColor
+{
+    // Always return clear if tapped
+    if (self.isTapped) { return [UIColor clearColor]; }
+
+    // Return clear if the tint color isn't opaque
+    BOOL isClear = CGColorGetAlpha(self.tintColor.CGColor) < (1.0f - FLT_EPSILON);
+    return isClear ? [UIColor clearColor] : self.tintColor;
 }
 
 #pragma mark - Interaction -
@@ -236,7 +249,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
     // Toggle the background color of the title label
     void (^updateTitleOpacity)(void) = ^{
-        self.titleLabel.backgroundColor = self.isTapped ? [UIColor clearColor] : CGColorGetAlpha(self.tintColor.CGColor) == 1 ? self.tintColor : [UIColor clearColor];
+        self.titleLabel.backgroundColor = self.labelBackgroundColor;
     };
     
     // -----------------------------------------------------
@@ -376,7 +389,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [super setTintColor:tintColor];
     [self updateTappedTintColorForTintColor];
     self.backgroundView.backgroundColor = tintColor;
-    self.titleLabel.backgroundColor = tintColor;
+    self.titleLabel.backgroundColor = self.labelBackgroundColor;
     [self setNeedsLayout];
 }
 
