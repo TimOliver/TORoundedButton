@@ -373,12 +373,9 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 }
 
 - (void)setTappedTintColorBrightnessOffset:(CGFloat)tappedTintColorBrightnessOffset {
-    if (TO_ROUNDED_BUTTON_FLOATS_MATCH(_tappedTintColorBrightnessOffset,
-                                       tappedTintColorBrightnessOffset))
-    {
-        return;
-    }
-    
+    if (TO_ROUNDED_BUTTON_FLOATS_MATCH(_tappedTintColorBrightnessOffset, 
+                                       tappedTintColorBrightnessOffset)) { return; }
+
     _tappedTintColorBrightnessOffset = tappedTintColorBrightnessOffset;
     [self _updateTappedTintColorForTintColor];
     [self setNeedsLayout];
