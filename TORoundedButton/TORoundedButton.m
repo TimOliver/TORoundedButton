@@ -41,9 +41,6 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
      or not because the state can change before blocks complete. */
     BOOL _isTapped;
 
-    /** A container view that holds all of the content view and performs the clipping. */
-    UIView *_containerView;
-
     /** The title label displaying the text in the center of the button. */
     UILabel *_titleLabel;
 
@@ -53,13 +50,10 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 #pragma mark - View Creation -
 
-- (instancetype)initWithText:(NSString *)text {
+- (instancetype)init {
     if (self = [super initWithFrame:(CGRect){0,0, 288.0f, 50.0f}]) {
         [self _roundedButtonCommonInit];
-        _titleLabel.text = text;
-        [_titleLabel sizeToFit];
     }
-
     return self;
 }
 
@@ -79,6 +73,25 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     return self;
 }
 
+- (instancetype)initWithContentView:(__kindof UIView *)contentView {
+    if (self = [super initWithFrame:contentView.bounds]) {
+        _contentView = contentView;
+        [self _roundedButtonCommonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithText:(NSString *)text {
+    if (self = [super initWithFrame:(CGRect){0,0, 288.0f, 50.0f}]) {
+        [self _roundedButtonCommonInit];
+        [self _makeTitleLabelIfNeeded];
+        _titleLabel.text = text;
+        [_titleLabel sizeToFit];
+    }
+
+    return self;
+}
+
 - (void)_roundedButtonCommonInit TOROUNDEDBUTTON_OBJC_DIRECT {
     // Default properties (Make sure they're not overriding IB)
     _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
@@ -91,12 +104,12 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self _updateTappedTintColorForTintColor];
 
     // Create the container view that manages the image view and text
-    _containerView = [[UIView alloc] initWithFrame:self.bounds];
-    _containerView.backgroundColor = [UIColor clearColor];
-    _containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _containerView.userInteractionEnabled = NO;
-    _containerView.clipsToBounds = YES;
-    [self addSubview:_containerView];
+    _contentView = [[UIView alloc] initWithFrame:self.bounds];
+    _contentView.backgroundColor = [UIColor clearColor];
+    _contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _contentView.userInteractionEnabled = NO;
+    _contentView.clipsToBounds = YES;
+    [self addSubview:_contentView];
 
     // Create the image view which will show the button background
     _backgroundView = [[UIView alloc] initWithFrame:self.bounds];
@@ -106,16 +119,23 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 #ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) { _backgroundView.layer.cornerCurve = kCACornerCurveContinuous; }
 #endif
-    [_containerView addSubview:_backgroundView];
+    [_contentView addSubview:_backgroundView];
 
-    // Create the title label that will display the button text
-    UIFont *buttonFont = [UIFont systemFontOfSize:17.0f weight:UIFontWeightBold];
-    if (@available(iOS 11.0, *)) {
-        // Apply resizable button metrics to font
-        UIFontMetrics *metrics = [[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleBody];
-        buttonFont = [metrics scaledFontForFont:buttonFont];
-    }
-    
+    // Create action events for all possible interactions with this control
+    [self addTarget:self action:@selector(_didTouchDownInside) forControlEvents:UIControlEventTouchDown|UIControlEventTouchDownRepeat];
+    [self addTarget:self action:@selector(_didTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [self addTarget:self action:@selector(_didDragOutside) forControlEvents:UIControlEventTouchDragExit|UIControlEventTouchCancel];
+    [self addTarget:self action:@selector(_didDragInside) forControlEvents:UIControlEventTouchDragEnter];
+}
+
+- (void)_makeTitleLabelIfNeeded TOROUNDEDBUTTON_OBJC_DIRECT {
+    if (_titleLabel) { return; }
+
+    // Make the font bold, and opt it into Dynamic Type sizing
+    UIFontMetrics *const metrics = [[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleBody];
+    UIFont *const buttonFont = [metrics scaledFontForFont:[UIFont systemFontOfSize:17.0f weight:UIFontWeightBold]];
+
+    // Configure the title label
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.textColor = [UIColor whiteColor];
@@ -124,13 +144,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _titleLabel.backgroundColor = [self _labelBackgroundColor];
     _titleLabel.text = @"Button";
     _titleLabel.numberOfLines = 0;
-    [_containerView addSubview:_titleLabel];
-
-    // Create action events for all possible interactions with this control
-    [self addTarget:self action:@selector(_didTouchDownInside) forControlEvents:UIControlEventTouchDown|UIControlEventTouchDownRepeat];
-    [self addTarget:self action:@selector(_didTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-    [self addTarget:self action:@selector(_didDragOutside) forControlEvents:UIControlEventTouchDragExit|UIControlEventTouchCancel];
-    [self addTarget:self action:@selector(_didDragInside) forControlEvents:UIControlEventTouchDragEnter];
+    [_contentView addSubview:_titleLabel];
 }
 
 #pragma mark - View Displaying -
@@ -140,7 +154,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
     // Configure the button text
     [_titleLabel sizeToFit];
-    _titleLabel.center = _containerView.center;
+    _titleLabel.center = _contentView.center;
     _titleLabel.frame = CGRectIntegral(_titleLabel.frame);
 }
 
@@ -300,7 +314,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
     // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
-        self->_containerView.transform = CGAffineTransformScale(CGAffineTransformIdentity,
+        self->_contentView.transform = CGAffineTransformScale(CGAffineTransformIdentity,
                                                               scale,
                                                               scale);
     };
@@ -322,6 +336,16 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 }
 
 #pragma mark - Public Accessors -
+
+- (void)setContentView:(UIView *)contentView {
+    if (_contentView == contentView) { return; }
+
+    _titleLabel = nil;
+    [_contentView removeFromSuperview];
+    _contentView = contentView ?: [UIView new];
+    [self addSubview:_contentView];
+    [self setNeedsLayout];
+}
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
     _titleLabel.attributedText = attributedText;
@@ -394,7 +418,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 - (void)setEnabled:(BOOL)enabled {
     [super setEnabled:enabled];
-    _containerView.alpha = enabled ? 1 : 0.4;
+    _contentView.alpha = enabled ? 1 : 0.4;
 }
 
 - (CGFloat)minimumWidth {
