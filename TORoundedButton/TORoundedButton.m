@@ -24,25 +24,6 @@
 
 #import "TORoundedButton.h"
 
-@interface TORoundedButton ()
-
-/** Hold on to a global state for whether we are tapped or not because the state can change before blocks complete */
-@property (nonatomic, assign) BOOL isTapped;
-
-/** A container view that holds all of the content view and performs the clipping */
-@property (nonatomic, strong) UIView *containerView;
-
-/** The title label displaying the text in the center of the button */
-@property (nonatomic, strong) UILabel *titleLabel;
-
-/** An image view that displays the rounded box behind the button text */
-@property (nonatomic, strong) UIView *backgroundView;
-
-/** Checks whether the button is tapped, or the BG is transparent to return the correct label background*/
-@property (nonatomic, direct, readonly) UIColor *labelBackgroundColor;
-
-@end
-
 // --------------------------------------------------------------------
 
 static inline BOOL TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(CGFloat value) {
@@ -55,7 +36,20 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 // --------------------------------------------------------------------
 
-@implementation TORoundedButton
+@implementation TORoundedButton {
+    /** Hold on to a global state for whether we are tapped
+     or not because the state can change before blocks complete. */
+    BOOL _isTapped;
+
+    /** A container view that holds all of the content view and performs the clipping. */
+    UIView *_containerView;
+
+    /** The title label displaying the text in the center of the button. */
+    UILabel *_titleLabel;
+
+    /** A background view that displays the rounded box behind the button text. */
+    UIView *_backgroundView;
+}
 
 #pragma mark - View Creation -
 
@@ -97,22 +91,22 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self _updateTappedTintColorForTintColor];
 
     // Create the container view that manages the image view and text
-    self.containerView = [[UIView alloc] initWithFrame:self.bounds];
-    self.containerView.backgroundColor = [UIColor clearColor];
-    self.containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.containerView.userInteractionEnabled = NO;
-    self.containerView.clipsToBounds = YES;
-    [self addSubview:self.containerView];
+    _containerView = [[UIView alloc] initWithFrame:self.bounds];
+    _containerView.backgroundColor = [UIColor clearColor];
+    _containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _containerView.userInteractionEnabled = NO;
+    _containerView.clipsToBounds = YES;
+    [self addSubview:_containerView];
 
     // Create the image view which will show the button background
-    self.backgroundView = [[UIView alloc] initWithFrame:self.bounds];
-    self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.backgroundView.backgroundColor = self.tintColor;
-    self.backgroundView.layer.cornerRadius = _cornerRadius;
+    _backgroundView = [[UIView alloc] initWithFrame:self.bounds];
+    _backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _backgroundView.backgroundColor = self.tintColor;
+    _backgroundView.layer.cornerRadius = _cornerRadius;
 #ifdef __IPHONE_13_0
-    if (@available(iOS 13.0, *)) { self.backgroundView.layer.cornerCurve = kCACornerCurveContinuous; }
+    if (@available(iOS 13.0, *)) { _backgroundView.layer.cornerCurve = kCACornerCurveContinuous; }
 #endif
-    [self.containerView addSubview:self.backgroundView];
+    [_containerView addSubview:_backgroundView];
 
     // Create the title label that will display the button text
     UIFont *buttonFont = [UIFont systemFontOfSize:17.0f weight:UIFontWeightBold];
@@ -122,15 +116,15 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
         buttonFont = [metrics scaledFontForFont:buttonFont];
     }
     
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.titleLabel.textAlignment = NSTextAlignmentCenter;
-    self.titleLabel.textColor = [UIColor whiteColor];
-    self.titleLabel.font = buttonFont;
-    self.titleLabel.adjustsFontForContentSizeCategory = YES;
-    self.titleLabel.backgroundColor = self.labelBackgroundColor;
-    self.titleLabel.text = @"Button";
-    self.titleLabel.numberOfLines = 0;
-    [self.containerView addSubview:self.titleLabel];
+    _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    _titleLabel.textColor = [UIColor whiteColor];
+    _titleLabel.font = buttonFont;
+    _titleLabel.adjustsFontForContentSizeCategory = YES;
+    _titleLabel.backgroundColor = [self _labelBackgroundColor];
+    _titleLabel.text = @"Button";
+    _titleLabel.numberOfLines = 0;
+    [_containerView addSubview:_titleLabel];
 
     // Create action events for all possible interactions with this control
     [self addTarget:self action:@selector(_didTouchDownInside) forControlEvents:UIControlEventTouchDown|UIControlEventTouchDownRepeat];
@@ -145,15 +139,15 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [super layoutSubviews];
 
     // Configure the button text
-    [self.titleLabel sizeToFit];
-    self.titleLabel.center = self.containerView.center;
-    self.titleLabel.frame = CGRectIntegral(self.titleLabel.frame);
+    [_titleLabel sizeToFit];
+    _titleLabel.center = _containerView.center;
+    _titleLabel.frame = CGRectIntegral(_titleLabel.frame);
 }
 
 - (void)tintColorDidChange {
     [super tintColorDidChange];
-    self.titleLabel.backgroundColor = self.labelBackgroundColor;
-    self.backgroundView.backgroundColor = self.tintColor;
+    _titleLabel.backgroundColor = [self _labelBackgroundColor];
+    _backgroundView.backgroundColor = self.tintColor;
     [self setNeedsLayout];
 }
 
@@ -177,9 +171,9 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
                                      amount:_tappedTintColorBrightnessOffset];
 }
 
-- (UIColor *)labelBackgroundColor {
+- (UIColor *)_labelBackgroundColor TOROUNDEDBUTTON_OBJC_DIRECT {
     // Always return clear if tapped
-    if (self.isTapped) { return [UIColor clearColor]; }
+    if (_isTapped) { return [UIColor clearColor]; }
 
     // Return clear if the tint color isn't opaque
     BOOL isClear = CGColorGetAlpha(self.tintColor.CGColor) < (1.0f - FLT_EPSILON);
@@ -189,18 +183,17 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 #pragma mark - Interaction -
 
 - (void)_didTouchDownInside {
-    self.isTapped = YES;
-    
+    _isTapped = YES;
+
     // The user touched their finger down into the button bounds
     [self _setLabelAlphaTappedAnimated:NO];
     [self _setBackgroundColorTappedAnimated:YES];
     [self _setButtonScaledTappedAnimated:YES];
 }
 
-- (void)_didTouchUpInside
-{
-    self.isTapped = NO;
-    
+- (void)_didTouchUpInside {
+    _isTapped = NO;
+
     // The user lifted their finger up from inside the button bounds
     [self _setLabelAlphaTappedAnimated:YES];
     [self _setBackgroundColorTappedAnimated:YES];
@@ -213,20 +206,18 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     if (self.tappedHandler) { self.tappedHandler(); }
 }
 
-- (void)_didDragOutside
-{
-    self.isTapped = NO;
-    
+- (void)_didDragOutside {
+    _isTapped = NO;
+
     // After tapping down, without releasing, the user dragged their finger outside the bounds
     [self _setLabelAlphaTappedAnimated:YES];
     [self _setBackgroundColorTappedAnimated:YES];
     [self _setButtonScaledTappedAnimated:YES];
 }
 
-- (void)_didDragInside
-{
-    self.isTapped = YES;
-    
+- (void)_didDragInside {
+    _isTapped = YES;
+
     // After dragging out, without releasing, they dragged back in
     [self _setLabelAlphaTappedAnimated:YES];
     [self _setBackgroundColorTappedAnimated:YES];
@@ -240,13 +231,13 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
     // Toggle the background color of the title label
     void (^updateTitleOpacity)(void) = ^{
-        self.titleLabel.backgroundColor = self.labelBackgroundColor;
+        self->_titleLabel.backgroundColor = [self _labelBackgroundColor];
     };
     
     // -----------------------------------------------------
     
     void (^animationBlock)(void) = ^{
-        self.backgroundView.backgroundColor = self.isTapped ? self.tappedTintColor : self.tintColor;
+        self->_backgroundView.backgroundColor = self->_isTapped ? self.tappedTintColor : self.tintColor;
     };
     
     void (^completionBlock)(BOOL) = ^(BOOL completed){
@@ -259,7 +250,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
         completionBlock(YES);
     }
     else {
-        self.titleLabel.backgroundColor = [UIColor clearColor];
+        _titleLabel.backgroundColor = [UIColor clearColor];
         [UIView animateWithDuration:self.tapAnimationDuration
                               delay:0.0f
              usingSpringWithDamping:1.0f
@@ -274,23 +265,23 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)_setLabelAlphaTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
     if (self.tappedTextAlpha > 1.0f - FLT_EPSILON) { return; }
 
-    CGFloat alpha = self.isTapped ? self.tappedTextAlpha : 1.0f;
+    CGFloat alpha = _isTapped ? self.tappedTextAlpha : 1.0f;
 
     // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
-        self.titleLabel.alpha = alpha;
+        self->_titleLabel.alpha = alpha;
     };
 
     // If we're not animating, just call the blocks manually
     if (!animated) {
         // Remove any animations in progress
-        [self.titleLabel.layer removeAnimationForKey:@"opacity"];
+        [_titleLabel.layer removeAnimationForKey:@"opacity"];
         animationBlock();
         return;
     }
 
     // Set the title label to clear beforehand
-    self.titleLabel.backgroundColor = [UIColor clearColor];
+    _titleLabel.backgroundColor = [UIColor clearColor];
 
     // Animate the button alpha
     [UIView animateWithDuration:self.tapAnimationDuration
@@ -305,11 +296,11 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)_setButtonScaledTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
     if (self.tappedButtonScale < FLT_EPSILON) { return; }
 
-    CGFloat scale = self.isTapped ? self.tappedButtonScale : 1.0f;
+    CGFloat scale = _isTapped ? self.tappedButtonScale : 1.0f;
 
     // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
-        self.containerView.transform = CGAffineTransformScale(CGAffineTransformIdentity,
+        self->_containerView.transform = CGAffineTransformScale(CGAffineTransformIdentity,
                                                               scale,
                                                               scale);
     };
@@ -333,45 +324,44 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 #pragma mark - Public Accessors -
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
-    self.titleLabel.attributedText = attributedText;
-    [self.titleLabel sizeToFit];
+    _titleLabel.attributedText = attributedText;
+    [_titleLabel sizeToFit];
     [self setNeedsLayout];
 }
 
-- (NSAttributedString *)attributedText { return self.titleLabel.attributedText; }
+- (NSAttributedString *)attributedText { return _titleLabel.attributedText; }
 
 - (void)setText:(NSString *)text {
-    self.titleLabel.text = text;
-    [self.titleLabel sizeToFit];
+    _titleLabel.text = text;
+    [_titleLabel sizeToFit];
     [self setNeedsLayout];
 }
 
-- (NSString *)text { return self.titleLabel.text; }
+- (NSString *)text { return _titleLabel.text; }
 
-- (void)setTextFont:(UIFont *)textFont
-{
-    self.titleLabel.font = textFont;
+- (void)setTextFont:(UIFont *)textFont {
+    _titleLabel.font = textFont;
     self.textPointSize = 0.0f; // Reset the IB text point size back to disabled
 }
-- (UIFont *)textFont { return self.titleLabel.font; }
+- (UIFont *)textFont { return _titleLabel.font; }
 
 - (void)setTextColor:(UIColor *)textColor {
-    self.titleLabel.textColor = textColor;
+    _titleLabel.textColor = textColor;
 }
-- (UIColor *)textColor { return self.titleLabel.textColor; }
+- (UIColor *)textColor { return _titleLabel.textColor; }
 
 - (void)setTextPointSize:(CGFloat)textPointSize {
     if (_textPointSize == textPointSize) { return; }
     _textPointSize = textPointSize;
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:textPointSize];
+    _titleLabel.font = [UIFont boldSystemFontOfSize:textPointSize];
     [self setNeedsLayout];
 }
 
 - (void)setTintColor:(UIColor *)tintColor {
     [super setTintColor:tintColor];
     [self _updateTappedTintColorForTintColor];
-    self.backgroundView.backgroundColor = tintColor;
-    self.titleLabel.backgroundColor = self.labelBackgroundColor;
+    _backgroundView.backgroundColor = tintColor;
+    _titleLabel.backgroundColor = [self _labelBackgroundColor];
     [self setNeedsLayout];
 }
 
@@ -401,17 +391,17 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     }
     
     _cornerRadius = cornerRadius;
-    self.backgroundView.layer.cornerRadius = _cornerRadius;
+    _backgroundView.layer.cornerRadius = _cornerRadius;
     [self setNeedsLayout];
 }
 
 - (void)setEnabled:(BOOL)enabled {
     [super setEnabled:enabled];
-    self.containerView.alpha = enabled ? 1 : 0.4;
+    _containerView.alpha = enabled ? 1 : 0.4;
 }
 
 - (CGFloat)minimumWidth {
-    return self.titleLabel.frame.size.width;
+    return _titleLabel.frame.size.width;
 }
 
 #pragma mark - Graphics Handling -
