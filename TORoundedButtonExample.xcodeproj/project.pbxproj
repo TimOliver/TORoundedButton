@@ -3,11 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		220F9AB622784FD4001862A7 /* TORoundedButton.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 220F9AAE22784FD4001862A7 /* TORoundedButton.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		220F9AB622784FD4001862A7 /* TORoundedButton.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 220F9AAE22784FD4001862A7 /* TORoundedButton.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		220F9ABC22784FF5001862A7 /* TORoundedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22700662226CA35D003492CB /* TORoundedButton.m */; platformFilter = ios; };
 		2270063E226CA24D003492CB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2270063D226CA24D003492CB /* AppDelegate.m */; };
 		22700644226CA24D003492CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22700642226CA24D003492CB /* Main.storyboard */; };
@@ -50,6 +50,7 @@
 		220F9ABE2278AA0B001862A7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		220FC30822BC67E700B5C284 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		220FC30922BC67FE00B5C284 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		221ACFC52AC939D700DE86FD /* TORoundedButtonExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TORoundedButtonExample.entitlements; sourceTree = "<group>"; };
 		22700639226CA24D003492CB /* TORoundedButtonExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TORoundedButtonExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2270063C226CA24D003492CB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2270063D226CA24D003492CB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -128,6 +129,7 @@
 		2270063B226CA24D003492CB /* TORoundedButtonExample */ = {
 			isa = PBXGroup;
 			children = (
+				221ACFC52AC939D700DE86FD /* TORoundedButtonExample.entitlements */,
 				2270063C226CA24D003492CB /* AppDelegate.h */,
 				2270063D226CA24D003492CB /* AppDelegate.m */,
 				22D23CC62276E73200EE65DD /* ViewController.h */,
@@ -241,7 +243,8 @@
 		22700631226CA24D003492CB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1250;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
 				ORGANIZATIONNAME = "Tim Oliver";
 				TargetAttributes = {
 					220F9AAD22784FD4001862A7 = {
@@ -373,12 +376,15 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/TORoundedButtonFramework/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.tim.TORoundedButton;
 				PRODUCT_NAME = TORoundedButton;
 				SUPPORTS_MACCATALYST = NO;
@@ -398,12 +404,15 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/TORoundedButtonFramework/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.tim.TORoundedButton;
 				PRODUCT_NAME = TORoundedButton;
 				SUPPORTS_MACCATALYST = NO;
@@ -450,6 +459,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -511,6 +521,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -532,6 +543,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TORoundedButtonExample/TORoundedButtonExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6LF3GMKZAB;
 				INFOPLIST_FILE = TORoundedButtonExample/Info.plist;
@@ -543,6 +555,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dev.tim.TORoundedButtonExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -551,6 +565,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TORoundedButtonExample/TORoundedButtonExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6LF3GMKZAB;
 				INFOPLIST_FILE = TORoundedButtonExample/Info.plist;
@@ -562,6 +577,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dev.tim.TORoundedButtonExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
