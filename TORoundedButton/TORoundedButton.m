@@ -99,6 +99,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _tapAnimationDuration = (_tapAnimationDuration > FLT_EPSILON) ?: 0.4f;
     _tappedButtonScale = (_tappedButtonScale > FLT_EPSILON) ?: 0.97f;
     _tappedTintColorBrightnessOffset = !TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(_tappedTintColorBrightnessOffset) ?: -0.15f;
+    _contentInset = (UIEdgeInsets){15.0, 15.0, 15.0, 15.0};
 
     // Set the tapped tint color if we've set to dynamically calculate it
     [self _updateTappedTintColorForTintColor];
@@ -348,6 +349,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
+    [self _makeTitleLabelIfNeeded];
     _titleLabel.attributedText = attributedText;
     [_titleLabel sizeToFit];
     [self setNeedsLayout];
@@ -356,6 +358,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (NSAttributedString *)attributedText { return _titleLabel.attributedText; }
 
 - (void)setText:(NSString *)text {
+    [self _makeTitleLabelIfNeeded];
     _titleLabel.text = text;
     [_titleLabel sizeToFit];
     [self setNeedsLayout];

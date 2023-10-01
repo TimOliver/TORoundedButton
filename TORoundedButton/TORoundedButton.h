@@ -35,6 +35,10 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /// this property to your own custom UIView subclass in order to more efficiently manage sizing and layout.
 @property (nonatomic, strong, null_resettable) UIView *contentView;
 
+/// The amount of inset padding between the content view and the edges of the button.
+/// (Default value is 15 points inset from each edge).
+@property (nonatomic, assign) UIEdgeInsets contentInset;
+
 /// The text that is displayed in center of the button (Default is nil).
 @property (nonatomic, copy, nullable) IBInspectable NSString *text;
 
@@ -89,6 +93,13 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 
 /// Create a new instance of a button with the provided view set as the hosting content view.
 - (instancetype)initWithContentView:(__kindof UIView *)contentView;
+
+/// Resizes the button to fit the bounding size of all of the subviews in `contentView`, plus content insetting.
+/// If a custom view was provided as the content view, or if the content view only has one subview this will also be called on it.
+- (void)sizeToFit;
+
+/// Calculates and returns the appropriate minimum size this button needs to be to fit into the provided size.
+- (CGSize)sizeThatFits:(CGSize)size;
 
 @end
 
