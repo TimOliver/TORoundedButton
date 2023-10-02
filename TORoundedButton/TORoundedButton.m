@@ -41,7 +41,10 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
      or not because the state can change before blocks complete. */
     BOOL _isTapped;
 
-    /** The title label displaying the text in the center of the button. */
+    /** A hosting container holding all of the view content that tap animations are applied to. */
+    UIView *_containerView;
+
+    /** If `text` is set, the internally managed title label to show it. */
     UILabel *_titleLabel;
 
     /** A background view that displays the rounded box behind the button text. */
@@ -51,14 +54,13 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 #pragma mark - View Creation -
 
 - (instancetype)init {
-    if (self = [super initWithFrame:(CGRect){0,0, 288.0f, 50.0f}]) {
-        [self _roundedButtonCommonInit];
-    }
+    if (self = [self initWithFrame:(CGRect){0,0, 288.0f, 50.0f}]) { }
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        _contentView = [UIView new];
         [self _roundedButtonCommonInit];
     }
 
@@ -67,6 +69,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
+        _contentView = [UIView new];
         [self _roundedButtonCommonInit];
     }
 
@@ -104,13 +107,13 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     // Set the tapped tint color if we've set to dynamically calculate it
     [self _updateTappedTintColorForTintColor];
 
-    // Create the container view that manages the image view and text
-    _contentView = [[UIView alloc] initWithFrame:self.bounds];
-    _contentView.backgroundColor = [UIColor clearColor];
-    _contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _contentView.userInteractionEnabled = NO;
-    _contentView.clipsToBounds = YES;
-    [self addSubview:_contentView];
+    // Create the container view that holds all of the views for animations.
+    _containerView = [[UIView alloc] initWithFrame:self.bounds];
+    _containerView.backgroundColor = [UIColor clearColor];
+    _containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _containerView.userInteractionEnabled = NO;
+    _containerView.clipsToBounds = YES;
+    [self addSubview:_containerView];
 
     // Create the image view which will show the button background
     _backgroundView = [[UIView alloc] initWithFrame:self.bounds];
@@ -120,7 +123,10 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 #ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) { _backgroundView.layer.cornerCurve = kCACornerCurveContinuous; }
 #endif
-    [_contentView addSubview:_backgroundView];
+    [_containerView addSubview:_backgroundView];
+
+    // The foreground content view
+    [_containerView addSubview:_contentView];
 
     // Create action events for all possible interactions with this control
     [self addTarget:self action:@selector(_didTouchDownInside) forControlEvents:UIControlEventTouchDown|UIControlEventTouchDownRepeat];
@@ -148,15 +154,57 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [_contentView addSubview:_titleLabel];
 }
 
-#pragma mark - View Displaying -
+#pragma mark - View Layout -
 
 - (void)layoutSubviews {
     [super layoutSubviews];
 
+    const CGSize boundsSize = self.bounds.size;
+    _contentView.frame = (CGRect){
+        .origin.x = _contentInset.left,
+        .origin.y = _contentInset.top,
+        .size.width = boundsSize.width - (_contentInset.left + _contentInset.right),
+        .size.height = boundsSize.height - (_contentInset.top + _contentInset.bottom),
+    };
+
     // Configure the button text
-    [_titleLabel sizeToFit];
-    _titleLabel.center = _contentView.center;
-    _titleLabel.frame = CGRectIntegral(_titleLabel.frame);
+    if (_titleLabel) {
+        [_titleLabel sizeToFit];
+        _titleLabel.center = (CGPoint){
+            .x = CGRectGetMidX(_contentView.bounds),
+            .y = CGRectGetMidY(_contentView.bounds)
+        };
+        _titleLabel.frame = CGRectIntegral(_titleLabel.frame);
+    }
+}
+
+- (void)sizeToFit { [super sizeToFit]; }
+
+- (CGSize)sizeThatFits:(CGSize)size {
+    const CGFloat horizontalPadding = (_contentInset.left + _contentInset.right);
+    const CGFloat verticalPadding = (_contentInset.top + _contentInset.bottom);
+    const CGSize contentSize = CGSizeMake(size.width - horizontalPadding, size.height - verticalPadding);
+    CGSize newSize = CGSizeZero;
+
+    // Check to see if the content view was overridden with custom class that implements its own sizing method.
+    const BOOL isMethodOverridden = [_contentView methodForSelector:@selector(sizeThatFits:)] !=
+                                        [UIView instanceMethodForSelector:@selector(sizeThatFits:)];
+    if (isMethodOverridden) {
+        newSize = [_contentView sizeThatFits:size];
+    } else if (_contentView.subviews.count == 1) {
+        // When there is 1 view, we can reliably scale the whole view around it.
+        newSize = [_contentView.subviews.firstObject sizeThatFits:contentSize];
+    } else if (_contentView.subviews.count > 1) {
+        // For multiple subviews, work out the bounds of all of the views and scale the button to fit
+        for (UIView *view in _contentView.subviews) {
+            newSize.width = MAX(CGRectGetMaxX(view.frame), newSize.width);
+            newSize.height = MAX(CGRectGetMaxY(view.frame), newSize.height);
+        }
+    }
+
+    newSize.width += horizontalPadding;
+    newSize.height += verticalPadding;
+    return newSize;
 }
 
 - (void)tintColorDidChange {
@@ -315,7 +363,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
     // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
-        self->_contentView.transform = CGAffineTransformScale(CGAffineTransformIdentity,
+        self->_containerView.transform = CGAffineTransformScale(CGAffineTransformIdentity,
                                                               scale,
                                                               scale);
     };
@@ -421,7 +469,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 - (void)setEnabled:(BOOL)enabled {
     [super setEnabled:enabled];
-    _contentView.alpha = enabled ? 1 : 0.4;
+    _containerView.alpha = enabled ? 1 : 0.4;
 }
 
 - (CGFloat)minimumWidth {

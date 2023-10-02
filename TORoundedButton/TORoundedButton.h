@@ -95,10 +95,14 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 - (instancetype)initWithContentView:(__kindof UIView *)contentView;
 
 /// Resizes the button to fit the bounding size of all of the subviews in `contentView`, plus content insetting.
-/// If a custom view was provided as the content view, or if the content view only has one subview this will also be called on it.
+/// If subclassing this class, override this method for custom size control (Dont't forget to include content insetting).
+/// If the content view only contains one subview (like the title label), or a custom content view is supplied, this will also be forwarded to it.
 - (void)sizeToFit;
 
 /// Calculates and returns the appropriate minimum size this button needs to be to fit into the provided size.
+/// If subclassing this class, override this method for custom size control (Dont't forget to include content insetting).
+/// If the content view only contains one subview (like the title label), or a custom content view is supplied, this will also be forwarded to it.
+/// If the content vieww contains multiple subviews, their bounding size will be calculated and then applied to this button.
 - (CGSize)sizeThatFits:(CGSize)size;
 
 @end
