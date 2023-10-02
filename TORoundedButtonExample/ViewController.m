@@ -30,6 +30,14 @@
     self.button.tappedHandler = ^{
         [weakSelf playFadeAnimationOnView:weakSelf.tappedLabel];
     };
+
+    // Uncomment to have the button shrink to wrap the text
+    // [self.button sizeToFit];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    self.button.center = self.view.center;
 }
 
 - (void)playFadeAnimationOnView:(UIView *)view
