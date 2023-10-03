@@ -94,6 +94,7 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /// Resizes the button to fit the bounding size of all of the subviews in `contentView`, plus content insetting.
 /// If subclassing this class, override this method for custom size control (Dont't forget to include content insetting).
 /// If the content view only contains one subview (like the title label), or a custom content view is supplied, this will also be forwarded to it.
+/// If the content vieww contains multiple subviews, their bounding size will be calculated and then applied to this button.
 - (void)sizeToFit;
 
 /// Calculates and returns the appropriate minimum size this button needs to be to fit into the provided size.
