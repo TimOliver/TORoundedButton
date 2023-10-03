@@ -74,9 +74,6 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /// The duration of the tapping cross-fade animation (Default is 0.4f).
 @property (nonatomic, assign) CGFloat tapAnimationDuration;
 
-/// Given the current size of the text label, the smallest horizontal width in which this button can scale.
-@property (nonatomic, readonly) CGFloat minimumWidth;
-
 /// A callback handler triggered each time the button is tapped.
 @property (nonatomic, copy) void (^tappedHandler)(void);
 

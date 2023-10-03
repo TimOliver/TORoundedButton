@@ -472,10 +472,6 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _containerView.alpha = enabled ? 1 : 0.4;
 }
 
-- (CGFloat)minimumWidth {
-    return _titleLabel.frame.size.width;
-}
-
 #pragma mark - Graphics Handling -
 
 - (UIColor *)_brightnessAdjustedColorWithColor:(UIColor *)color amount:(CGFloat)amount TOROUNDEDBUTTON_OBJC_DIRECT {
