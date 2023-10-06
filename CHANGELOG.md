@@ -1,6 +1,10 @@
 x.y.z Release Notes (yyyy-MM-dd)
 =============================================================
 
+### Added
+
+* A `contentView` property to enable adding custom view content to the button.
+
 ### Fixed
 
 * Re-calculating the darker tap color when moving between light and dark mode.
