@@ -27,23 +27,6 @@
     XCTAssertEqual(button.tappedButtonScale, 0.97f);
 }
 
-- (void)testMinimimumWidth
-{
-    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Long Button Name"];
-
-    // Manually
-    UILabel *titleLabel = nil;
-    for (UIView *subview in button.subviews.firstObject.subviews) {
-        if ([subview isKindOfClass:[UILabel class]]) {
-            titleLabel = (UILabel *)subview;
-            break;
-        }
-    }
-
-    XCTAssert(button.minimumWidth > 0.0f);
-    XCTAssertEqual(titleLabel.frame.size.width, button.minimumWidth);
-}
-
 - (void)testButtonInteraction
 {
     TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Long Button Name"];
