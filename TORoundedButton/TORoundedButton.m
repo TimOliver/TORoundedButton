@@ -120,13 +120,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self addSubview:_containerView];
 
     // Create the image view which will show the button background
-    _backgroundView = [[UIView alloc] initWithFrame:self.bounds];
-    _backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _backgroundView.backgroundColor = self.tintColor;
-    _backgroundView.layer.cornerRadius = _cornerRadius;
-#ifdef __IPHONE_13_0
-    if (@available(iOS 13.0, *)) { _backgroundView.layer.cornerCurve = kCACornerCurveContinuous; }
-#endif
+    _backgroundView = [self _makeBackgroundViewWithBlur:_isBlurBackground];
     [_containerView addSubview:_backgroundView];
 
     // The foreground content view
@@ -487,6 +481,31 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _cornerRadius = cornerRadius;
     _backgroundView.layer.cornerRadius = _cornerRadius;
     [self setNeedsLayout];
+}
+
+- (void)setIsBlurBackground:(BOOL)isBlurBackground {
+    if (_isBlurBackground == isBlurBackground) {
+        return;
+    }
+
+    _isBlurBackground = isBlurBackground;
+    [_backgroundView removeFromSuperview];
+    _backgroundView = [self _makeBackgroundViewWithBlur:_isBlurBackground];
+    [_containerView addSubview:_backgroundView];
+}
+
+- (void)setBlurStyle:(UIBlurEffectStyle)blurStyle {
+    if (_blurStyle == blurStyle) {
+        return;
+    }
+
+    _blurStyle = blurStyle;
+    if (!_isBlurBackground || ![_backgroundView isKindOfClass:[UIVisualEffectView class]]) {
+        return;
+    }
+
+    UIVisualEffectView *const blurView = (UIVisualEffectView *)_backgroundView;
+    [blurView setEffect:[UIBlurEffect effectWithStyle:_blurStyle]];
 }
 
 - (void)setEnabled:(BOOL)enabled {
