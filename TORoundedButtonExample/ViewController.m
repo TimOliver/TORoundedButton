@@ -20,16 +20,16 @@
     // Hide the tapped label
     self.tappedLabel.alpha = 0.0f;
 
+    __weak typeof(self) weakSelf = self;
+    self.button.tappedHandler = ^{
+        [weakSelf playFadeAnimationOnView:weakSelf.tappedLabel];
+    };
+
     // Uncomment this line for an attributed string example
     // self.button.attributedText = [[self class] makeExampleAttributedString];
 
     // Uncomment to apply an alpha value to the button
     // self.button.tintColor = [self.view.tintColor colorWithAlphaComponent:0.4];
-
-    __weak typeof(self) weakSelf = self;
-    self.button.tappedHandler = ^{
-        [weakSelf playFadeAnimationOnView:weakSelf.tappedLabel];
-    };
 
     // Uncomment to have the button shrink to wrap the text
     // [self.button sizeToFit];
