@@ -103,6 +103,10 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _tappedButtonScale = (_tappedButtonScale > FLT_EPSILON) ?: 0.97f;
     _tappedTintColorBrightnessOffset = !TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(_tappedTintColorBrightnessOffset) ?: -0.15f;
     _contentInset = (UIEdgeInsets){15.0, 15.0, 15.0, 15.0};
+    _blurStyle = UIBlurEffectStyleDark;
+#ifdef __IPHONE_13_0
+    if (@available(iOS 13.0, *)) { _blurStyle = UIBlurEffectStyleSystemMaterialDark; }
+#endif
 
     // Set the tapped tint color if we've set to dynamically calculate it
     [self _updateTappedTintColorForTintColor];
@@ -152,6 +156,24 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _titleLabel.text = @"Button";
     _titleLabel.numberOfLines = 0;
     [_contentView addSubview:_titleLabel];
+}
+
+- (UIView *)_makeBackgroundViewWithBlur:(BOOL)withBlur TOROUNDEDBUTTON_OBJC_DIRECT {
+    UIView *backgroundView = nil;
+    if (withBlur) {
+        UIBlurEffect *const blurEffect = [UIBlurEffect effectWithStyle:_blurStyle];
+        backgroundView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    } else {
+        backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+    }
+    backgroundView = [[UIView alloc] initWithFrame:self.bounds];
+    backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    backgroundView.backgroundColor = self.tintColor;
+    backgroundView.layer.cornerRadius = _cornerRadius;
+#ifdef __IPHONE_13_0
+    if (@available(iOS 13.0, *)) { backgroundView.layer.cornerCurve = kCACornerCurveContinuous; }
+#endif
+    return backgroundView;
 }
 
 #pragma mark - View Layout -
