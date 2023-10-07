@@ -39,6 +39,12 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /// (Default value is 15 points inset from each edge).
 @property (nonatomic, assign) UIEdgeInsets contentInset;
 
+/// Replaces the solid color background with a blur view. (Default is NO)
+@property (nonatomic, assign) BOOL isTranslucent;
+
+/// When `isTranslucent` is `YES`, the amount of blur the background view has.
+@property (nonatomic, assign) UIBlurEffectStyle blurStyle;
+
 /// The text that is displayed in center of the button (Default is nil).
 @property (nonatomic, copy, nullable) IBInspectable NSString *text;
 

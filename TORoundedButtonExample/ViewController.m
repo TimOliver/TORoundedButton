@@ -25,6 +25,9 @@
         [weakSelf playFadeAnimationOnView:weakSelf.tappedLabel];
     };
 
+    // Uncomment to make the background view a blur view
+    // self.button.isTranslucent = YES;
+
     // Uncomment this line for an attributed string example
     // self.button.attributedText = [[self class] makeExampleAttributedString];
 
