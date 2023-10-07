@@ -43,7 +43,7 @@ button.tappedTintColorBrightnessOffset = -0.15
 
 // A closure is used to detect when tapped
 button.tappedHandler = {
-	print("Button tapped!")
+    print("Button tapped!")
 }
 
 ```
