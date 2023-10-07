@@ -105,7 +105,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _contentInset = (UIEdgeInsets){15.0, 15.0, 15.0, 15.0};
     _blurStyle = UIBlurEffectStyleDark;
 #ifdef __IPHONE_13_0
-    if (@available(iOS 13.0, *)) { _blurStyle = UIBlurEffectStyleSystemMaterialDark; }
+    if (@available(iOS 13.0, *)) { _blurStyle = UIBlurEffectStyleSystemThinMaterialDark; }
 #endif
 
     // Set the tapped tint color if we've set to dynamically calculate it
@@ -120,7 +120,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self addSubview:_containerView];
 
     // Create the image view which will show the button background
-    _backgroundView = [self _makeBackgroundViewWithBlur:_isBlurBackground];
+    _backgroundView = [self _makeBackgroundViewWithBlur:_isTranslucent];
     [_containerView addSubview:_backgroundView];
 
     // The foreground content view
@@ -157,12 +157,13 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     if (withBlur) {
         UIBlurEffect *const blurEffect = [UIBlurEffect effectWithStyle:_blurStyle];
         backgroundView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        backgroundView.clipsToBounds = YES;
     } else {
         backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+        backgroundView.backgroundColor = self.tintColor;
     }
-    backgroundView = [[UIView alloc] initWithFrame:self.bounds];
+    backgroundView.frame = self.bounds;
     backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    backgroundView.backgroundColor = self.tintColor;
     backgroundView.layer.cornerRadius = _cornerRadius;
 #ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) { backgroundView.layer.cornerCurve = kCACornerCurveContinuous; }
@@ -252,7 +253,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 - (UIColor *)_labelBackgroundColor TOROUNDEDBUTTON_OBJC_DIRECT {
     // Always return clear if tapped
-    if (_isTapped) { return [UIColor clearColor]; }
+    if (_isTapped || _isTranslucent) { return [UIColor clearColor]; }
 
     // Return clear if the tint color isn't opaque
     BOOL isClear = CGColorGetAlpha(self.tintColor.CGColor) < (1.0f - FLT_EPSILON);
@@ -306,7 +307,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 #pragma mark - Animation -
 
 - (void)_setBackgroundColorTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
-    if (!self.tappedTintColor) { return; }
+    if (!self.tappedTintColor || _isTranslucent) { return; }
 
     // Toggle the background color of the title label
     void (^updateTitleOpacity)(void) = ^{
@@ -483,15 +484,17 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self setNeedsLayout];
 }
 
-- (void)setIsBlurBackground:(BOOL)isBlurBackground {
-    if (_isBlurBackground == isBlurBackground) {
+- (void)setIsTranslucent:(BOOL)isTranslucent {
+    if (_isTranslucent == isTranslucent) {
         return;
     }
 
-    _isBlurBackground = isBlurBackground;
+    _isTranslucent = isTranslucent;
     [_backgroundView removeFromSuperview];
-    _backgroundView = [self _makeBackgroundViewWithBlur:_isBlurBackground];
-    [_containerView addSubview:_backgroundView];
+    _backgroundView = [self _makeBackgroundViewWithBlur:_isTranslucent];
+    [_containerView insertSubview:_backgroundView atIndex:0];
+    _titleLabel.backgroundColor = [self _labelBackgroundColor];
+    [self setNeedsLayout];
 }
 
 - (void)setBlurStyle:(UIBlurEffectStyle)blurStyle {
@@ -500,7 +503,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     }
 
     _blurStyle = blurStyle;
-    if (!_isBlurBackground || ![_backgroundView isKindOfClass:[UIVisualEffectView class]]) {
+    if (!_isTranslucent || ![_backgroundView isKindOfClass:[UIVisualEffectView class]]) {
         return;
     }
 
