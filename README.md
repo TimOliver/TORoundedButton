@@ -73,11 +73,11 @@ github "TimOliver/TORoundedButton"
 
 # Why build this?
 
-This sort of button style is more or less the bread and butter of a lot of iOS apps. But even that being the case, it is not offered as an officially supported style of `UIButton`.
+This sort of button style is more or less a bread and butter requirement of a lot of iOS apps. But with even that being the case, it wasn't offered as an official implementation in `UIButton` [until iOS 15](https://developer.apple.com/documentation/uikit/uibackgroundconfiguration).
 
 Because of this, most developers will achieve this look by simply giving a `UIButton` a solid background, and then using the Core Animation `cornerRadius` API to round the corners. 
 
-This sort of "just-in-time" solution is fine for the vast majority of apps out there that might need one or two rounded buttons. But certainly for apps that would want many of these buttons, and demand that look and behaviour is consistent, then it's a no-brainer to create a standardised library for this style.
+This sort of "just-in-time" solution is fine for the vast majority of apps out there that might need one or two rounded buttons. But certainly for apps that would want many of these buttons, and demand all the buttons look and behaviour is consistent, then it's a no-brainer to create a standardised library for this style.
 
 In addition to that, while `UIButton` is a vary capable API, it is quite limiting. For example, it's not possible to animate the button zooming as it is tapped, or any other custom behaviour. 
 
@@ -101,4 +101,4 @@ iOS device mockup art by [Pixeden](http://pixeden.com).
 
 # License
 
-`TORoundedButton` is available under the MIT license. Please see the [LICENSE](LICENSE) file for more information. ![analytics](https://ga-beacon.appspot.com/UA-5643664-16/TORoundedButton/README.md?pixel)
+`TORoundedButton` is available under the MIT license. Please see the [LICENSE](LICENSE) file for more information.
