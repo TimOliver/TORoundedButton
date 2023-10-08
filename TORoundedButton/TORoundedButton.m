@@ -20,6 +20,7 @@
 //  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
 //  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+// Objective-C direct methods - https://nshipster.com/direct/
 #define TOROUNDEDBUTTON_OBJC_DIRECT __attribute__((objc_direct))
 
 #import "TORoundedButton.h"
@@ -283,7 +284,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self sendActionsForControlEvents:UIControlEventPrimaryActionTriggered];
 
     // Broadcast the tap event to all subscribed objects.
-    if (self.tappedHandler) { self.tappedHandler(); }
+    if (_tappedHandler) { _tappedHandler(); }
     [_delegate roundedButtonDidTap:self];
 }
 
@@ -308,7 +309,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 #pragma mark - Animation -
 
 - (void)_setBackgroundColorTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
-    if (!self.tappedTintColor || _isTranslucent) { return; }
+    if (!_tappedTintColor || _isTranslucent) { return; }
 
     // Toggle the background color of the title label
     void (^updateTitleOpacity)(void) = ^{
@@ -318,7 +319,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     // -----------------------------------------------------
     
     void (^animationBlock)(void) = ^{
-        self->_backgroundView.backgroundColor = self->_isTapped ? self.tappedTintColor : self.tintColor;
+        self->_backgroundView.backgroundColor = self->_isTapped ? self->_tappedTintColor : self.tintColor;
     };
     
     void (^completionBlock)(BOOL) = ^(BOOL completed){
@@ -332,7 +333,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     }
     else {
         _titleLabel.backgroundColor = [UIColor clearColor];
-        [UIView animateWithDuration:self.tapAnimationDuration
+        [UIView animateWithDuration:_tapAnimationDuration
                               delay:0.0f
              usingSpringWithDamping:1.0f
               initialSpringVelocity:0.5f
@@ -344,9 +345,9 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 }
 
 - (void)_setLabelAlphaTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
-    if (self.tappedTextAlpha > 1.0f - FLT_EPSILON) { return; }
+    if (_tappedTextAlpha > 1.0f - FLT_EPSILON) { return; }
 
-    CGFloat alpha = _isTapped ? self.tappedTextAlpha : 1.0f;
+    CGFloat alpha = _isTapped ? _tappedTextAlpha : 1.0f;
 
     // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
@@ -365,7 +366,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _titleLabel.backgroundColor = [UIColor clearColor];
 
     // Animate the button alpha
-    [UIView animateWithDuration:self.tapAnimationDuration
+    [UIView animateWithDuration:_tapAnimationDuration
                           delay:0.0f
          usingSpringWithDamping:1.0f
           initialSpringVelocity:0.5f
@@ -375,9 +376,9 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 }
 
 - (void)_setButtonScaledTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
-    if (self.tappedButtonScale < FLT_EPSILON) { return; }
+    if (_tappedButtonScale < FLT_EPSILON) { return; }
 
-    CGFloat scale = _isTapped ? self.tappedButtonScale : 1.0f;
+    CGFloat scale = _isTapped ? _tappedButtonScale : 1.0f;
 
     // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
@@ -393,7 +394,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     }
 
     // Animate the button alpha
-    [UIView animateWithDuration:self.tapAnimationDuration
+    [UIView animateWithDuration:_tapAnimationDuration
                           delay:0.0f
          usingSpringWithDamping:1.0f
           initialSpringVelocity:0.5f
