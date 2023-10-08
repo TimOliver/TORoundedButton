@@ -16,8 +16,7 @@ let package = Package(
     targets: [
         .target(
             name: "TORoundedButton",
-            path: ".",
-            sources: ["spm"]
+            path: "spm"
         )
     ],
     cLanguageStandard: .c11
