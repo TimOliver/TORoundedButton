@@ -3,6 +3,7 @@ x.y.z Release Notes (yyyy-MM-dd)
 
 ### Added
 
+* A `delegate` property to receive tap events for the button where delegates are preferred over blocks.
 * An `isTranslucent` property (and a `blurStyle` property) that replaces the background of buttons from a solid color to a blurred background.
 * A `contentView` property to enable adding custom view content to buttons.
 * `sizeToFit` and `sizeThatFits:` methods to allow automatic sizing of buttons around their content.
