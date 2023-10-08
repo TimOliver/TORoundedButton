@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class TORoundedButton;
 
+NS_SWIFT_NAME(RoundedButtonDelegate)
 @protocol TORoundedButtonDelegate <NSObject>
 
 /// Called when the user taps on the associated button.

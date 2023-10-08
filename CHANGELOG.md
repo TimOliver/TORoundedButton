@@ -12,6 +12,7 @@ x.y.z Release Notes (yyyy-MM-dd)
 
 * Re-calculating the darker tap color when moving between light and dark mode.
 * Changed the tap-down animation to always use a fluid zoom animation.
+* A broken symlink reference in the SPM integration.
 
 1.1.3 Release Notes (2020-12-12)
 =============================================================
