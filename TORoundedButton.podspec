@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'TORoundedButton'
-  s.version  = '1.1.3'
+  s.version  = '1.2.0'
   s.license  =  { :type => 'MIT', :file => 'LICENSE' }
   s.summary  = 'A high-performance button control with rounded corners for iOS.'
   s.homepage = 'https://github.com/TimOliver/TORoundedButton'
