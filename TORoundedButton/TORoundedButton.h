@@ -24,8 +24,21 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class TORoundedButton;
+
+@protocol TORoundedButtonDelegate <NSObject>
+
+/// Called when the user taps on the associated button.
+/// - Parameter button: The button object that was tapped.
+- (void)roundedButtonDidTap:(TORoundedButton *)button;
+
+@end
+
 NS_SWIFT_NAME(RoundedButton)
 IB_DESIGNABLE @interface TORoundedButton : UIControl
+
+/// A delegate object that can receive tap events from this button.
+@property (nonatomic, weak) id<TORoundedButtonDelegate> delegate;
 
 /// The radius of the corners of this button (Default is 12.0f).
 @property (nonatomic, assign) IBInspectable CGFloat cornerRadius;

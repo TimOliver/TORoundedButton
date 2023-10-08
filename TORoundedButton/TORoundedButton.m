@@ -282,8 +282,9 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     // Send the semantic button action for apps relying on this action
     [self sendActionsForControlEvents:UIControlEventPrimaryActionTriggered];
 
-    // Trigger the block if it has been set
+    // Broadcast the tap event to all subscribed objects.
     if (self.tappedHandler) { self.tappedHandler(); }
+    [_delegate roundedButtonDidTap:self];
 }
 
 - (void)_didDragOutside {
