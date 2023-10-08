@@ -20,6 +20,7 @@
 //  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
 //  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+// Objective-C direct methods - https://nshipster.com/direct/
 #define TOROUNDEDBUTTON_OBJC_DIRECT __attribute__((objc_direct))
 
 #import "TORoundedButton.h"
