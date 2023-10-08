@@ -18,6 +18,5 @@ let package = Package(
             name: "TORoundedButton",
             path: "spm"
         )
-    ],
-    cLanguageStandard: .c11
+    ]
 )
