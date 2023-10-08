@@ -3,16 +3,16 @@ x.y.z Release Notes (yyyy-MM-dd)
 
 ### Added
 
-* A `delegate` property to receive tap events for the button where delegates are preferred over blocks.
-* An `isTranslucent` property (and a `blurStyle` property) that replaces the background of buttons from a solid color to a blurred background.
-* A `contentView` property to enable adding custom view content to buttons.
-* `sizeToFit` and `sizeThatFits:` methods to allow automatic sizing of buttons around their content.
+* A `delegate` property to receive tap events for the button where delegates are preferred over blocks. ([#46](https://github.com/TimOliver/TORoundedButton/pull/46))
+* An `isTranslucent` property (and a `blurStyle` property) that replaces the background of buttons from a solid color to a blurred background. ([#45](https://github.com/TimOliver/TORoundedButton/pull/45))
+* A `contentView` property to enable adding custom view content to buttons. ([#44](https://github.com/TimOliver/TORoundedButton/pull/44))
+* `sizeToFit` and `sizeThatFits:` methods to allow automatic sizing of buttons around their content. ([#44](https://github.com/TimOliver/TORoundedButton/pull/44))
 
 ### Fixed
 
-* Re-calculating the darker tap color when moving between light and dark mode.
-* Changed the tap-down animation to always use a fluid zoom animation.
-* A broken symlink reference in the SPM integration.
+* Re-calculating the darker tap color when moving between light and dark mode. ([#34](https://github.com/TimOliver/TORoundedButton/pull/34))
+* Changed the tap-down animation to always use a fluid zoom animation. ([#35](https://github.com/TimOliver/TORoundedButton/pull/35))
+* A broken symlink reference in the SPM integration. ([#48](https://github.com/TimOliver/TORoundedButton/pull/48))
 
 1.1.3 Release Notes (2020-12-12)
 =============================================================
