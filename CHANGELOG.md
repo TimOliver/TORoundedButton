@@ -1,6 +1,16 @@
 x.y.z Release Notes (yyyy-MM-dd)
 =============================================================
 
+1.2.1 Release Notes (2023-10-09)
+=============================================================
+
+### Fixed
+
+* Tint color peridoically resets itself when translucency is enabled. ([#50](https://github.com/TimOliver/TORoundedButton/pull/50))
+
+1.2.0 Release Notes (2023-10-08)
+=============================================================
+
 ### Added
 
 * A `delegate` property to receive tap events for the button where delegates are preferred over blocks. ([#46](https://github.com/TimOliver/TORoundedButton/pull/46))
