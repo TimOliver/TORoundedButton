@@ -227,6 +227,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 - (void)tintColorDidChange {
     [super tintColorDidChange];
+    if (_isTranslucent) { return; }
     _titleLabel.backgroundColor = [self _labelBackgroundColor];
     _backgroundView.backgroundColor = self.tintColor;
     [self setNeedsLayout];
