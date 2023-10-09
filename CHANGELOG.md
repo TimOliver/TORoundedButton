@@ -6,7 +6,7 @@ x.y.z Release Notes (yyyy-MM-dd)
 
 ### Fixed
 
-* Tint color peridoically resets itself when translucency is enabled.
+* Tint color peridoically resets itself when translucency is enabled. ([#50](https://github.com/TimOliver/TORoundedButton/pull/50))
 
 1.2.0 Release Notes (2023-10-08)
 =============================================================
