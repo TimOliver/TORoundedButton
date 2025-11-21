@@ -1,6 +1,13 @@
 x.y.z Release Notes (yyyy-MM-dd)
 =============================================================
 
+1.2.2 Release Notes (2025-11-21)
+=============================================================
+
+### Fixed
+
+* An issue where no text would be visible if the class was instantiated from `initWithText:`. ([#51](https://github.com/TimOliver/TORoundedButton/pull/51))
+
 1.2.1 Release Notes (2023-10-09)
 =============================================================
 
