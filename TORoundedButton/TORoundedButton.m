@@ -87,6 +87,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 - (instancetype)initWithText:(NSString *)text {
     if (self = [super initWithFrame:(CGRect){0,0, 288.0f, 50.0f}]) {
+        _contentView = [UIView new];
         [self _roundedButtonCommonInit];
         [self _makeTitleLabelIfNeeded];
         _titleLabel.text = text;
