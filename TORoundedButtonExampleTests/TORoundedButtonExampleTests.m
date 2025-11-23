@@ -25,6 +25,12 @@
     XCTAssertEqual(button.tappedTextAlpha, 1.0f);
     XCTAssertEqual(button.tappedTintColorBrightnessOffset, -0.15f);
     XCTAssertEqual(button.tappedButtonScale, 0.97f);
+
+    if (@available(iOS 26.0, *)) {
+        XCTAssertNotNil(button.cornerConfiguration);
+    } else {
+        XCTAssertEqual(button.cornerRadius, 12.0f);
+    }
 }
 
 - (void)testButtonInteraction
