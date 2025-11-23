@@ -55,7 +55,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 #pragma mark - View Creation -
 
 - (instancetype)init {
-    if (self = [self initWithFrame:(CGRect){0,0, 288.0f, 50.0f}]) { }
+    if (self = [self initWithFrame:(CGRect){0,0, 288.0f, 44.0f}]) { }
     return self;
 }
 
@@ -86,7 +86,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 }
 
 - (instancetype)initWithText:(NSString *)text {
-    if (self = [super initWithFrame:(CGRect){0,0, 288.0f, 50.0f}]) {
+    if (self = [super initWithFrame:(CGRect){0,0, 288.0f, 44.0f}]) {
         _contentView = [UIView new];
         [self _roundedButtonCommonInit];
         [self _makeTitleLabelIfNeeded];
@@ -99,7 +99,6 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 - (void)_roundedButtonCommonInit TOROUNDEDBUTTON_OBJC_DIRECT {
     // Default properties (Make sure they're not overriding IB)
-    _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
     _tappedTextAlpha = (_tappedTextAlpha > FLT_EPSILON) ?: 1.0f;
     _tapAnimationDuration = (_tapAnimationDuration > FLT_EPSILON) ?: 0.4f;
     _tappedButtonScale = (_tappedButtonScale > FLT_EPSILON) ?: 0.97f;
@@ -133,6 +132,13 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self addTarget:self action:@selector(_didTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [self addTarget:self action:@selector(_didDragOutside) forControlEvents:UIControlEventTouchDragExit|UIControlEventTouchCancel];
     [self addTarget:self action:@selector(_didDragInside) forControlEvents:UIControlEventTouchDragEnter];
+
+    // Set the corner radius depending on app version
+    if (@available(iOS 26.0, *)) {
+        self.cornerConfiguration = [UICornerConfiguration capsuleConfiguration];
+    } else {
+        _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
+    }
 }
 
 - (void)_makeTitleLabelIfNeeded TOROUNDEDBUTTON_OBJC_DIRECT {
@@ -166,7 +172,6 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     }
     backgroundView.frame = self.bounds;
     backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    backgroundView.layer.cornerRadius = _cornerRadius;
 #ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) { backgroundView.layer.cornerCurve = kCACornerCurveContinuous; }
 #endif
@@ -200,7 +205,6 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
     // Lay out the title label
     if (!_titleLabel) { return; }
-
     [_titleLabel sizeToFit];
     _titleLabel.center = (CGPoint){
         .x = CGRectGetMidX(_contentView.bounds),
@@ -271,7 +275,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     if (_isTapped || _isTranslucent) { return [UIColor clearColor]; }
 
     // Return clear if the tint color isn't opaque
-    BOOL isClear = CGColorGetAlpha(self.tintColor.CGColor) < (1.0f - FLT_EPSILON);
+    const BOOL isClear = CGColorGetAlpha(self.tintColor.CGColor) < (1.0f - FLT_EPSILON);
     return isClear ? [UIColor clearColor] : self.tintColor;
 }
 
@@ -361,7 +365,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)_setLabelAlphaTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
     if (_tappedTextAlpha > 1.0f - FLT_EPSILON) { return; }
 
-    CGFloat alpha = _isTapped ? _tappedTextAlpha : 1.0f;
+    const CGFloat alpha = _isTapped ? _tappedTextAlpha : 1.0f;
 
     // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
@@ -392,7 +396,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)_setButtonScaledTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
     if (_tappedButtonScale < FLT_EPSILON) { return; }
 
-    CGFloat scale = _isTapped ? _tappedButtonScale : 1.0f;
+    const CGFloat scale = _isTapped ? _tappedButtonScale : 1.0f;
 
     // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
@@ -511,10 +515,24 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     if (fabs(cornerRadius - _cornerRadius) < FLT_EPSILON) {
         return;
     }
-    
+
     _cornerRadius = cornerRadius;
-    _backgroundView.layer.cornerRadius = _cornerRadius;
+
+    if (@available(iOS 26.0, *)) {
+        UICornerRadius *const radius = [UICornerRadius fixedRadius:_cornerRadius];
+        _backgroundView.cornerConfiguration = [UICornerConfiguration configurationWithUniformRadius:radius];
+    } else {
+        _backgroundView.layer.cornerRadius = _cornerRadius;
+    }
     [self setNeedsLayout];
+}
+
+- (void)setCornerConfiguration:(UICornerConfiguration *)cornerConfiguration {
+    _backgroundView.cornerConfiguration = cornerConfiguration;
+}
+
+- (UICornerConfiguration *)cornerConfiguration {
+    return _backgroundView.cornerConfiguration;
 }
 
 - (void)setIsTranslucent:(BOOL)isTranslucent {
