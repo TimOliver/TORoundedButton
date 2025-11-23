@@ -205,7 +205,6 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
     // Lay out the title label
     if (!_titleLabel) { return; }
-
     [_titleLabel sizeToFit];
     _titleLabel.center = (CGPoint){
         .x = CGRectGetMidX(_contentView.bounds),
@@ -276,7 +275,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     if (_isTapped || _isTranslucent) { return [UIColor clearColor]; }
 
     // Return clear if the tint color isn't opaque
-    BOOL isClear = CGColorGetAlpha(self.tintColor.CGColor) < (1.0f - FLT_EPSILON);
+    const BOOL isClear = CGColorGetAlpha(self.tintColor.CGColor) < (1.0f - FLT_EPSILON);
     return isClear ? [UIColor clearColor] : self.tintColor;
 }
 
@@ -366,7 +365,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)_setLabelAlphaTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
     if (_tappedTextAlpha > 1.0f - FLT_EPSILON) { return; }
 
-    CGFloat alpha = _isTapped ? _tappedTextAlpha : 1.0f;
+    const CGFloat alpha = _isTapped ? _tappedTextAlpha : 1.0f;
 
     // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
@@ -397,7 +396,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)_setButtonScaledTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
     if (_tappedButtonScale < FLT_EPSILON) { return; }
 
-    CGFloat scale = _isTapped ? _tappedButtonScale : 1.0f;
+    const CGFloat scale = _isTapped ? _tappedButtonScale : 1.0f;
 
     // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
