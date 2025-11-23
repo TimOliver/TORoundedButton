@@ -1,6 +1,13 @@
 x.y.z Release Notes (yyyy-MM-dd)
 =============================================================
 
+1.3.0 Release Notes (2025-11-23)
+=============================================================
+
+### Enhancements
+
+* Adds `overrideContentView` in order to temporarily show an alternative UI (such as a loading spinner) in buttons. ([#52](https://github.com/TimOliver/TORoundedButton/pull/52))
+
 1.2.2 Release Notes (2025-11-21)
 =============================================================
 
