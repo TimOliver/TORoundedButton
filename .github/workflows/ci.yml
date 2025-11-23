@@ -8,8 +8,13 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: '(curl -s -L https://tim.dev/install_ios_oss_ci | bash -s arg1 arg2) && bundle exec fastlane test'
-      env:
-        TEST_SCHEME: "TORoundedButtonTests"
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run unit tests
+        run: |
+          xcodebuild \
+            -project TORoundedButtonExample.xcodeproj \
+            -scheme TORoundedButtonTests \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            clean test
