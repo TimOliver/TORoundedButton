@@ -178,23 +178,35 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)layoutSubviews {
     [super layoutSubviews];
 
+    // Determine the content view's available maximum size accounting for the insetting
     const CGSize boundsSize = self.bounds.size;
-    _contentView.frame = (CGRect){
+    const CGRect contentBounds = (CGRect){
         .origin.x = _contentInset.left,
         .origin.y = _contentInset.top,
         .size.width = boundsSize.width - (_contentInset.left + _contentInset.right),
         .size.height = boundsSize.height - (_contentInset.top + _contentInset.bottom),
     };
 
-    // Configure the button text
-    if (_titleLabel) {
-        [_titleLabel sizeToFit];
-        _titleLabel.center = (CGPoint){
-            .x = CGRectGetMidX(_contentView.bounds),
-            .y = CGRectGetMidY(_contentView.bounds)
-        };
-        _titleLabel.frame = CGRectIntegral(_titleLabel.frame);
-    }
+    // Let the content view shrink itself to wrap its content if needed,
+    // and position it in the middle of the view.
+    UIView *const contentView = _overrideContentView ?: _contentView;
+    contentView.frame = ({
+        CGRect frame = contentBounds;
+        frame.size = [contentView sizeThatFits:contentBounds.size];
+        frame.origin.x = (boundsSize.width - frame.size.width) * 0.5f;
+        frame.origin.y = (boundsSize.height - frame.size.height) * 0.5f;
+        CGRectIntegral(frame);
+    });
+
+    // Lay out the title label
+    if (!_titleLabel) { return; }
+
+    [_titleLabel sizeToFit];
+    _titleLabel.center = (CGPoint){
+        .x = CGRectGetMidX(_contentView.bounds),
+        .y = CGRectGetMidY(_contentView.bounds)
+    };
+    _titleLabel.frame = CGRectIntegral(_titleLabel.frame);
 }
 
 - (void)sizeToFit { [super sizeToFit]; }
@@ -413,7 +425,24 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _titleLabel = nil;
     [_contentView removeFromSuperview];
     _contentView = contentView ?: [UIView new];
-    [self addSubview:_contentView];
+    [_containerView addSubview:_contentView];
+    [self setNeedsLayout];
+}
+
+- (void)setOverrideContentView:(UIView *)overrideContentView {
+    if (_overrideContentView == overrideContentView) { return; }
+    if (_overrideContentView != nil) {
+        [_overrideContentView removeFromSuperview];
+    }
+
+    _overrideContentView = overrideContentView;
+
+    if (_overrideContentView != nil) {
+        _contentView.hidden = YES;
+        [_containerView addSubview:_overrideContentView];
+    } else {
+        _contentView.hidden = NO;
+    }
     [self setNeedsLayout];
 }
 
