@@ -26,6 +26,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class TORoundedButton;
 
+/// The types of static/dynamic visual styles that can be applied to the background.
+typedef NS_ENUM(NSInteger, TORoundedButtonBackgroundStyle) {
+    TORoundedButtonBackgroundStyleSolid,
+    TORoundedButtonBackgroundStyleBlur,
+    TORoundedButtonBackgroundStyleGlass
+};
+
 NS_SWIFT_NAME(RoundedButtonDelegate)
 @protocol TORoundedButtonDelegate <NSObject>
 
@@ -65,11 +72,14 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /// (Default value is 15 points inset from each edge).
 @property (nonatomic, assign) UIEdgeInsets contentInset;
 
-/// Replaces the solid color background with a blur view. (Default is NO)
-@property (nonatomic, assign) BOOL isTranslucent;
+/// The style, whether static or dynamic of the button's background view.
+@property (nonatomic, assign) TORoundedButtonBackgroundStyle backgroundStyle;
 
-/// When `isTranslucent` is `YES`, the amount of blur the background view has.
+/// When `backgroundStyle` is set to `.blur`, the specific blur style to apply.
 @property (nonatomic, assign) UIBlurEffectStyle blurStyle;
+
+/// When `backgroundStyle` is set to `.blur`, the specific blur style to apply.
+@property (nonatomic, assign) UIGlassEffectStyle glassStyle API_AVAILABLE(ios(26.0));
 
 /// The text that is displayed in center of the button (Default is nil).
 /// This adds an internally controlled label view to the main content view.
