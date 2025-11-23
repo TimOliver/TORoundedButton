@@ -26,11 +26,15 @@
     XCTAssertEqual(button.tappedTintColorBrightnessOffset, -0.15f);
     XCTAssertEqual(button.tappedButtonScale, 0.97f);
 
+#ifdef __IPHONE_26_0
     if (@available(iOS 26.0, *)) {
         XCTAssertNotNil(button.cornerConfiguration);
     } else {
         XCTAssertEqual(button.cornerRadius, 12.0f);
     }
+#else
+    XCTAssertEqual(button.cornerRadius, 12.0f);
+#endif
 }
 
 - (void)testButtonInteraction

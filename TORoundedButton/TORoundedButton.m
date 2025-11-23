@@ -134,11 +134,15 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self addTarget:self action:@selector(_didDragInside) forControlEvents:UIControlEventTouchDragEnter];
 
     // Set the corner radius depending on app version
+#ifdef __IPHONE_26_0
     if (@available(iOS 26.0, *)) {
         self.cornerConfiguration = [UICornerConfiguration capsuleConfiguration];
     } else {
         _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
     }
+#else
+    _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
+#endif
 }
 
 - (void)_makeTitleLabelIfNeeded TOROUNDEDBUTTON_OBJC_DIRECT {
@@ -518,15 +522,20 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
     _cornerRadius = cornerRadius;
 
+#ifdef __IPHONE_26_0
     if (@available(iOS 26.0, *)) {
         UICornerRadius *const radius = [UICornerRadius fixedRadius:_cornerRadius];
         _backgroundView.cornerConfiguration = [UICornerConfiguration configurationWithUniformRadius:radius];
     } else {
         _backgroundView.layer.cornerRadius = _cornerRadius;
     }
+#else
+    _backgroundView.layer.cornerRadius = _cornerRadius;
+#endif
     [self setNeedsLayout];
 }
 
+#ifdef __IPHONE_26_0
 - (void)setCornerConfiguration:(UICornerConfiguration *)cornerConfiguration {
     _backgroundView.cornerConfiguration = cornerConfiguration;
 }
@@ -534,6 +543,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (UICornerConfiguration *)cornerConfiguration {
     return _backgroundView.cornerConfiguration;
 }
+#endif
 
 - (void)setIsTranslucent:(BOOL)isTranslucent {
     if (_isTranslucent == isTranslucent) {
