@@ -49,6 +49,11 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /// this property to your own custom UIView subclass in order to more efficiently manage sizing and layout.
 @property (nonatomic, strong, null_resettable) UIView *contentView;
 
+/// An additional content view that will hide `contentView` and show in its place when set.
+/// When this is set back to `nil`, the original content view is restored.
+/// This is useful for temporarily showing an alternative UI, such as a loading or download spinner.
+@property (nonatomic, strong, nullable) UIView *overrideContentView;
+
 /// The amount of inset padding between the content view and the edges of the button.
 /// (Default value is 15 points inset from each edge).
 @property (nonatomic, assign) UIEdgeInsets contentInset;
@@ -60,6 +65,7 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 @property (nonatomic, assign) UIBlurEffectStyle blurStyle;
 
 /// The text that is displayed in center of the button (Default is nil).
+/// This adds an internally controlled label view to the main content view.
 @property (nonatomic, copy, nullable) IBInspectable NSString *text;
 
 /// The attributed string used in the label of this button. 
