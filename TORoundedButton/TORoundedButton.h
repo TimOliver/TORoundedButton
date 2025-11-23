@@ -25,6 +25,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class TORoundedButton;
+@class UICornerConfiguration;
 
 NS_SWIFT_NAME(RoundedButtonDelegate)
 @protocol TORoundedButtonDelegate <NSObject>
@@ -41,8 +42,13 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /// A delegate object that can receive tap events from this button.
 @property (nonatomic, weak) id<TORoundedButtonDelegate> delegate;
 
-/// The radius of the corners of this button (Default is 12.0f).
-@property (nonatomic, assign) IBInspectable CGFloat cornerRadius;
+/// The corner-rounding behaviour of the button's boundaries.
+/// On iOS 26 and above, this is the `.capsule` preset by default.
+@property (nonatomic, strong, nullable) UICornerConfiguration *cornerConfiguration API_AVAILABLE(ios(26.0));;
+
+/// The radius of the corners of this button.
+/// (Default is 12.0f on iOS 18 and below. For iOS 26.0, use the `cornerConfiguration` property.)
+@property (nonatomic, assign) IBInspectable CGFloat cornerRadius API_DEPRECATED("Use `cornerConfiguration` instead.", ios(10.0, 18.0));;
 
 /// The hosting container that manages all of the foreground views in this button.
 /// You can either add your custom views to this view by default, or you can set
