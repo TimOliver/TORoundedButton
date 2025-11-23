@@ -44,7 +44,7 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 
 /// The corner-rounding behaviour of the button's boundaries.
 /// On iOS 26 and above, this is the `.capsule` preset by default.
-@property (nonatomic, strong, nullable) UICornerConfiguration *cornerConfiguration API_AVAILABLE(ios(26.0));;
+@property (nonatomic, strong, nullable) UICornerConfiguration *cornerConfiguration API_AVAILABLE(ios(26.0));
 
 /// The radius of the corners of this button.
 /// (Default is 12.0f on iOS 18 and below. For iOS 26.0, changing this property will update `cornerConfiguration`.)
