@@ -16,5 +16,5 @@ jobs:
           xcodebuild \
             -project TORoundedButtonExample.xcodeproj \
             -scheme TORoundedButtonTests \
-            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -destination 'platform=iOS Simulator,name=iPhone Air' \
             clean test
