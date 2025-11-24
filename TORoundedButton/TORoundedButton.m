@@ -50,12 +50,17 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
     /** A background view that displays the rounded box behind the button text. */
     UIView *_backgroundView;
+
+#ifdef __IPHONE_26_0
+    /** Maintain a reference to the corner configuration in case we swap out the background view */
+    UICornerConfiguration *_cornerConfiguration API_AVAILABLE(ios(26.0));
+#endif
 }
 
 #pragma mark - View Creation -
 
 - (instancetype)init {
-    if (self = [self initWithFrame:(CGRect){0,0, 288.0f, 44.0f}]) { }
+    if (self = [self initWithFrame:(CGRect){0,0, 288.0f, 52.0f}]) { }
     return self;
 }
 
@@ -86,7 +91,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 }
 
 - (instancetype)initWithText:(NSString *)text {
-    if (self = [super initWithFrame:(CGRect){0,0, 288.0f, 44.0f}]) {
+    if (self = [super initWithFrame:(CGRect){0,0, 288.0f, 52.0f}]) {
         _contentView = [UIView new];
         [self _roundedButtonCommonInit];
         [self _makeTitleLabelIfNeeded];
@@ -105,6 +110,18 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _tappedTintColorBrightnessOffset = !TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(_tappedTintColorBrightnessOffset) ?: -0.15f;
     _contentInset = (UIEdgeInsets){15.0, 15.0, 15.0, 15.0};
     _blurStyle = UIBlurEffectStyleDark;
+
+    // Set the corner radius depending on system version
+#ifdef __IPHONE_26_0
+    if (@available(iOS 26.0, *)) {
+        _cornerConfiguration = [UICornerConfiguration capsuleConfiguration];
+    } else {
+        _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
+    }
+#else
+    _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
+#endif
+
 #ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) { _blurStyle = UIBlurEffectStyleSystemThinMaterialDark; }
 #endif
@@ -132,17 +149,6 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [self addTarget:self action:@selector(_didTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [self addTarget:self action:@selector(_didDragOutside) forControlEvents:UIControlEventTouchDragExit|UIControlEventTouchCancel];
     [self addTarget:self action:@selector(_didDragInside) forControlEvents:UIControlEventTouchDragEnter];
-
-    // Set the corner radius depending on app version
-#ifdef __IPHONE_26_0
-    if (@available(iOS 26.0, *)) {
-        self.cornerConfiguration = [UICornerConfiguration capsuleConfiguration];
-    } else {
-        _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
-    }
-#else
-    _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
-#endif
 }
 
 - (void)_makeTitleLabelIfNeeded TOROUNDEDBUTTON_OBJC_DIRECT {
@@ -176,6 +182,15 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     }
     backgroundView.frame = self.bounds;
     backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+
+#ifdef __IPHONE_26_0
+    if (@available(iOS 26.0, *)) {
+        backgroundView.cornerConfiguration = _cornerConfiguration;
+    } else {
+        backgroundView.layer.cornerRadius = _cornerRadius;
+    }
+#endif
+
 #ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) { backgroundView.layer.cornerCurve = kCACornerCurveContinuous; }
 #endif
@@ -525,7 +540,8 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 #ifdef __IPHONE_26_0
     if (@available(iOS 26.0, *)) {
         UICornerRadius *const radius = [UICornerRadius fixedRadius:_cornerRadius];
-        _backgroundView.cornerConfiguration = [UICornerConfiguration configurationWithUniformRadius:radius];
+        _cornerConfiguration = [UICornerConfiguration configurationWithUniformRadius:radius];
+        _backgroundView.cornerConfiguration = _cornerConfiguration;
     } else {
         _backgroundView.layer.cornerRadius = _cornerRadius;
     }
@@ -537,11 +553,12 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 #ifdef __IPHONE_26_0
 - (void)setCornerConfiguration:(UICornerConfiguration *)cornerConfiguration {
-    _backgroundView.cornerConfiguration = cornerConfiguration;
+    _cornerConfiguration = cornerConfiguration;
+    _backgroundView.cornerConfiguration = _cornerConfiguration;
 }
 
 - (UICornerConfiguration *)cornerConfiguration {
-    return _backgroundView.cornerConfiguration;
+    return _cornerConfiguration;
 }
 #endif
 
