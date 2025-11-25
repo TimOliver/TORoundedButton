@@ -216,7 +216,10 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     UIView *const contentView = _overrideContentView ?: _contentView;
     contentView.frame = ({
         CGRect frame = contentBounds;
-        frame.size = [contentView sizeThatFits:contentBounds.size];
+        const CGSize intrinsicContentSize = contentView.intrinsicContentSize;
+        if (intrinsicContentSize.width > 0.0f && intrinsicContentSize.height) {
+            frame.size = [contentView sizeThatFits:contentBounds.size];
+        }
         frame.origin.x = (boundsSize.width - frame.size.width) * 0.5f;
         frame.origin.y = (boundsSize.height - frame.size.height) * 0.5f;
         CGRectIntegral(frame);
