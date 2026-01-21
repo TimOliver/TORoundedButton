@@ -592,8 +592,18 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
     _backgroundStyle = backgroundStyle;
     [_backgroundView removeFromSuperview];
     _backgroundView = [self _makeBackgroundViewWithStyle:_backgroundStyle];
-    [_containerView insertSubview:_backgroundView atIndex:0];
     _titleLabel.backgroundColor = [self _labelBackgroundColor];
+    const BOOL isGlass = backgroundStyle == TORoundedButtonBackgroundStyleGlass;
+    if (!isGlass) {
+        _containerView.hidden = NO;
+        [_containerView insertSubview:_backgroundView atIndex:0];
+        [_containerView addSubview:_contentView];
+    } else {
+        UIVisualEffectView *glassView = (UIVisualEffectView *)_backgroundView;
+        _containerView.hidden = YES;
+        [self insertSubview:glassView atIndex:0];
+        [glassView.contentView addSubview:_contentView];
+    }
     [self setNeedsLayout];
 }
 
