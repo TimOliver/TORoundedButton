@@ -35,8 +35,12 @@ static inline BOOL TORoundedButtonFloatsMatch(CGFloat firstValue, CGFloat second
     return fabs(firstValue - secondValue) > FLT_EPSILON;
 }
 
-static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundStyle backgroundStyle) {
-    return backgroundStyle != TORoundedButtonBackgroundStyleSolid;
+static inline BOOL TORoundedButtonIsSolidBackground(TORoundedButtonBackgroundStyle backgroundStyle) {
+    return backgroundStyle == TORoundedButtonBackgroundStyleSolid;
+}
+
+static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackgroundStyle backgroundStyle) {
+    return backgroundStyle != TORoundedButtonBackgroundStyleBlur;
 }
 
 // --------------------------------------------------------------------
@@ -147,10 +151,6 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
     _containerView.userInteractionEnabled = NO;
     [self addSubview:_containerView];
 
-    // Create the image view which will show the button background
-    _backgroundView = [self _makeBackgroundViewWithStyle:_backgroundStyle];
-    [_containerView addSubview:_backgroundView];
-
     // The foreground content view
     [_containerView addSubview:_contentView];
 
@@ -159,6 +159,17 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
     [self addTarget:self action:@selector(_didTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [self addTarget:self action:@selector(_didDragOutside) forControlEvents:UIControlEventTouchDragExit|UIControlEventTouchCancel];
     [self addTarget:self action:@selector(_didDragInside) forControlEvents:UIControlEventTouchDragEnter];
+}
+
+- (void)didMoveToSuperview {
+    [super didMoveToSuperview];
+    if (self.superview == nil || _backgroundView != nil) {
+        return;
+    }
+
+    // Defer making the background until we're added to the subview in case the user changes it
+    _backgroundView = [self _makeBackgroundViewWithStyle:_backgroundStyle];
+    [_containerView insertSubview:_backgroundView atIndex:0];
 }
 
 - (void)_makeTitleLabelIfNeeded TOROUNDEDBUTTON_OBJC_DIRECT {
@@ -182,13 +193,12 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
 
 - (UIView *)_makeBackgroundViewWithStyle:(TORoundedButtonBackgroundStyle)style TOROUNDEDBUTTON_OBJC_DIRECT {
     UIView *backgroundView = nil;
-    if (TORoundedButtonIsDynamicBackground(style)) {
+    if (!TORoundedButtonIsSolidBackground(style)) {
         // Create a glass or blur style based on the associated style
         UIVisualEffect *effect = nil;
         if (@available(iOS 26.0, *)) {
             if (style == TORoundedButtonBackgroundStyleGlass) {
                 UIGlassEffect *const glassEffect = [UIGlassEffect effectWithStyle:_glassStyle];
-                glassEffect.interactive = YES;
                 glassEffect.tintColor = self.tintColor;
                 effect = glassEffect;
             }
@@ -208,7 +218,7 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
     if (@available(iOS 26.0, *)) {
         backgroundView.cornerConfiguration = _cornerConfiguration;
     } else {
-        backgroundView.clipsToBounds = TORoundedButtonIsDynamicBackground(style);
+        backgroundView.clipsToBounds = !TORoundedButtonIsSolidBackground(style);
         backgroundView.layer.cornerRadius = _cornerRadius;
     }
 
@@ -253,6 +263,7 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
     _titleLabel.frame = CGRectIntegral(_titleLabel.frame);
 }
 
+// We need to declare this since we explicitly define it in the header
 - (void)sizeToFit { [super sizeToFit]; }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -282,11 +293,32 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
     return newSize;
 }
 
+- (void)_setBackgroundTintColor:(UIColor *)tintColor {
+    if (_backgroundStyle == TORoundedButtonBackgroundStyleBlur) {
+        return;
+    }
+#ifdef __IPHONE_26_0
+    if (@available(iOS 26.0, *)) {
+        if (_backgroundStyle == TORoundedButtonBackgroundStyleGlass) {
+            UIGlassEffect *effect = [UIGlassEffect effectWithStyle:UIGlassEffectStyleRegular];
+            effect.tintColor = tintColor;
+            [(UIVisualEffectView *)_backgroundView setEffect:effect];
+        } else {
+            _backgroundView.backgroundColor = tintColor;
+        }
+    } else {
+        _backgroundView.backgroundColor = tintColor;
+    }
+#else
+    _backgroundView.backgroundColor = tintColor;
+#endif
+}
+
 - (void)tintColorDidChange {
     [super tintColorDidChange];
-    if (TORoundedButtonIsDynamicBackground(_backgroundStyle)) { return; }
+    if (!TORoundedButtonIsTintableBackground(_backgroundStyle)) { return; }
     _titleLabel.backgroundColor = [self _labelBackgroundColor];
-    _backgroundView.backgroundColor = self.tintColor;
+    [self _setBackgroundTintColor:self.tintColor];
     [self setNeedsLayout];
 }
 
@@ -311,10 +343,8 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
 }
 
 - (UIColor *)_labelBackgroundColor TOROUNDEDBUTTON_OBJC_DIRECT {
-    // Always return clear if tapped
-    if (_isTapped || TORoundedButtonIsDynamicBackground(_backgroundStyle)) { return [UIColor clearColor]; }
-
-    // Return clear if the tint color isn't opaque
+    // Always return clear if we're not overlaying on a completely solid BG
+    if (_isTapped || !TORoundedButtonIsSolidBackground(_backgroundStyle)) { return [UIColor clearColor]; }
     const BOOL isClear = CGColorGetAlpha(self.tintColor.CGColor) < (1.0f - FLT_EPSILON);
     return isClear ? [UIColor clearColor] : self.tintColor;
 }
@@ -367,7 +397,7 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
 #pragma mark - Animation -
 
 - (void)_setBackgroundColorTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
-    if (!_tappedTintColor || TORoundedButtonIsDynamicBackground(_backgroundStyle)) { return; }
+    if (!_tappedTintColor || !TORoundedButtonIsTintableBackground(_backgroundStyle)) { return; }
 
     // Toggle the background color of the title label
     void (^updateTitleOpacity)(void) = ^{
@@ -375,11 +405,12 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
     };
     
     // -----------------------------------------------------
-    
+
+    UIColor *const destinationColor = _isTapped ? _tappedTintColor : self.tintColor;
     void (^animationBlock)(void) = ^{
-        self->_backgroundView.backgroundColor = self->_isTapped ? self->_tappedTintColor : self.tintColor;
+        [self _setBackgroundTintColor:destinationColor];
     };
-    
+
     void (^completionBlock)(BOOL) = ^(BOOL completed){
         if (completed == NO) { return; }
         updateTitleOpacity();
@@ -399,7 +430,6 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
                          animations:animationBlock
                          completion:completionBlock];
     }
-
 }
 
 - (void)_setLabelAlphaTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
@@ -443,7 +473,7 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
         self->_containerView.transform = CGAffineTransformScale(CGAffineTransformIdentity,
                                                               scale,
                                                               scale);
-    };
+        };
 
     // If we're not animating, just call the blocks manually
     if (!animated) {
@@ -529,9 +559,7 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
 - (void)setTintColor:(UIColor *)tintColor {
     [super setTintColor:tintColor];
     [self _updateTappedTintColorForTintColor];
-    if (!TORoundedButtonIsDynamicBackground(_backgroundStyle)) {
-        _backgroundView.backgroundColor = tintColor;
-    }
+    [self _setBackgroundTintColor:tintColor];
     _titleLabel.backgroundColor = [self _labelBackgroundColor];
     [self setNeedsLayout];
 }
@@ -567,7 +595,7 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
         _backgroundView.cornerConfiguration = _cornerConfiguration;
     } else {
         _backgroundView.layer.cornerRadius = _cornerRadius;
-        _backgroundView.layer.masksToBounds = TORoundedButtonIsDynamicBackground(_backgroundStyle);
+        _backgroundView.layer.masksToBounds = !TORoundedButtonIsSolidBackground(_backgroundStyle);
     }
 #else
     _backgroundView.layer.cornerRadius = _cornerRadius;
@@ -592,18 +620,8 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
     _backgroundStyle = backgroundStyle;
     [_backgroundView removeFromSuperview];
     _backgroundView = [self _makeBackgroundViewWithStyle:_backgroundStyle];
+    [_containerView insertSubview:_backgroundView atIndex:0];
     _titleLabel.backgroundColor = [self _labelBackgroundColor];
-    const BOOL isGlass = backgroundStyle == TORoundedButtonBackgroundStyleGlass;
-    if (!isGlass) {
-        _containerView.hidden = NO;
-        [_containerView insertSubview:_backgroundView atIndex:0];
-        [_containerView addSubview:_contentView];
-    } else {
-        UIVisualEffectView *glassView = (UIVisualEffectView *)_backgroundView;
-        _containerView.hidden = YES;
-        [self insertSubview:glassView atIndex:0];
-        [glassView.contentView addSubview:_contentView];
-    }
     [self setNeedsLayout];
 }
 
@@ -613,7 +631,7 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
     }
 
     _blurStyle = blurStyle;
-    if (!TORoundedButtonIsDynamicBackground(_backgroundStyle) || ![_backgroundView isKindOfClass:[UIVisualEffectView class]]) {
+    if (_backgroundStyle != TORoundedButtonBackgroundStyleBlur || ![_backgroundView isKindOfClass:[UIVisualEffectView class]]) {
         return;
     }
 
@@ -625,7 +643,7 @@ static inline BOOL TORoundedButtonIsDynamicBackground(TORoundedButtonBackgroundS
     if (_glassStyle == glassStyle) { return; }
     _glassStyle = glassStyle;
 
-    if (!TORoundedButtonIsDynamicBackground(_backgroundStyle) || ![_backgroundView isKindOfClass:[UIVisualEffectView class]]) {
+    if (_backgroundStyle != TORoundedButtonBackgroundStyleGlass || ![_backgroundView isKindOfClass:[UIVisualEffectView class]]) {
         return;
     }
 

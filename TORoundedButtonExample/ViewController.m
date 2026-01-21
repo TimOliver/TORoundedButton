@@ -20,8 +20,6 @@
     // Hide the tapped label
     self.tappedLabel.alpha = 0.0f;
 
-    self.button.backgroundStyle = TORoundedButtonBackgroundStyleGlass;
-
     __weak typeof(self) weakSelf = self;
     self.button.tappedHandler = ^{
         [weakSelf playFadeAnimationOnView:weakSelf.tappedLabel];
