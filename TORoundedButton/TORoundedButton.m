@@ -300,7 +300,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 #ifdef __IPHONE_26_0
     if (@available(iOS 26.0, *)) {
         if (_backgroundStyle == TORoundedButtonBackgroundStyleGlass) {
-            UIGlassEffect *effect = [UIGlassEffect effectWithStyle:UIGlassEffectStyleRegular];
+            UIGlassEffect *effect = [UIGlassEffect effectWithStyle:_glassStyle];
             effect.tintColor = tintColor;
             [(UIVisualEffectView *)_backgroundView setEffect:effect];
         } else {
@@ -649,8 +649,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 
     UIGlassEffect *const glassEffect = [UIGlassEffect effectWithStyle:_glassStyle];
     glassEffect.tintColor = self.tintColor;
-    glassEffect.interactive = YES;
-
+    
     UIVisualEffectView *const effectView = (UIVisualEffectView *)_backgroundView;
     [effectView setEffect:glassEffect];
 }
