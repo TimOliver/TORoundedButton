@@ -122,6 +122,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     // Set the corner radius depending on system version
 #ifdef __IPHONE_26_0
     if (@available(iOS 26.0, *)) {
+        _backgroundStyle = TORoundedButtonBackgroundStyleGlass;
         _cornerConfiguration = [UICornerConfiguration capsuleConfiguration];
     } else {
         _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
@@ -131,7 +132,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 #endif
 
 #ifdef __IPHONE_13_0
-    if (@available(iOS 13.0, *)) { _blurStyle = UIBlurEffectStyleSystemThinMaterialDark; }
+    if (@available(iOS 13.0, *)) { _blurStyle = UIBlurEffectStyleSystemThinMaterial; }
 #endif
 
     // Set the corner radius depending on system version
@@ -649,7 +650,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 
     UIGlassEffect *const glassEffect = [UIGlassEffect effectWithStyle:_glassStyle];
     glassEffect.tintColor = self.tintColor;
-    
+
     UIVisualEffectView *const effectView = (UIVisualEffectView *)_backgroundView;
     [effectView setEffect:glassEffect];
 }
