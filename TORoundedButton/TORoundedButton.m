@@ -32,7 +32,7 @@ static inline BOOL TORoundedButtonFloatIsZero(CGFloat value) {
 }
 
 static inline BOOL TORoundedButtonFloatsMatch(CGFloat firstValue, CGFloat secondValue) {
-    return fabs(firstValue - secondValue) > FLT_EPSILON;
+    return fabs(firstValue - secondValue) < FLT_EPSILON;
 }
 
 static inline BOOL TORoundedButtonIsSolidBackground(TORoundedButtonBackgroundStyle backgroundStyle) {
@@ -134,13 +134,6 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 #ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) { _blurStyle = UIBlurEffectStyleSystemThinMaterial; }
 #endif
-
-    // Set the corner radius depending on system version
-    if (@available(iOS 26.0, *)) {
-        _cornerConfiguration = [UICornerConfiguration capsuleConfiguration];
-    } else {
-        _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
-    }
 
     // Set the tapped tint color if we've set to dynamically calculate it
     [self _updateTappedTintColorForTintColor];
@@ -469,12 +462,12 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 
     const CGFloat scale = _isTapped ? _tappedButtonScale : 1.0f;
 
-    // Animate the alpha value of the label
+    // Animate the scale value of the label
     void (^animationBlock)(void) = ^{
         self->_containerView.transform = CGAffineTransformScale(CGAffineTransformIdentity,
                                                               scale,
                                                               scale);
-        };
+    };
 
     // If we're not animating, just call the blocks manually
     if (!animated) {
