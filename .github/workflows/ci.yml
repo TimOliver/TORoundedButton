@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: macos-latest
+    runs-on: macos-26
 
     steps:
       - name: Checkout
@@ -15,12 +15,12 @@ jobs:
         uses: futureware-tech/simulator-action@v2
         with:
           model: 'iPhone 16e'
-          os_version: '=18.6'
+          os_version: '=26.2'
 
       - name: Run unit tests
         run: |
           xcodebuild \
             -project TORoundedButtonExample.xcodeproj \
             -scheme TORoundedButtonTests \
-            -destination 'platform=iOS Simulator,name=iPhone 16e,OS=18.6' \
+            -destination 'platform=iOS Simulator,name=iPhone 16e,OS=26.2' \
             clean test

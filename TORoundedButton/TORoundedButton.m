@@ -1,7 +1,7 @@
 //
 //  TORoundedButton.m
 //
-//  Copyright 2019-2023 Timothy Oliver. All rights reserved.
+//  Copyright 2019-2026 Timothy Oliver. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to
@@ -27,12 +27,20 @@
 
 // --------------------------------------------------------------------
 
-static inline BOOL TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(CGFloat value) {
+static inline BOOL TORoundedButtonFloatIsZero(CGFloat value) {
     return (value > -FLT_EPSILON) && (value < FLT_EPSILON);
 }
 
-static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat secondValue) {
-    return fabs(firstValue - secondValue) > FLT_EPSILON;
+static inline BOOL TORoundedButtonFloatsMatch(CGFloat firstValue, CGFloat secondValue) {
+    return fabs(firstValue - secondValue) < FLT_EPSILON;
+}
+
+static inline BOOL TORoundedButtonIsSolidBackground(TORoundedButtonBackgroundStyle backgroundStyle) {
+    return backgroundStyle == TORoundedButtonBackgroundStyleSolid;
+}
+
+static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackgroundStyle backgroundStyle) {
+    return backgroundStyle != TORoundedButtonBackgroundStyleBlur;
 }
 
 // --------------------------------------------------------------------
@@ -107,13 +115,14 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _tappedTextAlpha = (_tappedTextAlpha > FLT_EPSILON) ?: 1.0f;
     _tapAnimationDuration = (_tapAnimationDuration > FLT_EPSILON) ?: 0.4f;
     _tappedButtonScale = (_tappedButtonScale > FLT_EPSILON) ?: 0.97f;
-    _tappedTintColorBrightnessOffset = !TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(_tappedTintColorBrightnessOffset) ?: -0.15f;
+    _tappedTintColorBrightnessOffset = !TORoundedButtonFloatIsZero(_tappedTintColorBrightnessOffset) ?: -0.15f;
     _contentInset = (UIEdgeInsets){15.0, 15.0, 15.0, 15.0};
     _blurStyle = UIBlurEffectStyleDark;
 
     // Set the corner radius depending on system version
 #ifdef __IPHONE_26_0
     if (@available(iOS 26.0, *)) {
+        _backgroundStyle = TORoundedButtonBackgroundStyleGlass;
         _cornerConfiguration = [UICornerConfiguration capsuleConfiguration];
     } else {
         _cornerRadius = (_cornerRadius > FLT_EPSILON) ?: 12.0f;
@@ -123,7 +132,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 #endif
 
 #ifdef __IPHONE_13_0
-    if (@available(iOS 13.0, *)) { _blurStyle = UIBlurEffectStyleSystemThinMaterialDark; }
+    if (@available(iOS 13.0, *)) { _blurStyle = UIBlurEffectStyleSystemThinMaterial; }
 #endif
 
     // Set the tapped tint color if we've set to dynamically calculate it
@@ -134,12 +143,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _containerView.backgroundColor = [UIColor clearColor];
     _containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _containerView.userInteractionEnabled = NO;
-    _containerView.clipsToBounds = YES;
     [self addSubview:_containerView];
-
-    // Create the image view which will show the button background
-    _backgroundView = [self _makeBackgroundViewWithBlur:_isTranslucent];
-    [_containerView addSubview:_backgroundView];
 
     // The foreground content view
     [_containerView addSubview:_contentView];
@@ -170,12 +174,23 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [_contentView addSubview:_titleLabel];
 }
 
-- (UIView *)_makeBackgroundViewWithBlur:(BOOL)withBlur TOROUNDEDBUTTON_OBJC_DIRECT {
+- (UIView *)_makeBackgroundViewWithStyle:(TORoundedButtonBackgroundStyle)style TOROUNDEDBUTTON_OBJC_DIRECT {
     UIView *backgroundView = nil;
-    if (withBlur) {
-        UIBlurEffect *const blurEffect = [UIBlurEffect effectWithStyle:_blurStyle];
-        backgroundView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-        backgroundView.clipsToBounds = YES;
+    if (!TORoundedButtonIsSolidBackground(style)) {
+        // Create a glass or blur style based on the associated style
+        UIVisualEffect *effect = nil;
+        if (@available(iOS 26.0, *)) {
+            if (style == TORoundedButtonBackgroundStyleGlass) {
+                UIGlassEffect *const glassEffect = [UIGlassEffect effectWithStyle:_glassStyle];
+                glassEffect.tintColor = self.tintColor;
+                effect = glassEffect;
+            }
+        }
+        if (effect == nil) {
+            UIBlurEffect *const blurEffect = [UIBlurEffect effectWithStyle:_blurStyle];
+            effect = blurEffect;
+        }
+        backgroundView = [[UIVisualEffectView alloc] initWithEffect:effect];
     } else {
         backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
         backgroundView.backgroundColor = self.tintColor;
@@ -183,18 +198,44 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     backgroundView.frame = self.bounds;
     backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
-#ifdef __IPHONE_26_0
+    backgroundView.clipsToBounds = !TORoundedButtonIsSolidBackground(style);
     if (@available(iOS 26.0, *)) {
         backgroundView.cornerConfiguration = _cornerConfiguration;
     } else {
         backgroundView.layer.cornerRadius = _cornerRadius;
     }
-#endif
 
 #ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) { backgroundView.layer.cornerCurve = kCACornerCurveContinuous; }
 #endif
     return backgroundView;
+}
+
+#pragma mark - View Lifecycle -
+
+- (void)didMoveToSuperview {
+    [super didMoveToSuperview];
+    if (self.superview == nil || _backgroundView != nil) {
+        return;
+    }
+
+    // Defer making the background until we're added to the subview in case the user changes it
+    _backgroundView = [self _makeBackgroundViewWithStyle:_backgroundStyle];
+    [_containerView insertSubview:_backgroundView atIndex:0];
+}
+
+- (void)tintColorDidChange {
+    [super tintColorDidChange];
+    if (!TORoundedButtonIsTintableBackground(_backgroundStyle)) { return; }
+    _titleLabel.backgroundColor = [self _labelBackgroundColor];
+    [self _setBackgroundTintColor:self.tintColor];
+    [self setNeedsLayout];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+    [self setNeedsLayout];
+    [self _updateTappedTintColorForTintColor];
 }
 
 #pragma mark - View Layout -
@@ -232,6 +273,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     _titleLabel.frame = CGRectIntegral(_titleLabel.frame);
 }
 
+// We need to declare this since we explicitly define it in the header
 - (void)sizeToFit { [super sizeToFit]; }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -259,43 +301,6 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     newSize.width += horizontalPadding;
     newSize.height += verticalPadding;
     return newSize;
-}
-
-- (void)tintColorDidChange {
-    [super tintColorDidChange];
-    if (_isTranslucent) { return; }
-    _titleLabel.backgroundColor = [self _labelBackgroundColor];
-    _backgroundView.backgroundColor = self.tintColor;
-    [self setNeedsLayout];
-}
-
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    [super traitCollectionDidChange:previousTraitCollection];
-    [self setNeedsLayout];
-    [self _updateTappedTintColorForTintColor];
-}
-
-- (void)_updateTappedTintColorForTintColor TOROUNDEDBUTTON_OBJC_DIRECT {
-    if (TO_ROUNDED_BUTTON_FLOAT_IS_ZERO(_tappedTintColorBrightnessOffset)) {
-        return;
-    }
-
-    UIColor *tintColor = self.tintColor;
-    if (@available(iOS 13.0, *)) {
-        tintColor = [tintColor resolvedColorWithTraitCollection:self.traitCollection];
-    }
-
-    _tappedTintColor = [self _brightnessAdjustedColorWithColor:tintColor
-                                     amount:_tappedTintColorBrightnessOffset];
-}
-
-- (UIColor *)_labelBackgroundColor TOROUNDEDBUTTON_OBJC_DIRECT {
-    // Always return clear if tapped
-    if (_isTapped || _isTranslucent) { return [UIColor clearColor]; }
-
-    // Return clear if the tint color isn't opaque
-    const BOOL isClear = CGColorGetAlpha(self.tintColor.CGColor) < (1.0f - FLT_EPSILON);
-    return isClear ? [UIColor clearColor] : self.tintColor;
 }
 
 #pragma mark - Interaction -
@@ -345,99 +350,71 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 #pragma mark - Animation -
 
-- (void)_setBackgroundColorTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
-    if (!_tappedTintColor || _isTranslucent) { return; }
+- (void)_performTapAnimation:(void (^)(void))animations
+                  completion:(void (^_Nullable)(BOOL finished))completion TOROUNDEDBUTTON_OBJC_DIRECT {
+    [UIView animateWithDuration:_tapAnimationDuration
+                          delay:0.0f
+         usingSpringWithDamping:1.0f
+          initialSpringVelocity:0.5f
+                        options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:animations
+                     completion:completion];
+}
 
-    // Toggle the background color of the title label
-    void (^updateTitleOpacity)(void) = ^{
-        self->_titleLabel.backgroundColor = [self _labelBackgroundColor];
-    };
-    
-    // -----------------------------------------------------
-    
+- (void)_setBackgroundColorTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
+    if (!_tappedTintColor || !TORoundedButtonIsTintableBackground(_backgroundStyle)) { return; }
+
+    UIColor *const destinationColor = _isTapped ? _tappedTintColor : self.tintColor;
     void (^animationBlock)(void) = ^{
-        self->_backgroundView.backgroundColor = self->_isTapped ? self->_tappedTintColor : self.tintColor;
+        [self _setBackgroundTintColor:destinationColor];
     };
-    
+
     void (^completionBlock)(BOOL) = ^(BOOL completed){
         if (completed == NO) { return; }
-        updateTitleOpacity();
+        self->_titleLabel.backgroundColor = [self _labelBackgroundColor];
     };
 
     if (!animated) {
         animationBlock();
         completionBlock(YES);
-    }
-    else {
+    } else {
         _titleLabel.backgroundColor = [UIColor clearColor];
-        [UIView animateWithDuration:_tapAnimationDuration
-                              delay:0.0f
-             usingSpringWithDamping:1.0f
-              initialSpringVelocity:0.5f
-                            options:UIViewAnimationOptionBeginFromCurrentState
-                         animations:animationBlock
-                         completion:completionBlock];
+        [self _performTapAnimation:animationBlock completion:completionBlock];
     }
-
 }
 
 - (void)_setLabelAlphaTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
     if (_tappedTextAlpha > 1.0f - FLT_EPSILON) { return; }
 
     const CGFloat alpha = _isTapped ? _tappedTextAlpha : 1.0f;
-
-    // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
         self->_titleLabel.alpha = alpha;
     };
 
-    // If we're not animating, just call the blocks manually
     if (!animated) {
-        // Remove any animations in progress
         [_titleLabel.layer removeAnimationForKey:@"opacity"];
         animationBlock();
         return;
     }
 
-    // Set the title label to clear beforehand
     _titleLabel.backgroundColor = [UIColor clearColor];
-
-    // Animate the button alpha
-    [UIView animateWithDuration:_tapAnimationDuration
-                          delay:0.0f
-         usingSpringWithDamping:1.0f
-          initialSpringVelocity:0.5f
-                        options:UIViewAnimationOptionBeginFromCurrentState
-                     animations:animationBlock
-                     completion:nil];
+    [self _performTapAnimation:animationBlock completion:nil];
 }
 
 - (void)_setButtonScaledTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
     if (_tappedButtonScale < FLT_EPSILON) { return; }
 
     const CGFloat scale = _isTapped ? _tappedButtonScale : 1.0f;
-
-    // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
-        self->_containerView.transform = CGAffineTransformScale(CGAffineTransformIdentity,
-                                                              scale,
-                                                              scale);
+        self->_containerView.transform = CGAffineTransformScale(CGAffineTransformIdentity, scale, scale);
     };
 
-    // If we're not animating, just call the blocks manually
     if (!animated) {
         animationBlock();
         return;
     }
 
-    // Animate the button alpha
-    [UIView animateWithDuration:_tapAnimationDuration
-                          delay:0.0f
-         usingSpringWithDamping:1.0f
-          initialSpringVelocity:0.5f
-                        options:UIViewAnimationOptionBeginFromCurrentState
-                     animations:animationBlock
-                     completion:nil];
+    [self _performTapAnimation:animationBlock completion:nil];
 }
 
 #pragma mark - Public Accessors -
@@ -508,7 +485,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 - (void)setTintColor:(UIColor *)tintColor {
     [super setTintColor:tintColor];
     [self _updateTappedTintColorForTintColor];
-    _backgroundView.backgroundColor = tintColor;
+    [self _setBackgroundTintColor:tintColor];
     _titleLabel.backgroundColor = [self _labelBackgroundColor];
     [self setNeedsLayout];
 }
@@ -521,7 +498,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 }
 
 - (void)setTappedTintColorBrightnessOffset:(CGFloat)tappedTintColorBrightnessOffset {
-    if (TO_ROUNDED_BUTTON_FLOATS_MATCH(_tappedTintColorBrightnessOffset, 
+    if (TORoundedButtonFloatsMatch(_tappedTintColorBrightnessOffset, 
                                        tappedTintColorBrightnessOffset)) { return; }
 
     _tappedTintColorBrightnessOffset = tappedTintColorBrightnessOffset;
@@ -544,6 +521,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
         _backgroundView.cornerConfiguration = _cornerConfiguration;
     } else {
         _backgroundView.layer.cornerRadius = _cornerRadius;
+        _backgroundView.layer.masksToBounds = !TORoundedButtonIsSolidBackground(_backgroundStyle);
     }
 #else
     _backgroundView.layer.cornerRadius = _cornerRadius;
@@ -553,6 +531,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 
 #ifdef __IPHONE_26_0
 - (void)setCornerConfiguration:(UICornerConfiguration *)cornerConfiguration {
+    if (_cornerConfiguration == cornerConfiguration) { return; }
     _cornerConfiguration = cornerConfiguration;
     _backgroundView.cornerConfiguration = _cornerConfiguration;
 }
@@ -562,14 +541,11 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
 }
 #endif
 
-- (void)setIsTranslucent:(BOOL)isTranslucent {
-    if (_isTranslucent == isTranslucent) {
-        return;
-    }
-
-    _isTranslucent = isTranslucent;
+- (void)setBackgroundStyle:(TORoundedButtonBackgroundStyle)backgroundStyle {
+    if (_backgroundStyle == backgroundStyle) { return; }
+    _backgroundStyle = backgroundStyle;
     [_backgroundView removeFromSuperview];
-    _backgroundView = [self _makeBackgroundViewWithBlur:_isTranslucent];
+    _backgroundView = [self _makeBackgroundViewWithStyle:_backgroundStyle];
     [_containerView insertSubview:_backgroundView atIndex:0];
     _titleLabel.backgroundColor = [self _labelBackgroundColor];
     [self setNeedsLayout];
@@ -581,7 +557,7 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     }
 
     _blurStyle = blurStyle;
-    if (!_isTranslucent || ![_backgroundView isKindOfClass:[UIVisualEffectView class]]) {
+    if (_backgroundStyle != TORoundedButtonBackgroundStyleBlur || ![_backgroundView isKindOfClass:[UIVisualEffectView class]]) {
         return;
     }
 
@@ -589,19 +565,76 @@ static inline BOOL TO_ROUNDED_BUTTON_FLOATS_MATCH(CGFloat firstValue, CGFloat se
     [blurView setEffect:[UIBlurEffect effectWithStyle:_blurStyle]];
 }
 
+- (void)setGlassStyle:(UIGlassEffectStyle)glassStyle {
+    if (_glassStyle == glassStyle) { return; }
+    _glassStyle = glassStyle;
+
+    if (_backgroundStyle != TORoundedButtonBackgroundStyleGlass || ![_backgroundView isKindOfClass:[UIVisualEffectView class]]) {
+        return;
+    }
+
+    UIGlassEffect *const glassEffect = [UIGlassEffect effectWithStyle:_glassStyle];
+    glassEffect.tintColor = self.tintColor;
+
+    UIVisualEffectView *const effectView = (UIVisualEffectView *)_backgroundView;
+    [effectView setEffect:glassEffect];
+}
+
 - (void)setEnabled:(BOOL)enabled {
     [super setEnabled:enabled];
     _containerView.alpha = enabled ? 1 : 0.4;
 }
 
-#pragma mark - Graphics Handling -
+#pragma mark - Private -
+
+- (void)_setBackgroundTintColor:(UIColor *)tintColor TOROUNDEDBUTTON_OBJC_DIRECT {
+    if (_backgroundStyle == TORoundedButtonBackgroundStyleBlur) {
+        return;
+    }
+#ifdef __IPHONE_26_0
+    if (@available(iOS 26.0, *)) {
+        if (_backgroundStyle == TORoundedButtonBackgroundStyleGlass) {
+            UIGlassEffect *effect = [UIGlassEffect effectWithStyle:_glassStyle];
+            effect.tintColor = tintColor;
+            [(UIVisualEffectView *)_backgroundView setEffect:effect];
+        } else {
+            _backgroundView.backgroundColor = tintColor;
+        }
+    } else {
+        _backgroundView.backgroundColor = tintColor;
+    }
+#else
+    _backgroundView.backgroundColor = tintColor;
+#endif
+}
+
+- (void)_updateTappedTintColorForTintColor TOROUNDEDBUTTON_OBJC_DIRECT {
+    if (TORoundedButtonFloatIsZero(_tappedTintColorBrightnessOffset)) {
+        return;
+    }
+
+    UIColor *tintColor = self.tintColor;
+    if (@available(iOS 13.0, *)) {
+        tintColor = [tintColor resolvedColorWithTraitCollection:self.traitCollection];
+    }
+
+    _tappedTintColor = [self _brightnessAdjustedColorWithColor:tintColor
+                                                        amount:_tappedTintColorBrightnessOffset];
+}
+
+- (UIColor *)_labelBackgroundColor TOROUNDEDBUTTON_OBJC_DIRECT {
+    // Always return clear if we're not overlaying on a completely solid background
+    if (_isTapped || !TORoundedButtonIsSolidBackground(_backgroundStyle)) { return [UIColor clearColor]; }
+    const BOOL isClear = CGColorGetAlpha(self.tintColor.CGColor) < (1.0f - FLT_EPSILON);
+    return isClear ? [UIColor clearColor] : self.tintColor;
+}
 
 - (UIColor *)_brightnessAdjustedColorWithColor:(UIColor *)color amount:(CGFloat)amount TOROUNDEDBUTTON_OBJC_DIRECT {
     if (!color) { return nil; }
-    
+
     CGFloat h, s, b, a;
     if (![color getHue:&h saturation:&s brightness:&b alpha:&a]) { return nil; }
-    b += amount; // Add the adjust amount
+    b += amount;
     b = MAX(b, 0.0f); b = MIN(b, 1.0f);
     return [UIColor colorWithHue:h saturation:s brightness:b alpha:a];
 }

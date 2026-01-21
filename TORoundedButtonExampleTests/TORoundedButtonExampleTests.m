@@ -20,7 +20,6 @@
     TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
     XCTAssertNotNil(button);
     XCTAssertEqual(button.text, @"Test");
-    XCTAssertEqual(button.cornerRadius, 12.0f);
     XCTAssertEqual(button.textColor, [UIColor whiteColor]);
     XCTAssertEqual(button.tappedTextAlpha, 1.0f);
     XCTAssertEqual(button.tappedTintColorBrightnessOffset, -0.15f);
