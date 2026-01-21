@@ -209,10 +209,10 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     backgroundView.frame = self.bounds;
     backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
+    backgroundView.clipsToBounds = !TORoundedButtonIsSolidBackground(style);
     if (@available(iOS 26.0, *)) {
         backgroundView.cornerConfiguration = _cornerConfiguration;
     } else {
-        backgroundView.clipsToBounds = !TORoundedButtonIsSolidBackground(style);
         backgroundView.layer.cornerRadius = _cornerRadius;
     }
 
@@ -390,15 +390,19 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 
 #pragma mark - Animation -
 
+- (void)_performTapAnimation:(void (^)(void))animations
+                  completion:(void (^_Nullable)(BOOL finished))completion TOROUNDEDBUTTON_OBJC_DIRECT {
+    [UIView animateWithDuration:_tapAnimationDuration
+                          delay:0.0f
+         usingSpringWithDamping:1.0f
+          initialSpringVelocity:0.5f
+                        options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:animations
+                     completion:completion];
+}
+
 - (void)_setBackgroundColorTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
     if (!_tappedTintColor || !TORoundedButtonIsTintableBackground(_backgroundStyle)) { return; }
-
-    // Toggle the background color of the title label
-    void (^updateTitleOpacity)(void) = ^{
-        self->_titleLabel.backgroundColor = [self _labelBackgroundColor];
-    };
-    
-    // -----------------------------------------------------
 
     UIColor *const destinationColor = _isTapped ? _tappedTintColor : self.tintColor;
     void (^animationBlock)(void) = ^{
@@ -407,22 +411,15 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 
     void (^completionBlock)(BOOL) = ^(BOOL completed){
         if (completed == NO) { return; }
-        updateTitleOpacity();
+        self->_titleLabel.backgroundColor = [self _labelBackgroundColor];
     };
 
     if (!animated) {
         animationBlock();
         completionBlock(YES);
-    }
-    else {
+    } else {
         _titleLabel.backgroundColor = [UIColor clearColor];
-        [UIView animateWithDuration:_tapAnimationDuration
-                              delay:0.0f
-             usingSpringWithDamping:1.0f
-              initialSpringVelocity:0.5f
-                            options:UIViewAnimationOptionBeginFromCurrentState
-                         animations:animationBlock
-                         completion:completionBlock];
+        [self _performTapAnimation:animationBlock completion:completionBlock];
     }
 }
 
@@ -430,59 +427,34 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     if (_tappedTextAlpha > 1.0f - FLT_EPSILON) { return; }
 
     const CGFloat alpha = _isTapped ? _tappedTextAlpha : 1.0f;
-
-    // Animate the alpha value of the label
     void (^animationBlock)(void) = ^{
         self->_titleLabel.alpha = alpha;
     };
 
-    // If we're not animating, just call the blocks manually
     if (!animated) {
-        // Remove any animations in progress
         [_titleLabel.layer removeAnimationForKey:@"opacity"];
         animationBlock();
         return;
     }
 
-    // Set the title label to clear beforehand
     _titleLabel.backgroundColor = [UIColor clearColor];
-
-    // Animate the button alpha
-    [UIView animateWithDuration:_tapAnimationDuration
-                          delay:0.0f
-         usingSpringWithDamping:1.0f
-          initialSpringVelocity:0.5f
-                        options:UIViewAnimationOptionBeginFromCurrentState
-                     animations:animationBlock
-                     completion:nil];
+    [self _performTapAnimation:animationBlock completion:nil];
 }
 
 - (void)_setButtonScaledTappedAnimated:(BOOL)animated TOROUNDEDBUTTON_OBJC_DIRECT {
     if (_tappedButtonScale < FLT_EPSILON) { return; }
 
     const CGFloat scale = _isTapped ? _tappedButtonScale : 1.0f;
-
-    // Animate the scale value of the label
     void (^animationBlock)(void) = ^{
-        self->_containerView.transform = CGAffineTransformScale(CGAffineTransformIdentity,
-                                                              scale,
-                                                              scale);
+        self->_containerView.transform = CGAffineTransformScale(CGAffineTransformIdentity, scale, scale);
     };
 
-    // If we're not animating, just call the blocks manually
     if (!animated) {
         animationBlock();
         return;
     }
 
-    // Animate the button alpha
-    [UIView animateWithDuration:_tapAnimationDuration
-                          delay:0.0f
-         usingSpringWithDamping:1.0f
-          initialSpringVelocity:0.5f
-                        options:UIViewAnimationOptionBeginFromCurrentState
-                     animations:animationBlock
-                     completion:nil];
+    [self _performTapAnimation:animationBlock completion:nil];
 }
 
 #pragma mark - Public Accessors -
