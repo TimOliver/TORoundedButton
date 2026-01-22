@@ -26,6 +26,8 @@ _In iOS 15, Apple finally introduced an official way to create rounded `UIButton
 
 * A completely custom implementation; no `UIButton` hacking.
 * Implemented with guidance from Core Animation engineers at WWDC 2019.
+* Plays a smooth, interruptible zooming animation when tapped.
+* Provides haptic feedback when tapped on supported devices.
 * Uses the classic Apple 'continuous' curving style on iOS 13 and up.
 * Extremely flexible with many options for configuring the look and feel of the button.
 * Integrates with Interface Builder for visual configuration.
