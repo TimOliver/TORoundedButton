@@ -63,6 +63,9 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     /** Maintain a reference to the corner configuration in case we swap out the background view */
     UICornerConfiguration *_cornerConfiguration API_AVAILABLE(ios(26.0));
 #endif
+
+    /** The current haptic feedback generator that will play vibrations when the button is tapped. */
+    UIImpactFeedbackGenerator *_impactGenerator;
 }
 
 #pragma mark - View Creation -
@@ -118,6 +121,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     _tappedTintColorBrightnessOffset = !TORoundedButtonFloatIsZero(_tappedTintColorBrightnessOffset) ?: -0.15f;
     _contentInset = (UIEdgeInsets){15.0, 15.0, 15.0, 15.0};
     _blurStyle = UIBlurEffectStyleDark;
+    _impactStyle = TORoundedButtonImpactStyleMedium;
 
     // Set the corner radius depending on system version
 #ifdef __IPHONE_26_0
@@ -150,7 +154,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 
     // Create action events for all possible interactions with this control
     [self addTarget:self action:@selector(_didTouchDownInside) forControlEvents:UIControlEventTouchDown|UIControlEventTouchDownRepeat];
-    [self addTarget:self action:@selector(_didTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [self addTarget:self action:@selector(_didTouchUpInside:event:) forControlEvents:UIControlEventTouchUpInside];
     [self addTarget:self action:@selector(_didDragOutside) forControlEvents:UIControlEventTouchDragExit|UIControlEventTouchCancel];
     [self addTarget:self action:@selector(_didDragInside) forControlEvents:UIControlEventTouchDragEnter];
 }
@@ -211,6 +215,19 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     return backgroundView;
 }
 
+- (UIImpactFeedbackGenerator *)_makeImpactGeneratorWithStyle:(TORoundedButtonImpactStyle)style TOROUNDEDBUTTON_OBJC_DIRECT {
+    if (style == TORoundedButtonImpactStyleNone) {
+        return nil;
+    }
+
+    const UIImpactFeedbackStyle impactStyle = (UIImpactFeedbackStyle)style;
+    if (@available(iOS 17.5, *)) {
+        return [UIImpactFeedbackGenerator feedbackGeneratorWithStyle:impactStyle forView:self];
+    }
+
+    return [[UIImpactFeedbackGenerator alloc] initWithStyle:impactStyle];
+}
+
 #pragma mark - View Lifecycle -
 
 - (void)didMoveToSuperview {
@@ -222,6 +239,11 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     // Defer making the background until we're added to the subview in case the user changes it
     _backgroundView = [self _makeBackgroundViewWithStyle:_backgroundStyle];
     [_containerView insertSubview:_backgroundView atIndex:0];
+
+    // If the button has been configured to set up an impact generator, create it now.
+    if (_impactStyle != TORoundedButtonImpactStyleNone && !_impactGenerator) {
+        _impactGenerator = [self _makeImpactGeneratorWithStyle:_impactStyle];
+    }
 }
 
 - (void)tintColorDidChange {
@@ -308,14 +330,25 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 - (void)_didTouchDownInside {
     _isTapped = YES;
 
+    // Preheat the impact generator to prepare playing it when we tap up.
+    [_impactGenerator prepare];
+
     // The user touched their finger down into the button bounds
     [self _setLabelAlphaTappedAnimated:NO];
     [self _setBackgroundColorTappedAnimated:YES];
     [self _setButtonScaledTappedAnimated:YES];
 }
 
-- (void)_didTouchUpInside {
+- (void)_didTouchUpInside:(id)sender event:(UIEvent *)event {
     _isTapped = NO;
+
+    // Play the impact to lock in that the user committed to this action.
+    if (@available(iOS 17.5, *)) {
+        const CGPoint touchPoint = [event.allTouches.anyObject locationInView:self];
+        [_impactGenerator impactOccurredAtLocation:touchPoint];
+    } else {
+        [_impactGenerator impactOccurred];
+    }
 
     // The user lifted their finger up from inside the button bounds
     [self _setLabelAlphaTappedAnimated:YES];
@@ -583,6 +616,12 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 - (void)setEnabled:(BOOL)enabled {
     [super setEnabled:enabled];
     _containerView.alpha = enabled ? 1 : 0.4;
+}
+
+- (void)setImpactStyle:(TORoundedButtonImpactStyle)impactStyle {
+    if (_impactStyle == impactStyle) { return; }
+    _impactStyle = impactStyle;
+    _impactGenerator = [self _makeImpactGeneratorWithStyle:impactStyle];
 }
 
 #pragma mark - Private -
