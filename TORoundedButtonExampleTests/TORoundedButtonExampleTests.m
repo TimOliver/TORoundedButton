@@ -22,7 +22,7 @@
     XCTAssertEqual(button.text, @"Test");
     XCTAssertEqual(button.textColor, [UIColor whiteColor]);
     XCTAssertEqual(button.tappedTextAlpha, 1.0f);
-    XCTAssertEqual(button.tappedTintColorBrightnessOffset, -0.15f);
+    XCTAssertEqual(button.tappedTintColorBrightnessOffset, 0.25f);
     XCTAssertEqual(button.tappedButtonScale, 0.97f);
 
 #ifdef __IPHONE_26_0

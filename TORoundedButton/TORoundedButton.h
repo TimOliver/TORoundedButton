@@ -116,7 +116,7 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 @property (nonatomic, assign) IBInspectable CGFloat tappedTextAlpha;
 
 /// Taking the default button background color apply a brightness offset for the tapped color 
-/// (Default is -0.1f. Set 0.0 for off).
+/// (Default is 0.25f. Set 0.0 for off).
 @property (nonatomic, assign) IBInspectable CGFloat tappedTintColorBrightnessOffset;
 
 /// If desired, explicity set the background color of the button when tapped (Default is nil).
@@ -125,8 +125,11 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /// When tapped, the scale by which the button shrinks during the animation (Default is 0.97f).
 @property (nonatomic, assign) IBInspectable CGFloat tappedButtonScale;
 
-/// The duration of the tapping cross-fade animation (Default is 0.4f).
-@property (nonatomic, assign) CGFloat tapAnimationDuration;
+/// The duration of the tap-down animation (Default is 0.1f).
+@property (nonatomic, assign) CGFloat tapDownAnimationDuration;
+
+/// The duration of the tap-up animation (Default is 0.4f).
+@property (nonatomic, assign) CGFloat tapUpAnimationDuration;
 
 /// A callback handler triggered each time the button is tapped.
 @property (nonatomic, copy) void (^tappedHandler)(void);
