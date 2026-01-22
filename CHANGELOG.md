@@ -1,6 +1,14 @@
 x.y.z Release Notes (yyyy-MM-dd)
 =============================================================
 
+2.0.0 Release Notes (2026-01-22)
+=============================================================
+
+### Enhancements 
+
+* Added `backgroundStyle` property to control the visual style of the buttom.
+* Added Liquid Glass variant of the button, which is now the default on iOS 26.
+
 1.3.0 Release Notes (2025-11-23)
 =============================================================
 
