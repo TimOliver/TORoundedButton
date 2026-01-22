@@ -33,6 +33,14 @@ typedef NS_ENUM(NSInteger, TORoundedButtonBackgroundStyle) {
     TORoundedButtonBackgroundStyleGlass
 };
 
+/// The types of impacts that the button can generate when tapped by the user.
+typedef NS_ENUM(NSInteger, TORoundedButtonImpactStyle) {
+    TORoundedButtonImpactStyleNone = -1,
+    TORoundedButtonImpactStyleLight = UIImpactFeedbackStyleLight,
+    TORoundedButtonImpactStyleMedium = UIImpactFeedbackStyleMedium,
+    TORoundedButtonImpactStyleHeavy = UIImpactFeedbackStyleHeavy
+};
+
 NS_SWIFT_NAME(RoundedButtonDelegate)
 @protocol TORoundedButtonDelegate <NSObject>
 
@@ -74,6 +82,9 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 
 /// The style, whether static or dynamic of the button's background view.
 @property (nonatomic, assign) TORoundedButtonBackgroundStyle backgroundStyle;
+
+/// The haptic impact style that this button will generate when tapped by the user. (Default is medium)
+@property (nonatomic, assign) TORoundedButtonImpactStyle impactStyle;
 
 /// When `backgroundStyle` is set to `.blur`, the specific blur style to apply.
 @property (nonatomic, assign) UIBlurEffectStyle blurStyle;
