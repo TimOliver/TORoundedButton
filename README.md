@@ -104,9 +104,7 @@ Some of the tips they mentioned included:
 
 # Credits
 
-`TORoundedButton` was created by [Tim Oliver](http://twitter.com/TimOliverAU) as a component of [iComics](http://icomics.co).
-
-iOS device mockup art by [Pixeden](http://pixeden.com).
+`TORoundedButton` was created by [Tim Oliver](http://twitter.com/TimOliverAU) as a component of [iComics](http://icomics.net).
 
 # License
 
