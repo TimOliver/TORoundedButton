@@ -20,7 +20,7 @@
 
 `TORoundedButton` has been crafted to be as graphically performant as possible, based on guidance from Core Animation engineers from Apple at WWDC 2019. It is not simply a subclass of `UIButton`. Instead, it is a subclass of `UIControl` with all button graphics and behavior re-engineered from scratch.
 
-_In 2021, Apple finally introduced an official way to create rounded `UIButton` styles with the [new `UIButtonConfiguration` API](https://developer.apple.com/documentation/uikit/uibackgroundconfiguration). 🎉 For simple button implementations, you should consider using the official API, but this library will still be available for more advanced use cases._
+_In iOS 15, Apple finally introduced an official way to create rounded `UIButton` styles with the [new `UIButtonConfiguration` API](https://developer.apple.com/documentation/uikit/uibackgroundconfiguration). 🎉 For simple button implementations, you should consider using the official API, but this library will still be available for more advanced use cases._
 
 # Features
 
