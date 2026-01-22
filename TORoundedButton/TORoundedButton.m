@@ -116,7 +116,8 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 - (void)_roundedButtonCommonInit TOROUNDEDBUTTON_OBJC_DIRECT {
     // Default properties (Make sure they're not overriding IB)
     _tappedTextAlpha = (_tappedTextAlpha > FLT_EPSILON) ?: 1.0f;
-    _tapAnimationDuration = (_tapAnimationDuration > FLT_EPSILON) ?: 0.4f;
+    _tapDownAnimationDuration = (_tapDownAnimationDuration > FLT_EPSILON) ?: 0.1f;
+    _tapUpAnimationDuration = (_tapUpAnimationDuration > FLT_EPSILON) ?: 0.4f;
     _tappedButtonScale = (_tappedButtonScale > FLT_EPSILON) ?: 0.97f;
     _tappedTintColorBrightnessOffset = !TORoundedButtonFloatIsZero(_tappedTintColorBrightnessOffset) ?: 0.25f;
     _contentInset = (UIEdgeInsets){15.0, 15.0, 15.0, 15.0};
@@ -385,7 +386,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 
 - (void)_performTapAnimation:(void (^)(void))animations
                   completion:(void (^_Nullable)(BOOL finished))completion TOROUNDEDBUTTON_OBJC_DIRECT {
-    [UIView animateWithDuration:_tapAnimationDuration
+    [UIView animateWithDuration:_isTapped ? _tapDownAnimationDuration : _tapUpAnimationDuration
                           delay:0.0f
          usingSpringWithDamping:1.0f
           initialSpringVelocity:0.5f
