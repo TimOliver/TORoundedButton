@@ -154,7 +154,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 
     // Create action events for all possible interactions with this control
     [self addTarget:self action:@selector(_didTouchDownInside) forControlEvents:UIControlEventTouchDown|UIControlEventTouchDownRepeat];
-    [self addTarget:self action:@selector(_didTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [self addTarget:self action:@selector(_didTouchUpInside:event:) forControlEvents:UIControlEventTouchUpInside];
     [self addTarget:self action:@selector(_didDragOutside) forControlEvents:UIControlEventTouchDragExit|UIControlEventTouchCancel];
     [self addTarget:self action:@selector(_didDragInside) forControlEvents:UIControlEventTouchDragEnter];
 }
@@ -339,11 +339,16 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     [self _setButtonScaledTappedAnimated:YES];
 }
 
-- (void)_didTouchUpInside {
+- (void)_didTouchUpInside:(id)sender event:(UIEvent *)event {
     _isTapped = NO;
 
-    // Play the impact.
-    [_impactGenerator impactOccurred];
+    // Play the impact to lock in that the user committed to this action.
+    if (@available(iOS 17.5, *)) {
+        const CGPoint touchPoint = [event.allTouches.anyObject locationInView:self];
+        [_impactGenerator impactOccurredAtLocation:touchPoint];
+    } else {
+        [_impactGenerator impactOccurred];
+    }
 
     // The user lifted their finger up from inside the button bounds
     [self _setLabelAlphaTappedAnimated:YES];
