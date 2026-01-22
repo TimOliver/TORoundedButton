@@ -1,13 +1,20 @@
-# TORoundedButton
+<h1 align="center">TORoundedButton</h1>
 
-<img src="https://raw.githubusercontent.com/TimOliver/TORoundedButton/master/screenshot.webp" width="500" align="right" alt="TORoundedButton" />
-
+<div align="center">
+    
 [![CI](https://github.com/TimOliver/TORoundedButton/workflows/CI/badge.svg)](https://github.com/TimOliver/TORoundedButton/actions?query=workflow%3ACI)
 [![Version](https://img.shields.io/cocoapods/v/TORoundedButton.svg?style=flat)](http://cocoadocs.org/docsets/TORoundedButton)
 [![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-4BC51D.svg?style=flat)](https://swift.org/package-manager/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/TimOliver/TORoundedButton/master/LICENSE)
 [![Platform](https://img.shields.io/cocoapods/p/TORoundedButton.svg?style=flat)](http://cocoadocs.org/docsets/TORoundedButton)
+
+</div>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/TimOliver/TORoundedButton/master/screenshot.webp" width="750" align="center" alt="TORoundedButton" />
+</div>
+<p/>
 
 `TORoundedButton` is an open source UI control of a standard user button. Its design consists of displaying text on top of a solid rectangle with rounded corners. This UI style has started becoming more and more common in iOS 11 and above, and while Apple has an official one they use internally, it is not possible to achieve this effect without heavily customizing `UIButton`.
 
