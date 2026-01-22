@@ -116,7 +116,7 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 @property (nonatomic, assign) IBInspectable CGFloat tappedTextAlpha;
 
 /// Taking the default button background color apply a brightness offset for the tapped color 
-/// (Default is -0.1f. Set 0.0 for off).
+/// (Default is 0.25f. Set 0.0 for off).
 @property (nonatomic, assign) IBInspectable CGFloat tappedTintColorBrightnessOffset;
 
 /// If desired, explicity set the background color of the button when tapped (Default is nil).
