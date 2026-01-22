@@ -1,6 +1,6 @@
 # TORoundedButton
 
-<img src="https://raw.githubusercontent.com/TimOliver/TORoundedButton/master/screenshot.png" width="500" align="right" alt="TORoundedButton" />
+<img src="https://raw.githubusercontent.com/TimOliver/TORoundedButton/master/screenshot.webp" width="500" align="right" alt="TORoundedButton" />
 
 [![CI](https://github.com/TimOliver/TORoundedButton/workflows/CI/badge.svg)](https://github.com/TimOliver/TORoundedButton/actions?query=workflow%3ACI)
 [![Version](https://img.shields.io/cocoapods/v/TORoundedButton.svg?style=flat)](http://cocoadocs.org/docsets/TORoundedButton)
