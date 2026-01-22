@@ -670,18 +670,16 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 }
 
 - (UIColor *)_brightnessAdjustedColorWithColor:(UIColor *)color amount:(CGFloat)amount TOROUNDEDBUTTON_OBJC_DIRECT {
-    // Clamp
+    // Clamp provided value just in case
     amount = fmaxf(0.0, fminf(amount, 1.0));
 
     CGFloat h = 0, s = 0, b = 0, a = 0;
-    if (![color getHue:&h saturation:&s brightness:&b alpha:&a]) {
-        return color;
-    }
+    if (![color getHue:&h saturation:&s brightness:&b alpha:&a]) { return color; }
 
     // Zones:
-    //  - RED   ≈ 0.0 / 1.0
-    //  - GREEN ≈ 0.33
-    //  - BLUE  ≈ 0.66
+    //  - RED   - 0.0 / 1.0
+    //  - GREEN - 0.33
+    //  - BLUE  - 0.66
     BOOL isRed   = (h < 0.05f || h > 0.95f);
     BOOL isGreen = (h > 0.25f && h < 0.45f);
     BOOL isBlue  = (h > 0.55f && h < 0.75f);
@@ -691,19 +689,19 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     CGFloat brightnessAdd = 0.0f;
 
     if (isRed) {
-        // systemRed → nudge toward orange/yellow, slightly brighter, modest sat
+        // systemRed - nudge toward orange/yellow, slightly brighter, modest sat
         hueShift      =  0.08f * amount;  // towards yellow
         satBoost      =  0.10f * amount;
         brightnessAdd =  0.18f * amount;
     }
     else if (isGreen) {
-        // systemGreen → nudge toward yellow-green, clearly brighter + more vivid
+        // systemGreen - nudge toward yellow-green, clearly brighter + more vivid
         hueShift      = -0.08f * amount;  // toward yellow-green
         satBoost      =  0.25f * amount;  // push harder here
         brightnessAdd =  0.22f * amount;  // stronger lift so it’s clearly changed
     }
     else if (isBlue) {
-        // systemBlue → nudge toward cyan, bright + vivid
+        // systemBlue - nudge toward cyan, bright + vivid
         hueShift      = -0.06f * amount;  // toward cyan
         satBoost      =  0.18f * amount;
         brightnessAdd =  0.18f * amount;
@@ -717,8 +715,8 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 
     // Apply hue shift with wrapping
     CGFloat newH = h + hueShift;
-    if (newH < 0.0f) newH += 1.0f;
-    if (newH > 1.0f) newH -= 1.0f;
+    if (newH < 0.0f) { newH += 1.0f; }
+    if (newH > 1.0f) { newH -= 1.0f; }
 
     // Brighten: constant bump + small relative lift if not already maxed
     CGFloat newB = b + brightnessAdd + (1.0f - b) * 0.2f * amount;
