@@ -16,7 +16,7 @@
 </div>
 <p/>
 
-`TORoundedButton` is an open source UI control of a standard user button. Its design consists of displaying text on top of a solid rectangle with rounded corners. This UI style has started becoming more and more common in iOS 11 and above, and while Apple has an official one they use internally, it is not possible to achieve this effect without heavily customizing `UIButton`.
+`TORoundedButton` is an open source UI control of a standard user button. Its design consists of displaying text on top of a solid rectangle with rounded corners. This UI style has started becoming more and more common in iOS 11 and above, and while Apple has an official one they use internally, as of iOS 14, it is not possible to achieve this effect without heavily customizing `UIButton`.
 
 `TORoundedButton` has been crafted to be as graphically performant as possible, based on guidance from Core Animation engineers from Apple at WWDC 2019. It is not simply a subclass of `UIButton`. Instead, it is a subclass of `UIControl` with all button graphics and behavior re-engineered from scratch.
 
