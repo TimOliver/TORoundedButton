@@ -46,7 +46,7 @@ let button = RoundedButton(text: "Continue")
 // The button color itself is controlled via tintColor
 button.tintColor = .red
 
-// If desired a brightness offset that will be used to 
+// If desired, a brightness offset that will be used to 
 // dynamically calculate the 'tapped' color from the default one.
 button.tappedTintColorBrightnessOffset = -0.15
 
