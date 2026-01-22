@@ -258,7 +258,11 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
     [self setNeedsLayout];
-    [self _updateTappedTintColorForTintColor];
+    if (@available(iOS 13.0, *)) {
+        if ([previousTraitCollection hasDifferentColorAppearanceComparedToTraitCollection:self.traitCollection]) {
+            [self _updateTappedTintColorForTintColor];
+        }
+    }
 }
 
 #pragma mark - View Layout -
@@ -657,7 +661,6 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     if (@available(iOS 13.0, *)) {
         tintColor = [tintColor resolvedColorWithTraitCollection:self.traitCollection];
     }
-
     _tappedTintColor = [self _brightnessAdjustedColorWithColor:tintColor
                                                         amount:_tappedTintColorBrightnessOffset];
 }
