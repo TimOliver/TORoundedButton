@@ -16,11 +16,9 @@
 </div>
 <p/>
 
-`TORoundedButton` is an open source UI control of a standard user button. Its design consists of displaying text on top of a solid rectangle with rounded corners. This UI style has started becoming more and more common in iOS 11 and above, and while Apple has an official one they use internally, as of iOS 14, it is not possible to achieve this effect without heavily customizing `UIButton`.
+`TORoundedButton` is an open source UI control of a standard user button. Its design consists of displaying text on top of a solid rectangle with rounded corners. This UI style started becoming the norm in iOS 11 with Apple introducing an official way to add this effect to `UIButton` [in iOS 15]((https://developer.apple.com/documentation/uikit/uibackgroundconfiguration)).
 
-`TORoundedButton` has been crafted to be as graphically performant as possible, based on guidance from Core Animation engineers from Apple at WWDC 2019. It is not simply a subclass of `UIButton`. Instead, it is a subclass of `UIControl` with all button graphics and behavior re-engineered from scratch.
-
-_In iOS 15, Apple finally introduced an official way to create rounded `UIButton` styles with the [new `UIButtonConfiguration` API](https://developer.apple.com/documentation/uikit/uibackgroundconfiguration). 🎉 For simple button implementations, you should consider using the official API, but this library will still be available for more advanced use cases._
+Even though there is now an official solution for adding rounded buttons to your iOS app, `TORoundedButton` still has a lot of value as an alternative. It been crafted to be as graphically performant as possible, based on guidance from Core Animation engineers from Apple at WWDC 2019. It is not simply a subclass of `UIButton`. Instead, it is a subclass of `UIControl` with all button graphics and behavior re-engineered from scratch. This allows a tailored, consistent experience across an entire app's surface, and includes additional conveniences such as graceful handling of the different UI styles in iOS 18 and iOS 26, as well as additional functionality like haptic feedback.
 
 # Features
 
