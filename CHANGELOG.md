@@ -1,6 +1,17 @@
 x.y.z Release Notes (yyyy-MM-dd)
 =============================================================
 
+2.1.0 Release Notes (2026-05-27)
+=============================================================
+
+### Added
+
+* Re-added the `minimumWidth` property, now including the horizontal `contentInset` padding, to help external layout systems size the button around its content.
+
+### Fixed
+
+* An issue where the title label could wrap onto two lines after `sizeToFit` was called against an already-narrow frame.
+
 2.0.0 Release Notes (2026-01-22)
 =============================================================
 
