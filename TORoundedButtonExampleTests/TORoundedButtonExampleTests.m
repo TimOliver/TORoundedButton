@@ -284,6 +284,7 @@
 - (void)testTintColorRoundTrip {
     TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
     button.tintColor = [UIColor purpleColor];
+    // The getter returns the explicitly-set tint color unchanged.
     XCTAssertEqualObjects(button.tintColor, [UIColor purpleColor]);
 }
 
@@ -370,6 +371,7 @@
         UICornerConfiguration *config =
             [UICornerConfiguration configurationWithUniformRadius:[UICornerRadius fixedRadius:8.0]];
         button.cornerConfiguration = config;
+        // Pointer equality: the setter stores the config directly without copying.
         XCTAssertEqualObjects(button.cornerConfiguration, config);
     }
 }
