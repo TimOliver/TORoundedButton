@@ -9,6 +9,18 @@
 #import <XCTest/XCTest.h>
 #import "TORoundedButton.h"
 
+@interface TORoundedButtonTestDelegate : NSObject <TORoundedButtonDelegate>
+@property (nonatomic, assign) NSInteger tapCount;
+@property (nonatomic, weak) TORoundedButton *lastButton;
+@end
+
+@implementation TORoundedButtonTestDelegate
+- (void)roundedButtonDidTap:(TORoundedButton *)button {
+    self.tapCount += 1;
+    self.lastButton = button;
+}
+@end
+
 @interface TORoundedButtonExampleTests : XCTestCase
 
 @end
@@ -180,6 +192,65 @@
     TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
     button.contentInset = UIEdgeInsetsMake(10, 20, 10, 20);
     XCTAssertTrue(UIEdgeInsetsEqualToEdgeInsets(button.contentInset, UIEdgeInsetsMake(10, 20, 10, 20)));
+}
+
+#pragma mark - Behavior
+
+- (void)testTappedHandlerFiresOnTouchUpInside {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Tap"];
+    __block NSInteger count = 0;
+    button.tappedHandler = ^{ count += 1; };
+    [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+    XCTAssertEqual(count, 1);
+}
+
+- (void)testDelegateReceivesTap {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Tap"];
+    TORoundedButtonTestDelegate *delegate = [TORoundedButtonTestDelegate new];
+    button.delegate = delegate;
+    [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+    XCTAssertEqual(delegate.tapCount, 1);
+    XCTAssertEqualObjects(delegate.lastButton, button);
+}
+
+- (void)testDisabledReducesContainerAlpha {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    UIView *container = [button valueForKey:@"containerView"];
+    XCTAssertEqualWithAccuracy(container.alpha, 1.0, 0.001);
+    button.enabled = NO;
+    XCTAssertEqualWithAccuracy(container.alpha, 0.4, 0.001);
+    button.enabled = YES;
+    XCTAssertEqualWithAccuracy(container.alpha, 1.0, 0.001);
+}
+
+- (void)testOverrideContentViewHidesAndRestoresContentView {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    UIView *override = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+
+    button.overrideContentView = override;
+    XCTAssertEqualObjects(button.overrideContentView, override);
+    XCTAssertTrue(button.contentView.hidden);
+    XCTAssertEqualObjects(override.superview, [button valueForKey:@"containerView"]);
+
+    button.overrideContentView = nil;
+    XCTAssertNil(button.overrideContentView);
+    XCTAssertFalse(button.contentView.hidden);
+}
+
+- (void)testBackgroundStyleBlurUsesVisualEffectView {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.backgroundStyle = TORoundedButtonBackgroundStyleBlur;
+    XCTAssertEqual(button.backgroundStyle, TORoundedButtonBackgroundStyleBlur);
+    UIView *backgroundView = [button valueForKey:@"backgroundView"];
+    XCTAssertTrue([backgroundView isKindOfClass:[UIVisualEffectView class]]);
+}
+
+- (void)testSizeToFitResizesButtonToMinimumWidth {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.frame = CGRectMake(0, 0, 1000, 200);
+    [button sizeToFit];
+    XCTAssertEqualWithAccuracy(button.bounds.size.width, button.minimumWidth, 1.0);
+    XCTAssertGreaterThan(button.bounds.size.height, 0.0);
 }
 
 @end
