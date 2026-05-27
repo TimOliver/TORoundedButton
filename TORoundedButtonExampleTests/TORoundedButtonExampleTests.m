@@ -267,4 +267,124 @@
     XCTAssertLessThan(button.bounds.size.height, 200.0);
 }
 
+#pragma mark - Accessors
+
+- (void)testContentViewRoundTripAndNilResets {
+    TORoundedButton *button = [[TORoundedButton alloc] init];
+    UIView *custom = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    button.contentView = custom;
+    XCTAssertEqualObjects(button.contentView, custom);
+
+    // contentView is null_resettable: setting nil restores a fresh, non-nil view.
+    button.contentView = nil;
+    XCTAssertNotNil(button.contentView);
+    XCTAssertNotEqualObjects(button.contentView, custom);
+}
+
+- (void)testTintColorRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.tintColor = [UIColor purpleColor];
+    XCTAssertEqualObjects(button.tintColor, [UIColor purpleColor]);
+}
+
+- (void)testTappedTintColorRoundTripResetsBrightnessOffset {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.tappedTintColor = [UIColor greenColor];
+    XCTAssertEqualObjects(button.tappedTintColor, [UIColor greenColor]);
+    // Setting an explicit tapped tint disables the brightness-derived color.
+    XCTAssertEqualWithAccuracy(button.tappedTintColorBrightnessOffset, 0.0, 0.001);
+}
+
+- (void)testTappedTintColorBrightnessOffsetRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.tappedTintColorBrightnessOffset = 0.5;
+    XCTAssertEqualWithAccuracy(button.tappedTintColorBrightnessOffset, 0.5, 0.001);
+}
+
+- (void)testTappedTextAlphaRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.tappedTextAlpha = 0.5;
+    XCTAssertEqualWithAccuracy(button.tappedTextAlpha, 0.5, 0.001);
+}
+
+- (void)testTappedButtonScaleRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.tappedButtonScale = 0.8;
+    XCTAssertEqualWithAccuracy(button.tappedButtonScale, 0.8, 0.001);
+}
+
+- (void)testTapAnimationDurationsRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.tapDownAnimationDuration = 0.2;
+    button.tapUpAnimationDuration = 0.6;
+    XCTAssertEqualWithAccuracy(button.tapDownAnimationDuration, 0.2, 0.001);
+    XCTAssertEqualWithAccuracy(button.tapUpAnimationDuration, 0.6, 0.001);
+}
+
+- (void)testCornerRadiusRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.cornerRadius = 20.0;
+    XCTAssertEqualWithAccuracy(button.cornerRadius, 20.0, 0.001);
+#ifdef __IPHONE_26_0
+    if (@available(iOS 26.0, *)) {
+        // On iOS 26, setting cornerRadius also rebuilds the corner configuration.
+        XCTAssertNotNil(button.cornerConfiguration);
+    }
+#endif
+}
+
+- (void)testImpactStyleRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.impactStyle = TORoundedButtonImpactStyleHeavy;
+    XCTAssertEqual(button.impactStyle, TORoundedButtonImpactStyleHeavy);
+    button.impactStyle = TORoundedButtonImpactStyleNone;
+    XCTAssertEqual(button.impactStyle, TORoundedButtonImpactStyleNone);
+}
+
+- (void)testBlurStyleRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    // Switch to the blur background so the style is actually applied to the effect view.
+    button.backgroundStyle = TORoundedButtonBackgroundStyleBlur;
+    button.blurStyle = UIBlurEffectStyleLight;
+    XCTAssertEqual(button.blurStyle, UIBlurEffectStyleLight);
+}
+
+- (void)testDelegateRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    TORoundedButtonTestDelegate *delegate = [TORoundedButtonTestDelegate new];
+    button.delegate = delegate;
+    XCTAssertEqualObjects(button.delegate, delegate);
+}
+
+- (void)testTappedHandlerRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    XCTAssertNil(button.tappedHandler);
+    button.tappedHandler = ^{};
+    XCTAssertNotNil(button.tappedHandler);
+}
+
+#ifdef __IPHONE_26_0
+- (void)testCornerConfigurationRoundTrip {
+    if (@available(iOS 26.0, *)) {
+        TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+        UICornerConfiguration *config =
+            [UICornerConfiguration configurationWithUniformRadius:[UICornerRadius fixedRadius:8.0]];
+        button.cornerConfiguration = config;
+        XCTAssertEqualObjects(button.cornerConfiguration, config);
+    }
+}
+
+- (void)testGlassStyleRoundTrip {
+    if (@available(iOS 26.0, *)) {
+        TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+        // Toggle away from and back to glass so the glass effect view exists and the
+        // style is actually applied (the default is already glass on iOS 26).
+        button.backgroundStyle = TORoundedButtonBackgroundStyleSolid;
+        button.backgroundStyle = TORoundedButtonBackgroundStyleGlass;
+        button.glassStyle = UIGlassEffectStyleClear;
+        XCTAssertEqual(button.glassStyle, UIGlassEffectStyleClear);
+    }
+}
+#endif
+
 @end
