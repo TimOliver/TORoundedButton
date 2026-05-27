@@ -134,9 +134,7 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /// A callback handler triggered each time the button is tapped.
 @property (nonatomic, copy) void (^tappedHandler)(void);
 
-/// The smallest width this button can be while still fitting its content on a single
-/// line, including the horizontal `contentInset` padding. Useful for external layout
-/// systems (such as alert controllers) sizing themselves around the button.
+/// The smallest width this button can be while still fitting its content on a single line.
 @property (nonatomic, readonly) CGFloat minimumWidth;
 
 /// Create a new instance of a button that can be further configured with either text or custom subviews.
