@@ -99,6 +99,11 @@
     return reference;
 }
 
+/// Reads the button's private `_isTapped` flag via KVC.
+- (BOOL)isTappedForButton:(TORoundedButton *)button {
+    return [[button valueForKey:@"isTapped"] boolValue];
+}
+
 #pragma mark - Layout Regression
 
 - (void)testTitleLabelDoesNotWrapWhenButtonIsWideEnough {
@@ -388,5 +393,69 @@
     }
 }
 #endif
+
+#pragma mark - Touch & Animation
+
+- (void)testTouchSequenceTogglesTappedState {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Tap"];
+    XCTAssertFalse([self isTappedForButton:button]);
+
+    [button sendActionsForControlEvents:UIControlEventTouchDown];      // _didTouchDownInside
+    XCTAssertTrue([self isTappedForButton:button]);
+
+    [button sendActionsForControlEvents:UIControlEventTouchDragExit];  // _didDragOutside
+    XCTAssertFalse([self isTappedForButton:button]);
+
+    [button sendActionsForControlEvents:UIControlEventTouchDragEnter]; // _didDragInside
+    XCTAssertTrue([self isTappedForButton:button]);
+
+    [button sendActionsForControlEvents:UIControlEventTouchUpInside];  // _didTouchUpInside:event:
+    XCTAssertFalse([self isTappedForButton:button]);
+}
+
+- (void)testTouchCancelResetsTappedState {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Tap"];
+    [button sendActionsForControlEvents:UIControlEventTouchDown];
+    XCTAssertTrue([self isTappedForButton:button]);
+    [button sendActionsForControlEvents:UIControlEventTouchCancel];    // _didDragOutside
+    XCTAssertFalse([self isTappedForButton:button]);
+}
+
+- (void)testTouchDownScalesContainerThenRestoresOnTouchUp {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Tap"];
+    UIView *container = [button valueForKey:@"containerView"];
+
+    [button sendActionsForControlEvents:UIControlEventTouchDown];
+    // Container scales down to tappedButtonScale (default 0.97); .a is the x-scale factor.
+    XCTAssertEqualWithAccuracy(container.transform.a, button.tappedButtonScale, 0.0001);
+
+    [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+    XCTAssertEqualWithAccuracy(container.transform.a, 1.0, 0.0001);
+}
+
+- (void)testTouchDimsLabelWhenTappedTextAlphaSet {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Tap"];
+    button.tappedTextAlpha = 0.4; // a value < 1 enables the alpha-dim path (1.0 disables it)
+    UILabel *titleLabel = [button valueForKey:@"titleLabel"];
+
+    [button sendActionsForControlEvents:UIControlEventTouchDown];
+    XCTAssertEqualWithAccuracy(titleLabel.alpha, 0.4, 0.0001);
+
+    [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+    XCTAssertEqualWithAccuracy(titleLabel.alpha, 1.0, 0.0001);
+}
+
+- (void)testTappedBackgroundColorPathForSolidStyle {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Tap"];
+    button.backgroundStyle = TORoundedButtonBackgroundStyleSolid;
+    button.tappedTintColor = [UIColor redColor];
+
+    // With a tintable (solid) background and an explicit tapped tint, the tap sequence
+    // exercises the background-color animation path in both directions.
+    [button sendActionsForControlEvents:UIControlEventTouchDown];
+    XCTAssertTrue([self isTappedForButton:button]);
+    [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+    XCTAssertFalse([self isTappedForButton:button]);
+}
 
 @end
