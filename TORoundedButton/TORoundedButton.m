@@ -292,6 +292,12 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
 
     // Lay out the title label
     if (!_titleLabel) { return; }
+    // Seed the label with the available content width first; otherwise a stale,
+    // too-narrow frame makes sizeToFit wrap the text onto multiple lines even
+    // when there is plenty of horizontal room.
+    CGRect labelFrame = _titleLabel.frame;
+    labelFrame.size = contentBounds.size;
+    _titleLabel.frame = labelFrame;
     [_titleLabel sizeToFit];
     _titleLabel.center = (CGPoint){
         .x = CGRectGetMidX(_contentView.bounds),

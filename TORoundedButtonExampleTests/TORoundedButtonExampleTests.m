@@ -49,4 +49,41 @@
     [self waitForExpectations:@[expectation] timeout:0.5f];
 }
 
+#pragma mark - Helpers
+
+/// A standalone label configured like the button's private title label,
+/// for measuring expected sizes without coupling tests to exact pixel values.
+- (UILabel *)referenceLabelForButton:(TORoundedButton *)button {
+    UILabel *titleLabel = [button valueForKey:@"titleLabel"];
+    UILabel *reference = [[UILabel alloc] init];
+    reference.font = titleLabel.font;
+    reference.text = titleLabel.text;
+    return reference;
+}
+
+#pragma mark - Layout Regression
+
+- (void)testTitleLabelDoesNotWrapWhenButtonIsWideEnough {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Reasonably Long Title"];
+    button.frame = CGRectMake(0, 0, 400, 52); // easily wide enough for one line
+
+    UILabel *titleLabel = [button valueForKey:@"titleLabel"];
+
+    // Natural single-line height (a fresh label defaults to numberOfLines == 1).
+    UILabel *reference = [self referenceLabelForButton:button];
+    [reference sizeToFit];
+    CGFloat singleLineHeight = reference.frame.size.height;
+
+    // Force the buggy precondition: a too-narrow label frame before layout.
+    CGRect narrow = titleLabel.frame;
+    narrow.size.width = 10.0; // narrower than the longest word
+    titleLabel.frame = narrow;
+
+    [button setNeedsLayout];
+    [button layoutIfNeeded];
+
+    XCTAssertEqualWithAccuracy(titleLabel.frame.size.height, singleLineHeight, 2.0,
+        @"Title label wrapped to multiple lines despite adequate button width");
+}
+
 @end
