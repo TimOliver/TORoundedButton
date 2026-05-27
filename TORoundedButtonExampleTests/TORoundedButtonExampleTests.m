@@ -218,6 +218,7 @@
     UIView *container = [button valueForKey:@"containerView"];
     XCTAssertEqualWithAccuracy(container.alpha, 1.0, 0.001);
     button.enabled = NO;
+    // setEnabled: hard-codes the disabled alpha to 0.4; this locks that value.
     XCTAssertEqualWithAccuracy(container.alpha, 0.4, 0.001);
     button.enabled = YES;
     XCTAssertEqualWithAccuracy(container.alpha, 1.0, 0.001);
@@ -239,18 +240,31 @@
 
 - (void)testBackgroundStyleBlurUsesVisualEffectView {
     TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    // Changing backgroundStyle rebuilds the background view synchronously, so this
+    // holds even without a superview (where the view would otherwise be created lazily).
     button.backgroundStyle = TORoundedButtonBackgroundStyleBlur;
     XCTAssertEqual(button.backgroundStyle, TORoundedButtonBackgroundStyleBlur);
     UIView *backgroundView = [button valueForKey:@"backgroundView"];
     XCTAssertTrue([backgroundView isKindOfClass:[UIVisualEffectView class]]);
 }
 
-- (void)testSizeToFitResizesButtonToMinimumWidth {
+- (void)testSizeToFitResizesButtonToFitContent {
     TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
     button.frame = CGRectMake(0, 0, 1000, 200);
     [button sizeToFit];
-    XCTAssertEqualWithAccuracy(button.bounds.size.width, button.minimumWidth, 1.0);
-    XCTAssertGreaterThan(button.bounds.size.height, 0.0);
+
+    // sizeToFit should shrink the over-sized button down to its content: the label's
+    // single-line width plus the horizontal contentInset. The expected width is anchored
+    // to an independent reference measurement (not the button's own minimumWidth, which
+    // would make this circular since both route through sizeThatFits:).
+    UILabel *reference = [self referenceLabelForButton:button];
+    CGFloat expectedWidth = [reference sizeThatFits:CGSizeMake(1.0e6, 1.0e6)].width
+        + button.contentInset.left + button.contentInset.right;
+    XCTAssertEqualWithAccuracy(button.bounds.size.width, expectedWidth, 1.0);
+
+    // And it genuinely shrank from the over-sized starting frame in both dimensions.
+    XCTAssertLessThan(button.bounds.size.width, 1000.0);
+    XCTAssertLessThan(button.bounds.size.height, 200.0);
 }
 
 @end
