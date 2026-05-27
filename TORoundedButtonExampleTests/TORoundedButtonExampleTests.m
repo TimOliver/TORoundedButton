@@ -449,13 +449,17 @@
     TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Tap"];
     button.backgroundStyle = TORoundedButtonBackgroundStyleSolid;
     button.tappedTintColor = [UIColor redColor];
+    UIView *backgroundView = [button valueForKey:@"backgroundView"];
 
-    // With a tintable (solid) background and an explicit tapped tint, the tap sequence
-    // exercises the background-color animation path in both directions.
+    // For a solid background the tapped tint is applied directly as the background color.
     [button sendActionsForControlEvents:UIControlEventTouchDown];
     XCTAssertTrue([self isTappedForButton:button]);
+    XCTAssertEqualObjects(backgroundView.backgroundColor, [UIColor redColor]);
+
+    // Releasing reverts the background away from the tapped tint.
     [button sendActionsForControlEvents:UIControlEventTouchUpInside];
     XCTAssertFalse([self isTappedForButton:button]);
+    XCTAssertNotEqualObjects(backgroundView.backgroundColor, [UIColor redColor]);
 }
 
 @end
