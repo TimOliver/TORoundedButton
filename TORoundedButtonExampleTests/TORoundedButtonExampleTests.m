@@ -70,7 +70,7 @@
     CGFloat before = button.minimumWidth;
     button.contentInset = UIEdgeInsetsMake(15, 40, 15, 40);
     CGFloat after = button.minimumWidth;
-    // Horizontal inset went from 15+15 (30) to 40+40 (80): a 50pt increase.
+    // Left+right inset delta drives the change: (40-15) + (40-15) = 50pt.
     XCTAssertEqualWithAccuracy(after - before, 50.0, 1.0);
 }
 
