@@ -184,6 +184,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     if (!TORoundedButtonIsSolidBackground(style)) {
         // Create a glass or blur style based on the associated style
         UIVisualEffect *effect = nil;
+#ifdef __IPHONE_26_0
         if (@available(iOS 26.0, *)) {
             if (style == TORoundedButtonBackgroundStyleGlass) {
                 UIGlassEffect *const glassEffect = [UIGlassEffect effectWithStyle:_glassStyle];
@@ -191,6 +192,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
                 effect = glassEffect;
             }
         }
+#endif
         if (effect == nil) {
             UIBlurEffect *const blurEffect = [UIBlurEffect effectWithStyle:_blurStyle];
             effect = blurEffect;
@@ -204,11 +206,15 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
     backgroundView.clipsToBounds = !TORoundedButtonIsSolidBackground(style);
+#ifdef __IPHONE_26_0
     if (@available(iOS 26.0, *)) {
         backgroundView.cornerConfiguration = _cornerConfiguration;
     } else {
         backgroundView.layer.cornerRadius = _cornerRadius;
     }
+#else
+    backgroundView.layer.cornerRadius = _cornerRadius;
+#endif
 
 #ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) { backgroundView.layer.cornerCurve = kCACornerCurveContinuous; }
@@ -613,6 +619,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     [blurView setEffect:[UIBlurEffect effectWithStyle:_blurStyle]];
 }
 
+#ifdef __IPHONE_26_0
 - (void)setGlassStyle:(UIGlassEffectStyle)glassStyle {
     if (_glassStyle == glassStyle) { return; }
     _glassStyle = glassStyle;
@@ -627,6 +634,7 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     UIVisualEffectView *const effectView = (UIVisualEffectView *)_backgroundView;
     [effectView setEffect:glassEffect];
 }
+#endif
 
 - (void)setEnabled:(BOOL)enabled {
     [super setEnabled:enabled];

@@ -89,8 +89,10 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /// When `backgroundStyle` is set to `.blur`, the specific blur style to apply.
 @property (nonatomic, assign) UIBlurEffectStyle blurStyle;
 
+#ifdef __IPHONE_26_0
 /// When `backgroundStyle` is set to `.glass`, the specific glass style to apply.
 @property (nonatomic, assign) UIGlassEffectStyle glassStyle API_AVAILABLE(ios(26.0));
+#endif
 
 /// The text that is displayed in center of the button (Default is nil).
 /// This adds an internally controlled label view to the main content view.
