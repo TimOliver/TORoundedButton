@@ -1,6 +1,9 @@
 x.y.z Release Notes (yyyy-MM-dd)
 =============================================================
 
+2.1.0 Release Notes (2026-05-27)
+=============================================================
+
 ### Added
 
 * Re-added the `minimumWidth` property, now including the horizontal `contentInset` padding, to help external layout systems size the button around its content.
