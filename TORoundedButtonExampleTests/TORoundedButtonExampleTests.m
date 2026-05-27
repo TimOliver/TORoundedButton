@@ -49,6 +49,31 @@
     [self waitForExpectations:@[expectation] timeout:0.5f];
 }
 
+#pragma mark - Sizing
+
+- (void)testMinimumWidthIncludesContentInset {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Hello"];
+    UILabel *reference = [self referenceLabelForButton:button];
+    CGFloat textWidth = [reference sizeThatFits:CGSizeMake(1.0e6, 1.0e6)].width;
+    CGFloat expected = textWidth + button.contentInset.left + button.contentInset.right;
+    XCTAssertEqualWithAccuracy(button.minimumWidth, expected, 1.0);
+}
+
+- (void)testMinimumWidthGrowsWithLongerText {
+    TORoundedButton *shortButton = [[TORoundedButton alloc] initWithText:@"Hi"];
+    TORoundedButton *longButton = [[TORoundedButton alloc] initWithText:@"A much longer button title"];
+    XCTAssertGreaterThan(longButton.minimumWidth, shortButton.minimumWidth);
+}
+
+- (void)testMinimumWidthGrowsWithContentInset {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Hello"];
+    CGFloat before = button.minimumWidth;
+    button.contentInset = UIEdgeInsetsMake(15, 40, 15, 40);
+    CGFloat after = button.minimumWidth;
+    // Horizontal inset went from 15+15 (30) to 40+40 (80): a 50pt increase.
+    XCTAssertEqualWithAccuracy(after - before, 50.0, 1.0);
+}
+
 #pragma mark - Helpers
 
 /// A standalone label matching the button's private title label font and text, for

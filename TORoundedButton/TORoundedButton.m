@@ -336,6 +336,13 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     return newSize;
 }
 
+- (CGFloat)minimumWidth {
+    // Measure at a large but finite size so the content lays out on a single line
+    // without tripping Core Text overflow handling (which a literal CGFLOAT_MAX can,
+    // once sizeThatFits: subtracts the horizontal padding from it).
+    return [self sizeThatFits:(CGSize){1.0e6, 1.0e6}].width;
+}
+
 #pragma mark - Interaction -
 
 - (void)_didTouchDownInside {
