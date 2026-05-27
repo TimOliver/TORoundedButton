@@ -113,4 +113,63 @@
         @"Title label wrapped to multiple lines despite adequate button width");
 }
 
+#pragma mark - Init & Defaults
+
+- (void)testInitUsesDefaultFrameSize {
+    TORoundedButton *button = [[TORoundedButton alloc] init];
+    XCTAssertEqualWithAccuracy(button.bounds.size.width, 288.0, 0.001);
+    XCTAssertEqualWithAccuracy(button.bounds.size.height, 52.0, 0.001);
+}
+
+- (void)testInitWithTextSetsText {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Confirm"];
+    XCTAssertEqualObjects(button.text, @"Confirm");
+}
+
+- (void)testInitWithContentViewSetsContentView {
+    UIView *custom = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
+    TORoundedButton *button = [[TORoundedButton alloc] initWithContentView:custom];
+    XCTAssertEqualObjects(button.contentView, custom);
+}
+
+#pragma mark - Text & Appearance
+
+- (void)testTextRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] init];
+    button.text = @"Hello";
+    XCTAssertEqualObjects(button.text, @"Hello");
+}
+
+- (void)testAttributedTextRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] init];
+    NSAttributedString *attributed = [[NSAttributedString alloc] initWithString:@"Styled"];
+    button.attributedText = attributed;
+    XCTAssertEqualObjects(button.attributedText.string, @"Styled");
+}
+
+- (void)testTextColorRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.textColor = [UIColor redColor];
+    XCTAssertEqualObjects(button.textColor, [UIColor redColor]);
+}
+
+- (void)testTextFontRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    UIFont *font = [UIFont systemFontOfSize:22.0];
+    button.textFont = font;
+    XCTAssertEqualObjects(button.textFont, font);
+}
+
+- (void)testTextPointSizeSetsFontSize {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.textPointSize = 28.0;
+    XCTAssertEqualWithAccuracy(button.textFont.pointSize, 28.0, 0.001);
+}
+
+- (void)testContentInsetRoundTrip {
+    TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
+    button.contentInset = UIEdgeInsetsMake(10, 20, 10, 20);
+    XCTAssertTrue(UIEdgeInsetsEqualToEdgeInsets(button.contentInset, UIEdgeInsetsMake(10, 20, 10, 20)));
+}
+
 @end
