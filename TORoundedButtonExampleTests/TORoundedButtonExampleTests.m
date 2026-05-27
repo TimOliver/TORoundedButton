@@ -51,8 +51,9 @@
 
 #pragma mark - Helpers
 
-/// A standalone label configured like the button's private title label,
-/// for measuring expected sizes without coupling tests to exact pixel values.
+/// A standalone label matching the button's private title label font and text, for
+/// measuring its natural *single-line* size (this label keeps the default
+/// numberOfLines == 1) without coupling tests to exact pixel values.
 - (UILabel *)referenceLabelForButton:(TORoundedButton *)button {
     UILabel *titleLabel = [button valueForKey:@"titleLabel"];
     UILabel *reference = [[UILabel alloc] init];
@@ -82,6 +83,7 @@
     [button setNeedsLayout];
     [button layoutIfNeeded];
 
+    // ±2pt slack absorbs CGRectIntegral rounding and font-metric variation.
     XCTAssertEqualWithAccuracy(titleLabel.frame.size.height, singleLineHeight, 2.0,
         @"Title label wrapped to multiple lines despite adequate button width");
 }
