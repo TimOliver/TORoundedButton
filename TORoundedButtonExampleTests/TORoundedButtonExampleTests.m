@@ -142,14 +142,24 @@
 
 - (void)testAttributedTextRoundTrip {
     TORoundedButton *button = [[TORoundedButton alloc] init];
-    NSAttributedString *attributed = [[NSAttributedString alloc] initWithString:@"Styled"];
+    NSAttributedString *attributed = [[NSAttributedString alloc] initWithString:@"Styled"
+        attributes:@{ NSForegroundColorAttributeName : [UIColor blueColor] }];
     button.attributedText = attributed;
+
+    // Both the text and the attributes we set should survive the round-trip. We check a
+    // specific attribute we set rather than full-object equality, since UILabel augments
+    // the string with its own default attributes (so == against the original can fail).
     XCTAssertEqualObjects(button.attributedText.string, @"Styled");
+    UIColor *foreground = [button.attributedText attribute:NSForegroundColorAttributeName
+                                                   atIndex:0
+                                            effectiveRange:NULL];
+    XCTAssertEqualObjects(foreground, [UIColor blueColor]);
 }
 
 - (void)testTextColorRoundTrip {
     TORoundedButton *button = [[TORoundedButton alloc] initWithText:@"Test"];
     button.textColor = [UIColor redColor];
+    // The getter returns the stored UIColor unchanged, so -isEqual: is the right check.
     XCTAssertEqualObjects(button.textColor, [UIColor redColor]);
 }
 
