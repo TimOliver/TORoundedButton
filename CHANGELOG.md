@@ -1,6 +1,13 @@
 x.y.z Release Notes (yyyy-MM-dd)
 =============================================================
 
+2.1.1 Release Notes (2026-06-04)
+=============================================================
+
+### Fixed
+
+* Toned down the tapped tint color calculations from producing oversaturated colors.
+
 2.1.0 Release Notes (2026-05-27)
 =============================================================
 
