@@ -68,6 +68,10 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     UIImpactFeedbackGenerator *_impactGenerator;
 }
 
+// We redlared `tintColor` in the header to make it more obvious that's how
+// you control the background color. Skip synthesizing any accessors in here.
+@dynamic tintColor;
+
 #pragma mark - View Creation -
 
 - (instancetype)init {
@@ -733,6 +737,14 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
         satBoost      =  0.15f * amount;
         brightnessAdd =  0.18f * amount;
     }
+
+    // Greys and other near-neutral colours carry a meaningless hue plus a faint
+    // undertone (e.g. systemGray leans slightly blue). Boosting their saturation
+    // amplifies that undertone into a visible tint, so scale the hue/saturation
+    // changes by how saturated the source already is — leaving brightness alone.
+    const CGFloat colorfulness = fminf(s / 0.15f, 1.0f);
+    hueShift *= colorfulness;
+    satBoost *= colorfulness;
 
     // Apply hue shift with wrapping
     CGFloat newH = h + hueShift;
