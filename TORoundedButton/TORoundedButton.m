@@ -734,6 +734,14 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
         brightnessAdd =  0.18f * amount;
     }
 
+    // Greys and other near-neutral colours carry a meaningless hue plus a faint
+    // undertone (e.g. systemGray leans slightly blue). Boosting their saturation
+    // amplifies that undertone into a visible tint, so scale the hue/saturation
+    // changes by how saturated the source already is — leaving brightness alone.
+    const CGFloat colorfulness = fminf(s / 0.15f, 1.0f);
+    hueShift *= colorfulness;
+    satBoost *= colorfulness;
+
     // Apply hue shift with wrapping
     CGFloat newH = h + hueShift;
     if (newH < 0.0f) { newH += 1.0f; }

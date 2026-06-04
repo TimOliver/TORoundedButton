@@ -117,7 +117,10 @@ IB_DESIGNABLE @interface TORoundedButton : UIControl
 /// (Defaults to off with 1.0f).
 @property (nonatomic, assign) IBInspectable CGFloat tappedTextAlpha;
 
-/// Taking the default button background color apply a brightness offset for the tapped color 
+/// The color of the button's rounded background shape. Applied to `.solid` and `.glass` styles.
+@property (nonatomic, strong, nullable) UIColor *tintColor;
+
+/// Taking the default button background color apply a brightness offset for the tapped color
 /// (Default is 0.25f. Set 0.0 for off).
 @property (nonatomic, assign) IBInspectable CGFloat tappedTintColorBrightnessOffset;
 
