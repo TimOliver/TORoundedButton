@@ -68,6 +68,10 @@ static inline BOOL TORoundedButtonIsTintableBackground(TORoundedButtonBackground
     UIImpactFeedbackGenerator *_impactGenerator;
 }
 
+// We redlared `tintColor` in the header to make it more obvious that's how
+// you control the background color. Skip synthesizing any accessors in here.
+@dynamic tintColor;
+
 #pragma mark - View Creation -
 
 - (instancetype)init {
